@@ -183,8 +183,8 @@ window.initParticles = () => {
         if (gates.length > 0) {
             gates.forEach(gate => {
                 const angleDeg = parseFloat(gate.getAttribute('data-angle'));
-                // Adding slightly more radius to put exactly on the outer border
-                const paddingRadius = maxRadius;
+                // Pull bubbles slightly inward towards the center
+                const paddingRadius = maxRadius - 20;
                 const angleRad = angleDeg * Math.PI / 180;
 
                 // Position calculations based on canvas center
