@@ -1,20 +1,19 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en" data-theme="light">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Subin Lim | Portfolio</title>
-    <meta name="description" content="Subin Lim's personal portfolio website showcasing profile, study, and personal projects with dynamic animations.">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <meta name="description"
+        content="Subin Lim's personal portfolio website showcasing profile, study, and personal projects.">
+    <link rel="stylesheet" as="style" crossorigin
+        href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
     <link rel="stylesheet" href="./css/style.css">
 </head>
+
 <body>
     <div id="app">
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
-        
         <!-- Navigation -->
         <nav class="navbar glassmorphism">
             <div class="nav-container">
@@ -25,10 +24,32 @@
                     <li><a href="#study" class="nav-link" data-target="study">Study</a></li>
                     <li><a href="#personal" class="nav-link" data-target="personal">Personal</a></li>
                 </ul>
-                <div class="hamburger">
-                    <span></span>
-                    <span></span>
-                    <span></span>
+                <div class="nav-controls">
+                    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Theme">
+                        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="5"></circle>
+                            <line x1="12" y1="1" x2="12" y2="3"></line>
+                            <line x1="12" y1="21" x2="12" y2="23"></line>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                            <line x1="1" y1="12" x2="3" y2="12"></line>
+                            <line x1="21" y1="12" x2="23" y2="12"></line>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                        </svg>
+                        <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                        </svg>
+                    </button>
+                    <div class="hamburger">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
                 </div>
             </div>
         </nav>
@@ -39,7 +60,8 @@
             <section id="main" class="page-section active">
                 <div class="hero">
                     <h1 class="hero-title fade-up">Creative <br> <span class="gradient-text">Developer</span></h1>
-                    <p class="hero-subtitle delay-1 fade-up">Welcome to my digital space. I build dynamic, interactive, and beautiful web experiences.</p>
+                    <p class="hero-subtitle delay-1 fade-up">Welcome to my digital space. I build dynamic, interactive,
+                        and beautiful web experiences.</p>
                     <div class="hero-actions delay-2 fade-up">
                         <a href="#profile" class="btn btn-primary" data-target="profile">Discover More</a>
                         <a href="#personal" class="btn btn-secondary" data-target="personal">View Projects</a>
@@ -58,7 +80,8 @@
                             </div>
                             <h3>Subin Lim</h3>
                             <p class="role">Software Engineer & Designer</p>
-                            <p class="bio">I specialize in crafting cutting-edge websites and full-stack applications with a focus on seamless user experience, beautiful UI, and robust performance.</p>
+                            <p class="bio">I specialize in crafting cutting-edge websites and full-stack applications
+                                with a focus on seamless user experience, beautiful UI, and robust performance.</p>
                             <div class="skills">
                                 <span class="skill-tag">JavaScript</span>
                                 <span class="skill-tag">HTML/CSS</span>
@@ -95,7 +118,8 @@
             <section id="study" class="page-section">
                 <div class="container">
                     <h2 class="section-title">My <span class="gradient-text">Studies</span></h2>
-                    <p class="section-desc">A deep dive into my continuous learning journey, exploring new technologies and concepts.</p>
+                    <p class="section-desc">A deep dive into my continuous learning journey, exploring new technologies
+                        and concepts.</p>
                     <div class="study-grid">
                         <div class="study-card glass-card hover-lift fade-up">
                             <div class="card-icon">🧠</div>
@@ -150,7 +174,7 @@
                 </div>
             </section>
         </main>
-        
+
         <footer>
             <div class="footer-content glassmorphism">
                 <p>&copy; 2026 Subin Lim. Designed & Built with passion.</p>
@@ -164,4 +188,5 @@
     </div>
     <script src="./js/app.js"></script>
 </body>
+
 </html>

@@ -1,4 +1,26 @@
 document.addEventListener('DOMContentLoaded', () => {
+    /* --- Theme Toggle --- */
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const htmlElement = document.documentElement;
+
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+        htmlElement.setAttribute('data-theme', savedTheme);
+    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        htmlElement.setAttribute('data-theme', 'dark');
+    } else {
+        htmlElement.setAttribute('data-theme', 'light');
+    }
+
+    if (themeToggleBtn) {
+        themeToggleBtn.addEventListener('click', () => {
+            let currentTheme = htmlElement.getAttribute('data-theme');
+            let newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            htmlElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        });
+    }
+
     /* --- Mobile Navigation --- */
     const hamburger = document.querySelector('.hamburger');
     const navLinksContainer = document.querySelector('.nav-links');
@@ -6,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const toggleNav = () => {
         navLinksContainer.classList.toggle('nav-active');
-        
+
         // Burger Animation
         hamburger.classList.toggle('toggle');
         const spans = hamburger.querySelectorAll('span');
@@ -25,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /* --- Single Page Application Routing --- */
     const sections = document.querySelectorAll('.page-section');
-    
+
     // Function to switch active section
     const navigateTo = (targetId) => {
         // Close mobile nav if open
@@ -36,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Remove active class from all sections
         sections.forEach(sec => {
             sec.classList.remove('active');
-            
+
             // Un-trigger animations so they replay
             const animatedElem = sec.querySelectorAll('.fade-up.visible');
             animatedElem.forEach(el => el.classList.remove('visible'));
@@ -47,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (targetSection) {
             targetSection.classList.add('active');
             window.scrollTo({ top: 0, behavior: 'instant' });
-            
+
             // Re-trigger animations after slight delay for transition
             setTimeout(() => {
                 const elToAnimate = targetSection.querySelectorAll('.fade-up');
@@ -70,13 +92,13 @@ document.addEventListener('DOMContentLoaded', () => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
             const targetId = link.getAttribute('data-target');
-            
+
             // Push state to history
             const newUrl = `#${targetId}`;
             if (window.location.hash !== newUrl) {
                 window.history.pushState({ section: targetId }, '', newUrl);
             }
-            
+
             navigateTo(targetId);
         });
     });
@@ -117,14 +139,4 @@ document.addEventListener('DOMContentLoaded', () => {
         window.history.replaceState({ section: initialHash }, '', `#${initialHash}`);
     }
     navigateTo(initialHash);
-});
-
-/* Interactive Blob follows mouse cursor globally */
-document.addEventListener('mousemove', (e) => {
-    const blob = document.querySelector('.blob-1');
-    const x = e.clientX;
-    const y = e.clientY;
-    
-    // Slow, subtle movement based on mouse
-    blob.style.transform = `translate(${x * 0.05}px, ${y * 0.05}px)`;
 });
