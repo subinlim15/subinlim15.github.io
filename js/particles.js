@@ -175,6 +175,24 @@ window.initParticles = () => {
         // Draw CMS/ATLAS Detector outline
         drawDetector(ctx, cx, cy, maxRadius, colors);
 
+        // Position Gates dynamically exactly on detector borders
+        const gates = document.querySelectorAll('.gate-btn');
+        if (gates.length > 0) {
+            gates.forEach(gate => {
+                const angleDeg = parseFloat(gate.getAttribute('data-angle'));
+                // Adding slightly more radius to put exactly on the outer border
+                const paddingRadius = maxRadius;
+                const angleRad = angleDeg * Math.PI / 180;
+
+                // Position calculations based on canvas center
+                const gx = cx + Math.cos(angleRad) * paddingRadius;
+                const gy = cy + Math.sin(angleRad) * paddingRadius;
+
+                gate.style.left = `${gx}px`;
+                gate.style.top = `${gy}px`;
+            });
+        }
+
         if (state === 'BEAM') {
             // Speed of the approaching beams
             beamProgress += 0.02;

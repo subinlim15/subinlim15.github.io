@@ -661,3 +661,53 @@ footer {
     pointer-events: none;
     opacity: 0.8;
 }
+
+/* Circular Detector Gates Navigation */
+.circular-gates-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    /* Let clicks pass through empty space */
+    z-index: 5;
+}
+
+.gate-btn {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    margin-left: -40px;
+    /* Center perfectly on point */
+    margin-top: -40px;
+    border-radius: 50%;
+    border: 2px solid var(--heading-color);
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: var(--heading-color);
+    font-size: 0.95rem;
+    font-weight: 500;
+    pointer-events: auto;
+    /* Clickable */
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s;
+    backdrop-filter: blur(2px);
+    opacity: 0.9;
+}
+
+.gate-btn:hover {
+    transform: scale(1.15);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme='dark'] .gate-btn:hover {
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+}
+
+.gate-btn span {
+    font-family: var(--font-family);
+    letter-spacing: 0.5px;
+}
