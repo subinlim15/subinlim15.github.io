@@ -91,6 +91,7 @@ h6 {
     width: 100%;
     z-index: 1000;
     padding: 1rem 0;
+    pointer-events: none;
 }
 
 .nav-container {
@@ -100,14 +101,17 @@ h6 {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    pointer-events: none;
 }
 
 .logo {
-    font-size: 1.5rem;
-    font-weight: 800;
+    font-family: var(--font-family);
+    font-size: 1.8rem;
+    font-weight: 300;
     color: var(--heading-color);
     text-decoration: none;
     letter-spacing: 0.5px;
+    pointer-events: auto;
 }
 
 .logo span {
@@ -155,6 +159,7 @@ h6 {
     display: flex;
     align-items: center;
     gap: 1rem;
+    pointer-events: auto;
 }
 
 .theme-toggle {
@@ -676,11 +681,11 @@ footer {
 
 .gate-btn {
     position: absolute;
-    width: 80px;
-    height: 80px;
-    margin-left: -40px;
+    width: 120px;
+    height: 120px;
+    margin-left: -60px;
     /* Center perfectly on point */
-    margin-top: -40px;
+    margin-top: -60px;
     border-radius: 50%;
     border: 2px solid var(--heading-color);
     background: transparent;
@@ -689,7 +694,7 @@ footer {
     justify-content: center;
     text-decoration: none;
     color: var(--heading-color);
-    font-size: 0.95rem;
+    font-size: 1.15rem;
     font-weight: 500;
     pointer-events: auto;
     /* Clickable */
