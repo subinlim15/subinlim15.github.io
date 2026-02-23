@@ -168,9 +168,12 @@ window.initParticles = () => {
         ctx.clearRect(0, 0, width, height);
 
         const colors = getThemeColors();
+        const navHeight = document.querySelector('.navbar')?.offsetHeight || 80;
+        const availableHeight = height - navHeight;
+
         const cx = width / 2;
-        const cy = (height / 2) + 40;
-        const maxRadius = Math.min(width, height) * 0.38;
+        const cy = navHeight + (availableHeight / 2);
+        const maxRadius = Math.min(width, availableHeight) * 0.42;
 
         // Draw CMS/ATLAS Detector outline
         drawDetector(ctx, cx, cy, maxRadius, colors);
