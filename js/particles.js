@@ -151,12 +151,12 @@ window.initParticles = () => {
         for (let i = 0; i < 40; i++) {
             leftBunch.push({
                 ox: (Math.random() - 0.5) * 60,
-                oy: (Math.random() - 0.5) * 8,
+                oy: (Math.random() - 0.5) * 2,
                 speed: Math.random() * 0.05 + 0.95
             });
             rightBunch.push({
                 ox: (Math.random() - 0.5) * 60,
-                oy: (Math.random() - 0.5) * 8,
+                oy: (Math.random() - 0.5) * 2,
                 speed: Math.random() * 0.05 + 0.95
             });
         }
