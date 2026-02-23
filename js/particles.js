@@ -169,8 +169,8 @@ window.initParticles = () => {
 
         const colors = getThemeColors();
         const cx = width / 2;
-        const cy = height / 2;
-        const maxRadius = Math.min(width, height) * 0.45;
+        const cy = (height / 2) + 40;
+        const maxRadius = Math.min(width, height) * 0.38;
 
         // Draw CMS/ATLAS Detector outline
         drawDetector(ctx, cx, cy, maxRadius, colors);
