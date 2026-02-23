@@ -275,7 +275,7 @@ h6 {
 }
 
 .hero-title {
-    font-size: 4rem;
+    font-size: 3rem;
     line-height: 1.2;
     margin-bottom: 1.5rem;
     letter-spacing: -0.5px;
@@ -698,9 +698,22 @@ footer {
     font-weight: 500;
     pointer-events: auto;
     /* Clickable */
-    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s, background-color 0.4s, border-color 0.4s, opacity 0.4s;
     backdrop-filter: blur(2px);
     opacity: 0.9;
+    z-index: 10;
+}
+
+.gate-btn.zoom-active {
+    transform: scale(40) !important;
+    background-color: var(--bg-color);
+    border-color: var(--bg-color);
+    z-index: 100;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s, border-color 0.3s, opacity 0.3s;
+}
+
+.gate-btn.zoom-resetting {
+    transition: none !important;
 }
 
 .gate-btn:hover {
@@ -715,4 +728,9 @@ footer {
 .gate-btn span {
     font-family: var(--font-family);
     letter-spacing: 0.5px;
+    transition: opacity 0.2s;
+}
+
+.gate-btn.zoom-active span {
+    opacity: 0;
 }

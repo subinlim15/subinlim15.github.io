@@ -90,6 +90,13 @@ document.addEventListener('DOMContentLoaded', () => {
         // Fetch the view lazily
         await loadView(targetId);
 
+        // Reset zoomed bubbles if returning without transition jitter
+        document.querySelectorAll('.gate-btn.zoom-active').forEach(btn => {
+            btn.classList.add('zoom-resetting');
+            btn.classList.remove('zoom-active');
+            setTimeout(() => btn.classList.remove('zoom-resetting'), 50);
+        });
+
         // Remove active class from all sections
         sections.forEach(sec => sec.classList.remove('active'));
 
@@ -108,13 +115,25 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             const targetId = link.getAttribute('data-target');
 
-            // Push state to history
-            const newUrl = `#${targetId}`;
-            if (window.location.hash !== newUrl) {
-                window.history.pushState({ section: targetId }, '', newUrl);
-            }
+            if (link.classList.contains('gate-btn')) {
+                if (link.classList.contains('zoom-active')) return;
+                link.classList.add('zoom-active');
 
-            navigateTo(targetId);
+                setTimeout(() => {
+                    const newUrl = `#${targetId}`;
+                    if (window.location.hash !== newUrl) {
+                        window.history.pushState({ section: targetId }, '', newUrl);
+                    }
+                    navigateTo(targetId);
+                }, 500); // wait 500ms for zoom effect
+            } else {
+                // Push state to history
+                const newUrl = `#${targetId}`;
+                if (window.location.hash !== newUrl) {
+                    window.history.pushState({ section: targetId }, '', newUrl);
+                }
+                navigateTo(targetId);
+            }
         }
     });
 
