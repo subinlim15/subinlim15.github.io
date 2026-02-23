@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subin Lim | Portfolio</title>
+    <meta name="description" content="Subin Lim's personal portfolio website showcasing profile, study, and personal projects with dynamic animations.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <div id="app">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        
+        <!-- Navigation -->
+        <nav class="navbar glassmorphism">
+            <div class="nav-container">
+                <a href="#main" class="logo">Subin<span>.</span></a>
+                <ul class="nav-links">
+                    <li><a href="#main" class="nav-link active" data-target="main">Home</a></li>
+                    <li><a href="#profile" class="nav-link" data-target="profile">Profile</a></li>
+                    <li><a href="#study" class="nav-link" data-target="study">Study</a></li>
+                    <li><a href="#personal" class="nav-link" data-target="personal">Personal</a></li>
+                </ul>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="content-wrapper">
+            <!-- Main Section -->
+            <section id="main" class="page-section active">
+                <div class="hero">
+                    <h1 class="hero-title fade-up">Creative <br> <span class="gradient-text">Developer</span></h1>
+                    <p class="hero-subtitle delay-1 fade-up">Welcome to my digital space. I build dynamic, interactive, and beautiful web experiences.</p>
+                    <div class="hero-actions delay-2 fade-up">
+                        <a href="#profile" class="btn btn-primary" data-target="profile">Discover More</a>
+                        <a href="#personal" class="btn btn-secondary" data-target="personal">View Projects</a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Profile Section -->
+            <section id="profile" class="page-section">
+                <div class="container">
+                    <h2 class="section-title">About <span class="gradient-text">Me</span></h2>
+                    <div class="profile-grid">
+                        <div class="profile-card glass-card fade-up">
+                            <div class="profile-avatar">
+                                <div class="avatar-placeholder"></div>
+                            </div>
+                            <h3>Subin Lim</h3>
+                            <p class="role">Software Engineer & Designer</p>
+                            <p class="bio">I specialize in crafting cutting-edge websites and full-stack applications with a focus on seamless user experience, beautiful UI, and robust performance.</p>
+                            <div class="skills">
+                                <span class="skill-tag">JavaScript</span>
+                                <span class="skill-tag">HTML/CSS</span>
+                                <span class="skill-tag">React</span>
+                                <span class="skill-tag">UI/UX</span>
+                            </div>
+                        </div>
+                        <div class="profile-info glass-card fade-up delay-1">
+                            <h3>Experience</h3>
+                            <ul class="timeline">
+                                <li>
+                                    <div class="timeline-dot"></div>
+                                    <div class="timeline-content">
+                                        <h4>Senior Frontend Developer</h4>
+                                        <p class="date">2023 - Present</p>
+                                        <p>Leading UI/UX initiatives and building scalable web applications.</p>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="timeline-dot"></div>
+                                    <div class="timeline-content">
+                                        <h4>Web Developer</h4>
+                                        <p class="date">2020 - 2023</p>
+                                        <p>Developed dynamic interfaces and integrated robust backend services.</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Study Section -->
+            <section id="study" class="page-section">
+                <div class="container">
+                    <h2 class="section-title">My <span class="gradient-text">Studies</span></h2>
+                    <p class="section-desc">A deep dive into my continuous learning journey, exploring new technologies and concepts.</p>
+                    <div class="study-grid">
+                        <div class="study-card glass-card hover-lift fade-up">
+                            <div class="card-icon">🧠</div>
+                            <h3>Algorithms</h3>
+                            <p>Exploring complex data structures and optimizing code for maximum efficiency.</p>
+                            <a href="#" class="read-more">Read Notes &rarr;</a>
+                        </div>
+                        <div class="study-card glass-card hover-lift fade-up delay-1">
+                            <div class="card-icon">🎨</div>
+                            <h3>Design Systems</h3>
+                            <p>Building comprehensive and scalable design systems for modern applications.</p>
+                            <a href="#" class="read-more">Read Notes &rarr;</a>
+                        </div>
+                        <div class="study-card glass-card hover-lift fade-up delay-2">
+                            <div class="card-icon">🚀</div>
+                            <h3>Web Performance</h3>
+                            <p>Mastering the art of delivering fast and reliable web experiences globally.</p>
+                            <a href="#" class="read-more">Read Notes &rarr;</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Personal Section -->
+            <section id="personal" class="page-section">
+                <div class="container">
+                    <h2 class="section-title">Personal <span class="gradient-text">Projects</span></h2>
+                    <div class="projects-grid">
+                        <div class="project-card glass-card fade-up">
+                            <div class="project-image proj-1"></div>
+                            <div class="project-content">
+                                <h3>NextGen E-Commerce</h3>
+                                <p>A futuristic e-commerce platform featuring immersive 3D product previews.</p>
+                                <div class="project-links">
+                                    <a href="#" class="btn btn-outline btn-small">Live Demo</a>
+                                    <a href="#" class="btn btn-text btn-small">GitHub</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="project-card glass-card fade-up delay-1">
+                            <div class="project-image proj-2"></div>
+                            <div class="project-content">
+                                <h3>FinTech Dashboard</h3>
+                                <p>Real-time financial analytics dashboard with dynamic animated charts.</p>
+                                <div class="project-links">
+                                    <a href="#" class="btn btn-outline btn-small">Live Demo</a>
+                                    <a href="#" class="btn btn-text btn-small">GitHub</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+        
+        <footer>
+            <div class="footer-content glassmorphism">
+                <p>&copy; 2026 Subin Lim. Designed & Built with passion.</p>
+                <div class="social-links">
+                    <a href="#">GitHub</a>
+                    <a href="#">LinkedIn</a>
+                    <a href="#">Twitter</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+    <script src="./js/app.js"></script>
+</body>
+</html>
