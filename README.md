@@ -4,21 +4,27 @@ A simple, modern, and minimalist single-page portfolio website built for GitHub 
 
 ## 🚀 Features
 
-- **Single Page Application (SPA) Routing:** Seamlessly transition between Main, Profile, Study, and Personal Project sections without page reloads.
+- **Single Page Application (SPA) Routing:** Asynchronously fetches and loads page views (`Main`, `Profile`, `Study`, `Personal`) using `fetch()` without full page reloads.
+- **Particle Detector Navigation:** Innovative circular UI navigation gates dynamically pinned to a real-time particle collision simulation via `js/particles.js`.
 - **Dark/Light Mode Toggle:** A built-in theme toggle that remembers user preference using `localStorage`.
 - **Minimalist Aesthetic:** Clean, soft-bordered layout prioritizing content over flashy colors.
 - **Typography:** Uses the [Pretendard Variable](https://github.com/orioncactus/pretendard) font for high-quality, readable typography.
-- **Responsive Design:** A mobile-friendly layout with a hamburger menu for smaller screens.
 
 ## 📂 Project Structure
 
 ```text
 .
-├── index.html        # Main HTML layout
+├── index.html        # Main HTML layout shell
 ├── css/
 │   └── style.css     # CSS Variables, theming, and responsive styles
-└── js/
-    └── app.js        # Logic for routing, animations, and theme toggling
+├── js/
+│   ├── app.js        # Logic for view fetching, routing, and theme toggling
+│   └── particles.js  # Canvas animation for particle collisions and gate positioning
+└── views/            # Individual HTML partials for each page section
+    ├── main.html
+    ├── profile.html
+    ├── study.html
+    └── personal.html
 ```
 
 ## 🛠️ Future Improvements
