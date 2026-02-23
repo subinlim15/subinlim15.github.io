@@ -45,36 +45,77 @@ document.addEventListener('DOMContentLoaded', () => {
 
     hamburger.addEventListener('click', toggleNav);
 
-    /* --- Single Page Application Routing --- */
+    /* --- Single Page Application Routing & View Fetching --- */
     const sections = document.querySelectorAll('.page-section');
+    const loadedViews = {};
+
+    // If sections are long and scrollable, animate elements when they appear
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: "0px 0px -50px 0px"
+    };
+
+    const scrollObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, observerOptions);
+
+    const observeNewElements = (container) => {
+        const fadeElements = container.querySelectorAll('.fade-up');
+        fadeElements.forEach(el => {
+            scrollObserver.observe(el);
+        });
+    };
+
+    // Function to load external HTML view
+    const loadView = async (targetId) => {
+        const section = document.getElementById(targetId);
+        if (section && !loadedViews[targetId]) {
+            try {
+                const response = await fetch(`./views/${targetId}.html`);
+                if (response.ok) {
+                    const html = await response.text();
+                    section.innerHTML = html;
+                    loadedViews[targetId] = true;
+                    // Observe new loaded elements
+                    observeNewElements(section);
+                }
+            } catch (error) {
+                console.error(`Error loading view ${targetId}:`, error);
+            }
+        } else if (section && loadedViews[targetId]) {
+            // Un-trigger and re-trigger animations if already loaded
+            const animatedElem = section.querySelectorAll('.fade-up.visible');
+            animatedElem.forEach(el => el.classList.remove('visible'));
+
+            setTimeout(() => {
+                const elToAnimate = section.querySelectorAll('.fade-up');
+                elToAnimate.forEach(el => el.classList.add('visible'));
+            }, 50);
+        }
+    };
 
     // Function to switch active section
-    const navigateTo = (targetId) => {
+    const navigateTo = async (targetId) => {
         // Close mobile nav if open
         if (navLinksContainer.classList.contains('nav-active')) {
             toggleNav();
         }
 
-        // Remove active class from all sections
-        sections.forEach(sec => {
-            sec.classList.remove('active');
+        // Fetch the view lazily
+        await loadView(targetId);
 
-            // Un-trigger animations so they replay
-            const animatedElem = sec.querySelectorAll('.fade-up.visible');
-            animatedElem.forEach(el => el.classList.remove('visible'));
-        });
+        // Remove active class from all sections
+        sections.forEach(sec => sec.classList.remove('active'));
 
         // Add active class to target
         const targetSection = document.getElementById(targetId);
         if (targetSection) {
             targetSection.classList.add('active');
             window.scrollTo({ top: 0, behavior: 'instant' });
-
-            // Re-trigger animations after slight delay for transition
-            setTimeout(() => {
-                const elToAnimate = targetSection.querySelectorAll('.fade-up');
-                elToAnimate.forEach(el => el.classList.add('visible'));
-            }, 50);
         }
 
         // Update nav active state
@@ -86,10 +127,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-    // Listen to Nav Links and Buttons
-    const routeLinks = document.querySelectorAll('a[data-target]');
-    routeLinks.forEach(link => {
-        link.addEventListener('click', (e) => {
+    // Event Delegation for Nav Links and Data-Target Buttons (Handles newly loaded DOM inside views)
+    document.body.addEventListener('click', (e) => {
+        const link = e.target.closest('a[data-target]');
+        if (link) {
             e.preventDefault();
             const targetId = link.getAttribute('data-target');
 
@@ -100,7 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             navigateTo(targetId);
-        });
+        }
     });
 
     // Handle back/forward navigation
@@ -108,28 +149,6 @@ document.addEventListener('DOMContentLoaded', () => {
         let hash = window.location.hash.substring(1);
         if (!hash) hash = 'main';
         navigateTo(hash);
-    });
-
-    /* --- Intersection Observer for Scroll Animations --- */
-    // If sections are long and scrollable, animate elements when they appear
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: "0px 0px -50px 0px"
-    };
-
-    const scrollObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-                // Optional: Stop observing once animated
-                // observer.unobserve(entry.target);
-            }
-        });
-    }, observerOptions);
-
-    const fadeElements = document.querySelectorAll('.fade-up');
-    fadeElements.forEach(el => {
-        scrollObserver.observe(el);
     });
 
     // Initial load route handling
