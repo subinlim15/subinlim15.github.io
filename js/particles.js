@@ -129,6 +129,12 @@ window.initParticles = () => {
             ctx.lineWidth = this.thickness;
             ctx.stroke();
             ctx.setLineDash([]); // Reset
+
+            // Draw physical particle at the head
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.thickness * 1.5, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(${colors.beam}, ${alpha})`;
+            ctx.fill();
         }
     }
 
@@ -136,6 +142,26 @@ window.initParticles = () => {
     let beamProgress = 0;
     let eventTracks = [];
     let cooldownTimer = 0;
+    let leftBunch = [];
+    let rightBunch = [];
+
+    const initBunches = () => {
+        leftBunch = [];
+        rightBunch = [];
+        for (let i = 0; i < 40; i++) {
+            leftBunch.push({
+                ox: (Math.random() - 0.5) * 60,
+                oy: (Math.random() - 0.5) * 8,
+                speed: Math.random() * 0.05 + 0.95
+            });
+            rightBunch.push({
+                ox: (Math.random() - 0.5) * 60,
+                oy: (Math.random() - 0.5) * 8,
+                speed: Math.random() * 0.05 + 0.95
+            });
+        }
+    };
+    initBunches();
 
     const animate = () => {
         requestAnimationFrame(animate);
@@ -153,21 +179,25 @@ window.initParticles = () => {
             // Speed of the approaching beams
             beamProgress += 0.02;
 
-            const beamDist = (1 - beamProgress) * (width / 2);
+            const baseDist = (1 - beamProgress) * (width / 2);
 
-            ctx.beginPath();
-            ctx.strokeStyle = `rgba(${colors.beam}, 0.8)`;
-            ctx.lineWidth = 3;
+            ctx.fillStyle = `rgba(${colors.beam}, 0.9)`;
 
-            // Beam 1 (Left to Right)
-            ctx.moveTo(0, cy);
-            ctx.lineTo(cx - beamDist, cy);
+            // Draw Left Bunch Particles
+            leftBunch.forEach(p => {
+                let px = cx - baseDist * p.speed + p.ox;
+                ctx.beginPath();
+                ctx.arc(px, cy + p.oy, 1.5, 0, Math.PI * 2);
+                ctx.fill();
+            });
 
-            // Beam 2 (Right to Left)
-            ctx.moveTo(width, cy);
-            ctx.lineTo(cx + beamDist, cy);
-
-            ctx.stroke();
+            // Draw Right Bunch Particles
+            rightBunch.forEach(p => {
+                let px = cx + baseDist * p.speed + p.ox;
+                ctx.beginPath();
+                ctx.arc(px, cy + p.oy, 1.5, 0, Math.PI * 2);
+                ctx.fill();
+            });
 
             // Head-on collision trigger
             if (beamProgress >= 1) {
@@ -209,6 +239,7 @@ window.initParticles = () => {
             if (cooldownTimer <= 0) {
                 state = 'BEAM';
                 beamProgress = 0;
+                initBunches();
             }
         }
     };
