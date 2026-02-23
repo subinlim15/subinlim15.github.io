@@ -186,16 +186,44 @@ window.initParticles = () => {
             // Draw Left Bunch Particles
             leftBunch.forEach(p => {
                 let px = cx - baseDist * p.speed + p.ox;
+                let py = cy + p.oy;
+
+                let grad = ctx.createLinearGradient(px - 20, py, px, py);
+                grad.addColorStop(0, `rgba(${colors.beam}, 0)`);
+                grad.addColorStop(1, `rgba(${colors.beam}, 0.9)`);
+
                 ctx.beginPath();
-                ctx.arc(px, cy + p.oy, 1.5, 0, Math.PI * 2);
+                ctx.moveTo(px - 20, py);
+                ctx.lineTo(px, py);
+                ctx.strokeStyle = grad;
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.arc(px, py, 1.2, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(${colors.beam}, 0.9)`;
                 ctx.fill();
             });
 
             // Draw Right Bunch Particles
             rightBunch.forEach(p => {
                 let px = cx + baseDist * p.speed + p.ox;
+                let py = cy + p.oy;
+
+                let grad = ctx.createLinearGradient(px + 20, py, px, py);
+                grad.addColorStop(0, `rgba(${colors.beam}, 0)`);
+                grad.addColorStop(1, `rgba(${colors.beam}, 0.9)`);
+
                 ctx.beginPath();
-                ctx.arc(px, cy + p.oy, 1.5, 0, Math.PI * 2);
+                ctx.moveTo(px + 20, py);
+                ctx.lineTo(px, py);
+                ctx.strokeStyle = grad;
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.arc(px, py, 1.2, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(${colors.beam}, 0.9)`;
                 ctx.fill();
             });
 
