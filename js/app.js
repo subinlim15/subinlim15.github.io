@@ -21,29 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    /* --- Mobile Navigation --- */
-    const hamburger = document.querySelector('.hamburger');
-    const navLinksContainer = document.querySelector('.nav-links');
-    const navLinks = document.querySelectorAll('.nav-link');
 
-    const toggleNav = () => {
-        navLinksContainer.classList.toggle('nav-active');
-
-        // Burger Animation
-        hamburger.classList.toggle('toggle');
-        const spans = hamburger.querySelectorAll('span');
-        if (hamburger.classList.contains('toggle')) {
-            spans[0].style.transform = 'rotate(-45deg) translate(-5px, 6px)';
-            spans[1].style.opacity = '0';
-            spans[2].style.transform = 'rotate(45deg) translate(-5px, -6px)';
-        } else {
-            spans[0].style.transform = 'none';
-            spans[1].style.opacity = '1';
-            spans[2].style.transform = 'none';
-        }
-    };
-
-    hamburger.addEventListener('click', toggleNav);
 
     /* --- Single Page Application Routing & View Fetching --- */
     const sections = document.querySelectorAll('.page-section');
@@ -108,10 +86,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to switch active section
     const navigateTo = async (targetId) => {
-        // Close mobile nav if open
-        if (navLinksContainer.classList.contains('nav-active')) {
-            toggleNav();
-        }
 
         // Fetch the view lazily
         await loadView(targetId);
@@ -125,14 +99,6 @@ document.addEventListener('DOMContentLoaded', () => {
             targetSection.classList.add('active');
             window.scrollTo({ top: 0, behavior: 'instant' });
         }
-
-        // Update nav active state
-        navLinks.forEach(link => {
-            link.classList.remove('active');
-            if (link.getAttribute('data-target') === targetId) {
-                link.classList.add('active');
-            }
-        });
     };
 
     // Event Delegation for Nav Links and Data-Target Buttons (Handles newly loaded DOM inside views)
