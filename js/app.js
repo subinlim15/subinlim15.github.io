@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         window.history.pushState({ section: targetId }, '', newUrl);
                     }
                     navigateTo(targetId);
-                }, 500); // wait 500ms for zoom effect
+                }, 1000); // Wait 1 second for gradual zoom effect
             } else {
                 // Push state to history
                 const newUrl = `#${targetId}`;
