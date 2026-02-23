@@ -82,6 +82,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     loadedViews[targetId] = true;
                     // Observe new loaded elements
                     observeNewElements(section);
+
+                    if (targetId === 'main' && typeof window.initParticles === 'function') {
+                        window.initParticles();
+                    }
                 }
             } catch (error) {
                 console.error(`Error loading view ${targetId}:`, error);
@@ -95,6 +99,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 const elToAnimate = section.querySelectorAll('.fade-up');
                 elToAnimate.forEach(el => el.classList.add('visible'));
             }, 50);
+
+            if (targetId === 'main' && typeof window.initParticles === 'function') {
+                window.initParticles();
+            }
         }
     };
 

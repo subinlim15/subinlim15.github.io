@@ -1,4 +1,6 @@
-document.addEventListener('DOMContentLoaded', () => {
+window.initParticles = () => {
+    if (document.getElementById('particle-canvas')) return;
+
     // Create canvas dynamically
     const canvas = document.createElement('canvas');
     canvas.id = 'particle-canvas';
@@ -212,4 +214,4 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     animate();
-});
+};
