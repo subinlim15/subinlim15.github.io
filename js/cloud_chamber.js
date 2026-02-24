@@ -72,8 +72,8 @@ class CloudChamber {
             vy: Math.sin(angle) * speed,
             charge: charge,
             life: 1.0,
-            // Slower decay for longer visibility
-            decayRate: isCosmic ? 0.0015 : 0.003 + Math.random() * 0.003,
+            // Increased decay for shorter lifetime
+            decayRate: isCosmic ? 0.003 : 0.008 + Math.random() * 0.01,
             history: [{ x, y }]
         });
     }
