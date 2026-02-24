@@ -99,24 +99,34 @@ class CloudChamber {
                 const dx = this.mouseX - p.x;
                 const dy = this.mouseY - p.y;
                 const dist2 = dx * dx + dy * dy;
-                // Reduced interaction radius for more localized effect (~250px)
-                const maxDist2 = 250 * 250;
 
-                if (dist2 < maxDist2) {
-                    // Local magnetic field magnitude (stronger closer to mouse)
-                    const bStrength = (1 - (dist2 / maxDist2)) * 0.3;
-                    const curveForce = p.charge * bStrength;
+                // Magnetic Dipole Model
+                // For a dipole pointing out of the (x,y) screen (z-axis), the B-field in the plane is proportional to 1/r³
+                // Introduce a 'zDepth' to prevent singularity/infinity when distance is 0. 
+                // Imagine the dipole is placed slightly below the screen at z = -depth.
+                const zDepth = 60;
+                const r3 = Math.pow(dist2 + zDepth * zDepth, 1.5);
 
-                    // Lorentz force changes direction
-                    const newVx = p.vx * Math.cos(curveForce) - p.vy * Math.sin(curveForce);
-                    const newVy = p.vx * Math.sin(curveForce) + p.vy * Math.cos(curveForce);
-                    p.vx = newVx;
-                    p.vy = newVy;
+                // Dipole Moment constant (tuned to give a max B-field of ~0.35 at the exact mouse center)
+                // 0.35 * (60^3) = 75600
+                const dipoleMoment = 75600;
+                const bStrength = dipoleMoment / r3;
 
-                    // Energy loss: gentler decay so the spiral makes multiple loops
-                    p.vx *= 0.985;
-                    p.vy *= 0.985;
-                }
+                // Lorentz force (F = qv x B): Acts perpendicular to velocity, causing rotation without changing speed.
+                const curveForce = p.charge * bStrength;
+
+                const newVx = p.vx * Math.cos(curveForce) - p.vy * Math.sin(curveForce);
+                const newVy = p.vx * Math.sin(curveForce) + p.vy * Math.cos(curveForce);
+                p.vx = newVx;
+                p.vy = newVy;
+
+                // Synchrotron Radiation (Energy Loss)
+                // Accelerated charged particles in a B-field lose energy proportional to B² * v²
+                // We simulate this by applying a drag coefficient proportional to bStrength squared.
+                // This creates realistic tighter inward spirals closer to the dipole.
+                const radiationLoss = Math.max(0.6, 1 - (0.15 * bStrength * bStrength));
+                p.vx *= radiationLoss;
+                p.vy *= radiationLoss;
             }
 
             p.x += p.vx;
