@@ -1,138 +1,129 @@
 const PersonalGame = (() => {
     let canvas, ctx;
-    let particles = [];
     let animationId;
     let isPlaying = false;
     let score = 0;
-    let timeLeft = 30;
-    let timerInterval;
+    let frameCount = 0;
+
+    const GRAVITY = 0.6;
+    const JUMP_FORCE = -10;
+    const GROUND_HEIGHT = 20;
+
+    let player = {
+        x: 50,
+        y: 150,
+        width: 20,
+        height: 20,
+        vy: 0,
+        isGrounded: true,
+        color: '#ff4757'
+    };
+
+    let obstacles = [];
+    let particles = [];
 
     const COLORS = {
         background: '#111',
-        higgs: '#ff4757',
-        noise: ['#1e90ff', '#2ed573', '#ffa502', '#57606f', '#7bed9f']
+        ground: '#333',
+        player: '#ff4757',
+        obstacle: '#2ed573',
+        text: '#fff'
     };
-
-    class Particle {
-        constructor(isHiggs = false) {
-            this.isHiggs = isHiggs;
-            this.radius = isHiggs ? 8 : (Math.random() * 4 + 3);
-            this.reset();
-        }
-
-        reset() {
-            if (!canvas) return;
-            this.x = Math.random() * (canvas.width - this.radius * 2) + this.radius;
-            this.y = Math.random() * (canvas.height - this.radius * 2) + this.radius;
-
-            // Speed up the higgs a bit so it's challenging to catch
-            const speedMultiplier = this.isHiggs ? 3.5 : (Math.random() * 1.5 + 0.5);
-            const angle = Math.random() * Math.PI * 2;
-            this.vx = Math.cos(angle) * speedMultiplier;
-            this.vy = Math.sin(angle) * speedMultiplier;
-
-            this.color = this.isHiggs ? COLORS.higgs : COLORS.noise[Math.floor(Math.random() * COLORS.noise.length)];
-
-            // For higgs, erratic movement timer
-            this.wiggleTimer = 0;
-        }
-
-        update() {
-            if (!canvas) return;
-
-            // Erratic movement for Higgs
-            if (this.isHiggs) {
-                this.wiggleTimer++;
-                if (this.wiggleTimer > 30) {
-                    this.vx += (Math.random() - 0.5) * 2;
-                    this.vy += (Math.random() - 0.5) * 2;
-
-                    // Cap speed
-                    const speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
-                    if (speed > 5) {
-                        this.vx = (this.vx / speed) * 5;
-                        this.vy = (this.vy / speed) * 5;
-                    }
-                    this.wiggleTimer = 0;
-                }
-            }
-
-            this.x += this.vx;
-            this.y += this.vy;
-
-            // Bounce off walls
-            if (this.x - this.radius <= 0 || this.x + this.radius >= canvas.width) this.vx *= -1;
-            if (this.y - this.radius <= 0 || this.y + this.radius >= canvas.height) this.vy *= -1;
-
-            // Constrain
-            this.x = Math.max(this.radius, Math.min(canvas.width - this.radius, this.x));
-            this.y = Math.max(this.radius, Math.min(canvas.height - this.radius, this.y));
-        }
-
-        draw(ctx) {
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-            ctx.fillStyle = this.color;
-            ctx.fill();
-            if (this.isHiggs) {
-                ctx.shadowBlur = 10;
-                ctx.shadowColor = this.color;
-                ctx.fill();
-                ctx.shadowBlur = 0; // Reset
-            }
-            ctx.closePath();
-        }
-    }
-
-    function spawnParticles() {
-        particles = [];
-        // Spawn 1 higgs
-        particles.push(new Particle(true));
-        // Spawn N noise particles depending on score to increase difficulty
-        const noiseCount = 40 + (score * 15);
-        for (let i = 0; i < noiseCount; i++) {
-            particles.push(new Particle(false));
-        }
-    }
 
     function initGame() {
         canvas = document.getElementById('higgs-game-canvas');
         if (!canvas) return;
         ctx = canvas.getContext('2d');
 
-        // Handle click
-        canvas.addEventListener('mousedown', handleCanvasClick);
-        canvas.addEventListener('touchstart', handleCanvasClick, { passive: false });
+        // Input handlers
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space' && !e.repeat) {
+                e.preventDefault();
+                handleJump();
+            }
+        });
+
+        // Touch or click on canvas
+        canvas.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            handleJump();
+        });
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            handleJump();
+        }, { passive: false });
 
         const startBtn = document.getElementById('start-game-btn');
         if (startBtn) {
             startBtn.addEventListener('click', startGame);
         }
 
-        // Draw initial state
-        ctx.fillStyle = COLORS.background;
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        drawInitialState();
+    }
+
+    function handleJump() {
+        if (!isPlaying) {
+            // Start game on first jump if overlay is visible
+            const overlay = document.getElementById('game-overlay');
+            if (overlay.style.display !== 'none') {
+                startGame();
+            }
+            return;
+        }
+
+        if (player.isGrounded) {
+            player.vy = JUMP_FORCE;
+            player.isGrounded = false;
+            createParticles(player.x, player.y + player.height, 5, '#ddd');
+        }
+    }
+
+    function createParticles(x, y, count, color) {
+        for (let i = 0; i < count; i++) {
+            particles.push({
+                x: x,
+                y: y,
+                vx: (Math.random() - 0.5) * 4,
+                vy: (Math.random() - 1) * 4,
+                life: 1.0,
+                color: color
+            });
+        }
+    }
+
+    function updateParticles() {
+        for (let i = particles.length - 1; i >= 0; i--) {
+            let p = particles[i];
+            p.x += p.vx;
+            p.y += p.vy;
+            p.life -= 0.05;
+            if (p.life <= 0) {
+                particles.splice(i, 1);
+            } else {
+                ctx.globalAlpha = p.life;
+                ctx.fillStyle = p.color;
+                ctx.fillRect(p.x, p.y, 3, 3);
+                ctx.globalAlpha = 1.0;
+            }
+        }
     }
 
     function startGame() {
         if (isPlaying) return;
-        score = 0;
-        timeLeft = 30;
-        isPlaying = true;
 
         document.getElementById('game-overlay').style.display = 'none';
+
+        // Reset state
+        score = 0;
+        frameCount = 0;
+        obstacles = [];
+        particles = [];
+        player.y = canvas.height - GROUND_HEIGHT - player.height;
+        player.vy = 0;
+        player.isGrounded = true;
+        isPlaying = true;
+
         updateUI();
-
-        spawnParticles();
-
-        if (timerInterval) clearInterval(timerInterval);
-        timerInterval = setInterval(() => {
-            timeLeft--;
-            updateUI();
-            if (timeLeft <= 0) {
-                endGame();
-            }
-        }, 1000);
 
         if (animationId) cancelAnimationFrame(animationId);
         gameLoop();
@@ -140,133 +131,122 @@ const PersonalGame = (() => {
 
     function endGame() {
         isPlaying = false;
-        cancelAnimationFrame(animationId);
-        clearInterval(timerInterval);
+        createParticles(player.x + player.width / 2, player.y + player.height / 2, 20, COLORS.player);
 
         const overlay = document.getElementById('game-overlay');
         const msg = document.getElementById('game-message');
         const btn = document.getElementById('start-game-btn');
 
-        overlay.style.display = 'flex';
-        btn.textContent = 'Run Another Collision';
-
-        if (score >= 5.0) {
-            msg.textContent = `Discovery! Reached ${score.toFixed(1)}σ! 🏆`;
-            msg.style.color = '#ffd700';
-        } else {
-            msg.textContent = `Run Ended. Only ${score.toFixed(1)}σ...`;
-            msg.style.color = '#FFF';
-        }
+        setTimeout(() => {
+            overlay.style.display = 'flex';
+            msg.innerHTML = `Collision Detected!<br><span style="font-size:1.2rem;color:#ccc">Score: ${Math.floor(score)}</span>`;
+            btn.textContent = 'Restart Dash';
+        }, 500);
     }
 
     function updateUI() {
         const scoreEl = document.getElementById('game-score');
-        const timeEl = document.getElementById('game-time');
-        if (scoreEl) scoreEl.textContent = `Significance: ${score.toFixed(1)} σ`;
-        if (timeEl) timeEl.textContent = `Time: ${timeLeft}s`;
+        if (scoreEl) scoreEl.textContent = `Score: ${Math.floor(score)}`;
     }
 
-    function handleCanvasClick(e) {
-        if (!isPlaying || !canvas) return;
-        e.preventDefault();
+    function drawInitialState() {
+        if (!ctx) return;
+        ctx.fillStyle = COLORS.background;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        const rect = canvas.getBoundingClientRect();
+        ctx.fillStyle = COLORS.ground;
+        ctx.fillRect(0, canvas.height - GROUND_HEIGHT, canvas.width, GROUND_HEIGHT);
 
-        // Calculate scale factors if CSS scales the canvas
-        const scaleX = canvas.width / rect.width;
-        const scaleY = canvas.height / rect.height;
-
-        // Support both mouse and touch
-        let clientX = e.clientX;
-        let clientY = e.clientY;
-        if (e.touches && e.touches.length > 0) {
-            clientX = e.touches[0].clientX;
-            clientY = e.touches[0].clientY;
-        }
-
-        const clickX = (clientX - rect.left) * scaleX;
-        const clickY = (clientY - rect.top) * scaleY;
-
-        let hitHiggs = false;
-
-        for (let i = 0; i < particles.length; i++) {
-            const p = particles[i];
-            const dist = Math.hypot(p.x - clickX, p.y - clickY);
-            // generous hitbox
-            if (dist < p.radius + 15) {
-                if (p.isHiggs) {
-                    hitHiggs = true;
-                    break;
-                } else {
-                    // Penalty for clicking noise
-                    timeLeft = Math.max(0, timeLeft - 2);
-                    updateUI();
-                }
-            }
-        }
-
-        if (hitHiggs) {
-            score += 0.5;
-            timeLeft += 2; // Bonus time
-            updateUI();
-            // Create particle explosion
-            createExplosion(clickX, clickY);
-            // Respawn harder
-            spawnParticles();
-
-            // Win condition early
-            if (score >= 5.0 && timeLeft > 0) {
-                endGame();
-            }
-        }
-    }
-
-    let explosions = [];
-    function createExplosion(x, y) {
-        for (let i = 0; i < 15; i++) {
-            explosions.push({
-                x: x,
-                y: y,
-                vx: (Math.random() - 0.5) * 8,
-                vy: (Math.random() - 0.5) * 8,
-                life: 1.0,
-                color: COLORS.higgs
-            });
-        }
-    }
-
-    function updateExplosions() {
-        for (let i = explosions.length - 1; i >= 0; i--) {
-            const p = explosions[i];
-            p.x += p.vx;
-            p.y += p.vy;
-            p.life -= 0.05;
-            if (p.life <= 0) {
-                explosions.splice(i, 1);
-            } else {
-                ctx.globalAlpha = p.life;
-                ctx.fillStyle = p.color;
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.globalAlpha = 1.0;
-            }
-        }
+        ctx.fillStyle = COLORS.player;
+        ctx.fillRect(player.x, canvas.height - GROUND_HEIGHT - player.height, player.width, player.height);
     }
 
     function gameLoop() {
-        if (!isPlaying || !ctx) return;
+        if (!isPlaying) {
+            // Render one last frame for death particles
+            ctx.fillStyle = COLORS.background;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = COLORS.ground;
+            ctx.fillRect(0, canvas.height - GROUND_HEIGHT, canvas.width, GROUND_HEIGHT);
+            updateParticles();
+            if (particles.length > 0) {
+                animationId = requestAnimationFrame(gameLoop);
+            }
+            return;
+        }
 
-        // draw background with slight trail
-        ctx.fillStyle = 'rgba(17, 17, 17, 0.4)';
+        frameCount++;
+        score += 0.05;
+
+        if (frameCount % 10 === 0) updateUI();
+
+        // Clear canvas
+        ctx.fillStyle = COLORS.background;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        particles.forEach(p => {
-            p.update();
-            p.draw(ctx);
-        });
+        // Draw ground
+        ctx.fillStyle = COLORS.ground;
+        ctx.fillRect(0, canvas.height - GROUND_HEIGHT, canvas.width, GROUND_HEIGHT);
 
-        updateExplosions();
+        // Player physics
+        player.vy += GRAVITY;
+        player.y += player.vy;
+
+        const groundY = canvas.height - GROUND_HEIGHT - player.height;
+        if (player.y > groundY) {
+            player.y = groundY;
+            player.vy = 0;
+            player.isGrounded = true;
+        }
+
+        // Draw Player with glow
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = COLORS.player;
+        ctx.fillStyle = COLORS.player;
+        ctx.fillRect(player.x, player.y, player.width, player.height);
+        ctx.shadowBlur = 0;
+
+        // Manage Obstacles
+        // Speed up over time
+        const gameSpeed = 5 + (score * 0.02);
+
+        // Spawn
+        if (frameCount % Math.max(40, Math.floor(120 - score)) === 0) {
+            obstacles.push({
+                x: canvas.width,
+                y: canvas.height - GROUND_HEIGHT - (Math.random() > 0.7 ? 40 : 25), // Occasional high obstacles
+                width: 15,
+                height: Math.random() > 0.7 ? 40 : 25,
+                color: COLORS.obstacle
+            });
+        }
+
+        // Update & Draw Obstacles
+        for (let i = obstacles.length - 1; i >= 0; i--) {
+            let obs = obstacles[i];
+            obs.x -= gameSpeed;
+
+            ctx.fillStyle = obs.color;
+            ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
+
+            // Collision Detection (AABB)
+            if (
+                player.x < obs.x + obs.width &&
+                player.x + player.width > obs.x &&
+                player.y < obs.y + obs.height &&
+                player.y + player.height > obs.y
+            ) {
+                // Hit!
+                endGame();
+            }
+
+            // Remove off-screen
+            if (obs.x + obs.width < 0) {
+                obstacles.splice(i, 1);
+            }
+        }
+
+        updateParticles();
 
         animationId = requestAnimationFrame(gameLoop);
     }
@@ -282,7 +262,6 @@ const PersonalGame = (() => {
         stop: () => {
             isPlaying = false;
             if (animationId) cancelAnimationFrame(animationId);
-            if (timerInterval) clearInterval(timerInterval);
         }
     };
 })();
