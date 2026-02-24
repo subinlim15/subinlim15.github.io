@@ -242,7 +242,7 @@ h6 {
     overflow: visible;
     opacity: 1;
     visibility: visible;
-    transform: translateY(0) scale(1);
+    transform: none;
     pointer-events: all;
     position: relative;
 }
