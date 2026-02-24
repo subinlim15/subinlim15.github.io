@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // TOC Scroll Spy Logic
-        const blocks = container.querySelectorAll('.section-block');
+        const blocks = container.querySelectorAll('#summary, .timeline-section-title');
         if (blocks.length > 0) {
             const tocObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (activeLink) activeLink.classList.add('active-toc');
                     }
                 });
-            }, { rootMargin: '-120px 0px -60% 0px' });
+            }, { rootMargin: '-100px 0px -50% 0px' });
             blocks.forEach(block => tocObserver.observe(block));
         }
     };
@@ -155,7 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         window.history.pushState({ section: targetId }, '', newUrl);
                     }
                     navigateTo(targetId);
-                }, 1000); // Wait 1 second for gradual zoom effect
+                }, 400); // Wait 400ms for snappier zoom transition
             } else {
                 // Push state to history
                 const newUrl = `#${targetId}`;
