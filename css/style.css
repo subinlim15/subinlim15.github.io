@@ -789,10 +789,10 @@ footer {
 }
 
 .page-section.zoom-dive {
-    transform: scale(10) !important;
+    transform: scale(1.03) !important;
     opacity: 0 !important;
     pointer-events: none;
-    transition: transform 0.6s cubic-bezier(0.5, 0, 0.2, 1), opacity 0.5s 0.1s !important;
+    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s !important;
 }
 
 .gate-btn.zoom-active {

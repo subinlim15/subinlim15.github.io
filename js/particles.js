@@ -171,9 +171,17 @@ window.initParticles = () => {
         const navHeight = document.querySelector('.navbar')?.offsetHeight || 80;
         const availableHeight = height - navHeight;
 
+        let yOffset = 0;
+        let radiusFactor = 0.42;
+
+        if (width < 768) {
+            yOffset = height * 0.15; // Shift down on mobile
+            radiusFactor = 0.35;    // Make slightly smaller on mobile to fit
+        }
+
         const cx = width / 2;
-        const cy = navHeight + (availableHeight / 2);
-        const maxRadius = Math.min(width, availableHeight) * 0.42;
+        const cy = navHeight + (availableHeight / 2) + yOffset;
+        const maxRadius = Math.min(width, availableHeight) * radiusFactor;
 
         // Draw CMS/ATLAS Detector outline
         drawDetector(ctx, cx, cy, maxRadius, colors);
