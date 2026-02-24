@@ -109,7 +109,7 @@ class CloudChamber {
 
                 // Dipole Moment constant (tuned to give a max B-field of ~0.35 at the exact mouse center)
                 // 0.35 * (60^3) = 75600
-                const dipoleMoment = 75600;
+                const dipoleMoment = 100000;
                 const bStrength = dipoleMoment / r3;
 
                 // Lorentz force (F = qv x B): Acts perpendicular to velocity, causing rotation without changing speed.
