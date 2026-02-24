@@ -73,16 +73,21 @@ document.addEventListener('DOMContentLoaded', () => {
         const blocks = container.querySelectorAll('#summary, .timeline-section-title');
         if (blocks.length > 0) {
             const tocObserver = new IntersectionObserver((entries) => {
+                let currentActive = null;
+                // Find the topmost intersecting element
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        const id = entry.target.getAttribute('id');
-                        const links = document.querySelectorAll('.profile-toc a');
-                        links.forEach(a => a.classList.remove('active-toc'));
-                        const activeLink = document.querySelector(`.profile-toc a[data-scroll="${id}"]`);
-                        if (activeLink) activeLink.classList.add('active-toc');
+                        currentActive = entry.target.getAttribute('id');
                     }
                 });
-            }, { rootMargin: '-100px 0px -50% 0px' });
+
+                if (currentActive) {
+                    const links = document.querySelectorAll('.profile-toc a');
+                    links.forEach(a => a.classList.remove('active-toc'));
+                    const activeLink = document.querySelector(`.profile-toc a[data-scroll="${currentActive}"]`);
+                    if (activeLink) activeLink.classList.add('active-toc');
+                }
+            }, { rootMargin: '-150px 0px -60% 0px' });
             blocks.forEach(block => tocObserver.observe(block));
         }
     };
@@ -145,20 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Add active class to target
         const targetSection = document.getElementById(targetId);
         if (targetSection) {
-            if (origin) {
-                targetSection.style.setProperty('--origin-x', `${origin.x}px`);
-                targetSection.style.setProperty('--origin-y', `${origin.y}px`);
-                targetSection.classList.add('from-bubble');
-
-                // Force reflow so the browser registers the initial masked state
-                void targetSection.offsetWidth;
-
-                targetSection.classList.add('active');
-            } else {
-                targetSection.style.removeProperty('--origin-x');
-                targetSection.style.removeProperty('--origin-y');
-                targetSection.classList.add('active');
-            }
+            targetSection.classList.add('active');
             window.scrollTo({ top: 0, behavior: 'instant' });
         }
     };
@@ -171,15 +163,18 @@ document.addEventListener('DOMContentLoaded', () => {
             const targetId = link.getAttribute('data-target');
 
             if (link.classList.contains('gate-btn')) {
-                const rect = link.getBoundingClientRect();
-                const origin = { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+                if (link.classList.contains('zoom-active')) return;
 
-                // Navigate immediately to expand the target page via clip-path
-                const newUrl = `#${targetId}`;
-                if (window.location.hash !== newUrl) {
-                    window.history.pushState({ section: targetId }, '', newUrl);
-                }
-                navigateTo(targetId, origin);
+                link.classList.add('zoom-active');
+
+                // Wait for the bubble to scale up to 40x, then show the new page.
+                setTimeout(() => {
+                    const newUrl = `#${targetId}`;
+                    if (window.location.hash !== newUrl) {
+                        window.history.pushState({ section: targetId }, '', newUrl);
+                    }
+                    navigateTo(targetId);
+                }, 800);
             } else {
                 // Push state to history
                 const newUrl = `#${targetId}`;
