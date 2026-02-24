@@ -18,28 +18,32 @@ class CloudChamber {
         this.ctx = this.canvas.getContext('2d');
         this.resize();
 
+        this.mouseX = -1000;
+        this.mouseY = -1000;
+        this.isHoveringBackground = false;
+
         // Mouse interaction for Magnetic Field based on background hovering
-        const setMagneticField = (e) => {
+        const trackMouse = (e) => {
             if (!this.isActive) return;
             const target = e.target;
-            // If the mouse is over a card, navbar, or control, remove B-field
             const overCard = target.closest('.glass-card, .navbar, .gate-btn, .footer-content');
-            if (!overCard) {
-                // Determine direction based on x position relative to center for consistent curving
-                const rect = this.canvas.getBoundingClientRect();
-                const x = e.clientX || (e.touches && e.touches[0].clientX) || 0;
-                this.targetB = (x > rect.left + rect.width / 2) ? 0.05 : -0.05;
-            } else {
-                this.targetB = 0;
-            }
+
+            this.isHoveringBackground = !overCard;
+            this.mouseX = e.clientX || (e.touches && e.touches[0].clientX) || -1000;
+            this.mouseY = e.clientY || (e.touches && e.touches[0].clientY) || -1000;
         };
 
-        window.addEventListener('mousemove', setMagneticField);
-        window.addEventListener('touchmove', setMagneticField, { passive: true });
+        window.addEventListener('mousemove', trackMouse);
+        window.addEventListener('touchmove', trackMouse, { passive: true });
 
         // Reset when mouse leaves
-        window.addEventListener('mouseleave', () => this.targetB = 0);
-        window.addEventListener('touchend', () => this.targetB = 0);
+        const resetMouse = () => {
+            this.isHoveringBackground = false;
+            this.mouseX = -1000;
+            this.mouseY = -1000;
+        };
+        window.addEventListener('mouseleave', resetMouse);
+        window.addEventListener('touchend', resetMouse);
 
         window.addEventListener('resize', () => {
             if (this.isActive) this.resize();
@@ -95,13 +99,30 @@ class CloudChamber {
         for (let i = this.particles.length - 1; i >= 0; i--) {
             let p = this.particles[i];
 
-            // Apply magnetic field (Lorentz Force curve)
-            if (Math.abs(this.currentB) > 0.001) {
-                const curveForce = p.charge * this.currentB;
-                const newVx = p.vx * Math.cos(curveForce) - p.vy * Math.sin(curveForce);
-                const newVy = p.vx * Math.sin(curveForce) + p.vy * Math.cos(curveForce);
-                p.vx = newVx;
-                p.vy = newVy;
+            // Localized magnetic field (B-field coming out of the screen)
+            if (this.isHoveringBackground) {
+                const dx = this.mouseX - p.x;
+                const dy = this.mouseY - p.y;
+                const dist2 = dx * dx + dy * dy;
+                // B field strength falls off with distance squared, capped at a max distance ~300px
+                const maxDist2 = 300 * 300;
+
+                if (dist2 < maxDist2) {
+                    // Local magnetic field magnitude (stronger closer to mouse)
+                    const bStrength = (1 - (dist2 / maxDist2)) * 0.15;
+                    const curveForce = p.charge * bStrength;
+
+                    // Lorentz force changes direction but not speed (magnetic field doing no work)
+                    const newVx = p.vx * Math.cos(curveForce) - p.vy * Math.sin(curveForce);
+                    const newVy = p.vx * Math.sin(curveForce) + p.vy * Math.cos(curveForce);
+                    p.vx = newVx;
+                    p.vy = newVy;
+
+                    // Energy loss due to Bremsstrahlung/Synchrotron radiation in a magnetic field
+                    // Speed slowly decays, creating a tighter inward spiral
+                    p.vx *= 0.96;
+                    p.vy *= 0.96;
+                }
             }
 
             p.x += p.vx;
@@ -126,8 +147,8 @@ class CloudChamber {
                 // Color mapping: subtle traces adapting to theme
                 const alpha = Math.max(0, p.life);
                 const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-                const rgb = isDark ? '180, 200, 255' : '120, 130, 150'; // Bright for dark mode, subtle grey/blue for light mode
-                this.ctx.strokeStyle = `rgba(${rgb}, ${alpha * (isDark ? 0.4 : 0.6)})`;
+                const rgb = isDark ? '180, 200, 255' : '80, 100, 140'; // Deeper blue/grey for light mode for better visibility
+                this.ctx.strokeStyle = `rgba(${rgb}, ${alpha * (isDark ? 0.4 : 0.8)})`;
                 this.ctx.lineWidth = 1.5;
                 this.ctx.lineCap = 'round';
                 this.ctx.lineJoin = 'round';
