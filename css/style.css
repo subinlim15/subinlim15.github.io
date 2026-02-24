@@ -619,6 +619,14 @@ ul.cv-list li::before,
     color: var(--text-color);
 }
 
+.role-subtitle {
+    font-size: 0.95rem;
+    font-style: italic;
+    color: var(--secondary-color);
+    margin-bottom: 0.8rem;
+    padding-left: 2px;
+}
+
 .skills {
     display: flex;
     flex-wrap: wrap;
