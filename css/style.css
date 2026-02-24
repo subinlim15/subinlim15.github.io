@@ -495,10 +495,38 @@ h6 {
 }
 
 .social-btn:hover {
-    background: var(--heading-color);
-    color: var(--bg-color);
     transform: translateY(-3px);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.social-btn.email-btn:hover,
+.social-btn.insta-btn:hover {
+    background: var(--heading-color);
+    color: var(--bg-color);
+}
+
+.social-btn.linkedin-btn:hover {
+    background: #0077B5;
+    color: #FFF;
+    border-color: #0077B5;
+}
+
+.social-btn.orcid-btn:hover {
+    background: #A6CE39;
+    color: #FFF;
+    border-color: #A6CE39;
+}
+
+.social-btn.inspire-btn:hover {
+    background: #001528;
+    color: #FFF;
+    border-color: #001528;
+}
+
+[data-theme='dark'] .social-btn.inspire-btn:hover {
+    background: #00FFFF;
+    color: #000;
+    border-color: #00FFFF;
 }
 
 .profile-divider {
