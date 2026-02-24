@@ -129,27 +129,47 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // Function to switch active section
-    const navigateTo = async (targetId, origin = null) => {
-
+    const navigateTo = async (targetId, isBubbleZoom = false) => {
         // Fetch the view lazily
         await loadView(targetId);
 
-        // Reset zoomed bubbles if returning without transition jitter
-        document.querySelectorAll('.gate-btn.zoom-active').forEach(btn => {
-            btn.classList.add('zoom-resetting');
-            btn.classList.remove('zoom-active');
-            setTimeout(() => btn.classList.remove('zoom-resetting'), 50);
-        });
-
-        // Remove active class from all sections
-        sections.forEach(sec => {
-            sec.classList.remove('active');
-            sec.classList.remove('from-bubble');
-        });
-
-        // Add active class to target
         const targetSection = document.getElementById(targetId);
-        if (targetSection) {
+        if (!targetSection) return;
+
+        if (isBubbleZoom) {
+            // Instantly start fading in the target section
+            targetSection.classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'instant' });
+
+            // Wait for the bubble expansion (0.8s) to complete
+            setTimeout(() => {
+                // Instantly hide all other sections to prevent fading ghost flashes
+                sections.forEach(sec => {
+                    if (sec.id !== targetId) {
+                        sec.style.transition = 'none';
+                        sec.classList.remove('active');
+                        void sec.offsetWidth; // Force reflow
+                        sec.style.transition = '';
+                    }
+                });
+
+                // Reset bubble scales quietly now that main section is hidden
+                document.querySelectorAll('.gate-btn.zoom-active').forEach(btn => {
+                    btn.classList.add('zoom-resetting');
+                    btn.classList.remove('zoom-active');
+                    setTimeout(() => btn.classList.remove('zoom-resetting'), 50);
+                });
+            }, 800);
+
+        } else {
+            // Standard reset for regular navigation (e.g. back button)
+            document.querySelectorAll('.gate-btn.zoom-active').forEach(btn => {
+                btn.classList.add('zoom-resetting');
+                btn.classList.remove('zoom-active');
+                setTimeout(() => btn.classList.remove('zoom-resetting'), 50);
+            });
+
+            sections.forEach(sec => sec.classList.remove('active'));
             targetSection.classList.add('active');
             window.scrollTo({ top: 0, behavior: 'instant' });
         }
@@ -167,14 +187,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 link.classList.add('zoom-active');
 
-                // Wait for the bubble to scale up to 40x, then show the new page.
-                setTimeout(() => {
-                    const newUrl = `#${targetId}`;
-                    if (window.location.hash !== newUrl) {
-                        window.history.pushState({ section: targetId }, '', newUrl);
-                    }
-                    navigateTo(targetId);
-                }, 800);
+                // Navigate IMMEDIATELY to trigger simultaneous content fade
+                const newUrl = `#${targetId}`;
+                if (window.location.hash !== newUrl) {
+                    window.history.pushState({ section: targetId }, '', newUrl);
+                }
+                navigateTo(targetId, true);
             } else {
                 // Push state to history
                 const newUrl = `#${targetId}`;
