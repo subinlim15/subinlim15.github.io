@@ -146,15 +146,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const targetSection = document.getElementById(targetId);
         if (targetSection) {
             if (origin) {
-                targetSection.style.transformOrigin = `${origin.x}px ${origin.y}px`;
+                targetSection.style.setProperty('--origin-x', `${origin.x}px`);
+                targetSection.style.setProperty('--origin-y', `${origin.y}px`);
                 targetSection.classList.add('from-bubble');
 
-                // Force reflow so the browser registers the initial scaled down state
+                // Force reflow so the browser registers the initial masked state
                 void targetSection.offsetWidth;
 
                 targetSection.classList.add('active');
             } else {
-                targetSection.style.transformOrigin = '';
+                targetSection.style.removeProperty('--origin-x');
+                targetSection.style.removeProperty('--origin-y');
                 targetSection.classList.add('active');
             }
             window.scrollTo({ top: 0, behavior: 'instant' });
@@ -169,20 +171,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const targetId = link.getAttribute('data-target');
 
             if (link.classList.contains('gate-btn')) {
-                if (link.classList.contains('zoom-active')) return;
-
                 const rect = link.getBoundingClientRect();
                 const origin = { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
 
-                link.classList.add('zoom-active');
-
-                setTimeout(() => {
-                    const newUrl = `#${targetId}`;
-                    if (window.location.hash !== newUrl) {
-                        window.history.pushState({ section: targetId }, '', newUrl);
-                    }
-                    navigateTo(targetId, origin);
-                }, 800); // Wait 800ms for bubble zoom to fill screen
+                // Navigate immediately to expand the target page via clip-path
+                const newUrl = `#${targetId}`;
+                if (window.location.hash !== newUrl) {
+                    window.history.pushState({ section: targetId }, '', newUrl);
+                }
+                navigateTo(targetId, origin);
             } else {
                 // Push state to history
                 const newUrl = `#${targetId}`;
