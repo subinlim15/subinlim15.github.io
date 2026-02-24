@@ -4,9 +4,10 @@
     </div>
     <h2 class="section-title">Profile <span class="gradient-text">CV</span></h2>
     <div class="profile-layout">
+        <canvas id="cloud-chamber-canvas" class="cloud-chamber-bg"></canvas>
         <div class="profile-main">
             <!-- Summary Profile Card -->
-            <div id="summary" class="profile-card glass-card fade-up">
+            <div id="introduction" class="profile-card glass-card fade-up">
 
                 <h3>Jongwon (Subin) Lim</h3>
                 <p class="role">Experimental Particle Physicist</p>
@@ -18,6 +19,11 @@
                     Seoul, Republic of Korea<br>
                     ljw1015@hanyang.ac.kr
                 </p>
+            </div>
+
+            
+            <div id="skills-section" class="profile-info glass-card fade-up delay-1">
+                <h3 id="skills" class="timeline-section-title" style="margin-top:0;">Skills</h3>
                 <div class="skills">
                     <span class="skill-tag">Python</span>
                     <span class="skill-tag">C/C++</span>
@@ -28,11 +34,13 @@
                     <span class="skill-tag">Pythia</span>
                     <span class="skill-tag">Delphes</span>
                 </div>
-            </div>
+                        </div>
+
+</div>
 
             <!-- Details CV Card -->
-            <div class="profile-info glass-card fade-up delay-1">
-                <h3 id="education" class="timeline-section-title" style="margin-top:0;">Education</h3>
+                        <div class="profile-info glass-card fade-up delay-2">
+                <h3 id="education" style="margin-top:0;" class="timeline-section-title" style="margin-top:0;">Education</h3>
                 <ul class="timeline">
                     <li>
                         <div class="timeline-dot"></div>
@@ -56,8 +64,10 @@
                         </div>
                     </li>
                 </ul>
+            </div>
 
-                <h3 id="research-experience" class="timeline-section-title">Research Experience</h3>
+            <div class="profile-info glass-card fade-up delay-3">
+                <h3 id="research-experience" style="margin-top:0;" class="timeline-section-title">Research Experience</h3>
                 <ul class="timeline">
                     <li>
                         <div class="timeline-dot"></div>
@@ -100,8 +110,10 @@
                         </div>
                     </li>
                 </ul>
+            </div>
 
-                <h3 id="publications" class="timeline-section-title">Publications</h3>
+            <div class="profile-info glass-card fade-up delay-4">
+                <h3 id="publications" style="margin-top:0;" class="timeline-section-title">Publications</h3>
                 <ol class="cv-list">
                     <li>CMS Collaboration, "Search for charged-lepton flavour violation in top quark interactions with
                         an up-type quark, a muon, and a τ lepton in proton-proton collisions at √s = 13 TeV," Accepted
@@ -115,8 +127,10 @@
                         jets in the ttbb events by using deep neural network," <i>Journal of the Korean Physical
                             Society</i>, Nov. 2020.</li>
                 </ol>
+            </div>
 
-                <h3 id="conferences" class="timeline-section-title">Conferences</h3>
+            <div class="profile-info glass-card fade-up delay-5">
+                <h3 id="conferences" style="margin-top:0;" class="timeline-section-title">Conferences</h3>
                 <ol class="cv-list">
                     <li><b>J. Lim</b>, and T.-J. Kim, "Search for Charged Lepton Flavour Violation in top quark
                         interaction with muon and tau in pp collisions at √s = 13 TeV". <i>2022 KPS Spring Meeting:
@@ -125,8 +139,10 @@
                         top quark sector with charm, muon, and tau final states". <i>2020 KPS Fall Meeting: Korean
                             Physics Society</i>, Nov. 2020 (Oral presentation).</li>
                 </ol>
+            </div>
 
-                <h3 id="schools-workshops" class="timeline-section-title">Schools & Workshops</h3>
+            <div class="profile-info glass-card fade-up delay-6">
+                <h3 id="schools-workshops" style="margin-top:0;" class="timeline-section-title">Schools & Workshops</h3>
                 <ul class="timeline">
                     <li>
                         <div class="timeline-dot"></div>
@@ -157,8 +173,10 @@
                         </div>
                     </li>
                 </ul>
+            </div>
 
-                <h3 id="scholarships-awards" class="timeline-section-title">Scholarships & Awards</h3>
+            <div class="profile-info glass-card fade-up delay-7">
+                <h3 id="scholarships-awards" style="margin-top:0;" class="timeline-section-title">Scholarships & Awards</h3>
                 <ul class="timeline">
                     <li>
                         <div class="timeline-dot"></div>
@@ -196,8 +214,10 @@
                         </div>
                     </li>
                 </ul>
+            </div>
 
-                <h3 id="work-experience" class="timeline-section-title">Work Experience</h3>
+            <div class="profile-info glass-card fade-up delay-8">
+                <h3 id="work-experience" style="margin-top:0;" class="timeline-section-title">Work Experience</h3>
                 <ul class="timeline">
                     <li>
                         <div class="timeline-dot"></div>
@@ -209,8 +229,10 @@
                         </div>
                     </li>
                 </ul>
+            </div>
 
-                <h3 id="professional-memberships" class="timeline-section-title">Professional Memberships & Teaching
+            <div class="profile-info glass-card fade-up delay-9">
+                <h3 id="professional-memberships" style="margin-top:0;" class="timeline-section-title">Professional Memberships & Teaching
                 </h3>
                 <ul class="timeline">
                     <li>
@@ -232,8 +254,10 @@
                         </div>
                     </li>
                 </ul>
+            </div>
 
-                <h3 id="extracurricular" class="timeline-section-title">Extracurricular Activities</h3>
+            <div class="profile-info glass-card fade-up delay-10">
+                <h3 id="extracurricular" style="margin-top:0;" class="timeline-section-title">Extracurricular Activities</h3>
                 <ul class="timeline">
                     <li>
                         <div class="timeline-dot"></div>
@@ -253,13 +277,14 @@
                     </li>
                 </ul>
             </div>
-        </div>
+            </div>
 
         <!-- TOC Sidebar -->
         <aside class="profile-toc glass-card fade-up delay-2">
             <h4>Contents</h4>
             <ul>
-                <li><a href="#" data-scroll="summary">Summary</a></li>
+                <li><a href="#" data-scroll="introduction">Introduction</a></li>
+                <li><a href="#" data-scroll="skills">Skills</a></li>
                 <li><a href="#" data-scroll="education">Education</a></li>
                 <li><a href="#" data-scroll="research-experience">Research Experience</a></li>
                 <li><a href="#" data-scroll="publications">Publications</a></li>

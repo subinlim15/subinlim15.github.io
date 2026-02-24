@@ -129,53 +129,34 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // Function to switch active section
-    const navigateTo = async (targetId, isBubbleZoom = false) => {
+    const navigateTo = async (targetId) => {
         // Fetch the view lazily
         await loadView(targetId);
 
         const targetSection = document.getElementById(targetId);
         if (!targetSection) return;
 
-        if (isBubbleZoom) {
-            // Instantly start fading in the target section
-            targetSection.classList.add('active');
-            window.scrollTo({ top: 0, behavior: 'instant' });
+        // Reset zoomed bubbles without delay jitter
+        document.querySelectorAll('.gate-btn.zoom-active').forEach(btn => {
+            btn.classList.add('zoom-resetting');
+            btn.classList.remove('zoom-active');
+            setTimeout(() => btn.classList.remove('zoom-resetting'), 50);
+        });
 
-            // Wait for the bubble expansion (0.8s) to complete
-            setTimeout(() => {
-                // Instantly hide all other sections to prevent fading ghost flashes
-                sections.forEach(sec => {
-                    if (sec.id !== targetId) {
-                        sec.style.transition = 'none';
-                        sec.classList.remove('active');
-                        void sec.offsetWidth; // Force reflow
-                        sec.style.transition = '';
-                    }
-                });
+        // Simply hide old, show new
+        sections.forEach(sec => sec.classList.remove('active'));
+        targetSection.classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'instant' });
 
-                // Reset bubble scales quietly now that main section is hidden
-                document.querySelectorAll('.gate-btn.zoom-active').forEach(btn => {
-                    btn.classList.add('zoom-resetting');
-                    btn.classList.remove('zoom-active');
-                    setTimeout(() => btn.classList.remove('zoom-resetting'), 50);
-                });
-            }, 500);
-
-        } else {
-            // Standard reset for regular navigation (e.g. back button)
-            document.querySelectorAll('.gate-btn.zoom-active').forEach(btn => {
-                btn.classList.add('zoom-resetting');
-                btn.classList.remove('zoom-active');
-                setTimeout(() => btn.classList.remove('zoom-resetting'), 50);
-            });
-
-            sections.forEach(sec => sec.classList.remove('active'));
-            targetSection.classList.add('active');
-            window.scrollTo({ top: 0, behavior: 'instant' });
+        // Handle profile specific background animation
+        if (targetId === 'profile' && typeof window.initCloudChamber === 'function') {
+            window.initCloudChamber();
+        } else if (typeof window.stopCloudChamber === 'function') {
+            window.stopCloudChamber();
         }
     };
 
-    // Event Delegation for Nav Links and Data-Target Buttons (Handles newly loaded DOM inside views)
+    // Event Delegation for Nav Links and Data-Target Buttons
     document.body.addEventListener('click', (e) => {
         const link = e.target.closest('a[data-target]');
         if (link) {
@@ -184,15 +165,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (link.classList.contains('gate-btn')) {
                 if (link.classList.contains('zoom-active')) return;
-
                 link.classList.add('zoom-active');
 
-                // Navigate IMMEDIATELY to trigger simultaneous content fade
-                const newUrl = `#${targetId}`;
-                if (window.location.hash !== newUrl) {
-                    window.history.pushState({ section: targetId }, '', newUrl);
-                }
-                navigateTo(targetId, true);
+                // Wait shortly for button to slightly expand before changing page
+                setTimeout(() => {
+                    const newUrl = `#${targetId}`;
+                    if (window.location.hash !== newUrl) {
+                        window.history.pushState({ section: targetId }, '', newUrl);
+                    }
+                    navigateTo(targetId);
+                }, 200);
             } else {
                 // Push state to history
                 const newUrl = `#${targetId}`;
@@ -202,7 +184,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 navigateTo(targetId);
             }
         }
-
         // Handle Table of Contents (TOC) smooth scrolling
         const scrollBtn = e.target.closest('[data-scroll]');
         if (scrollBtn) {
