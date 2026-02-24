@@ -450,16 +450,48 @@ h6 {
     text-align: center;
 }
 
-.profile-card .role {
-    color: var(--secondary-color);
-    font-weight: 500;
-    margin: 0.5rem 0 1.5rem;
+.profile-name {
+    font-size: 1.8rem;
+    margin-bottom: 0.3rem;
+    color: var(--heading-color);
 }
 
-.profile-card .bio {
+.profile-title {
+    font-size: 1.05rem;
+    font-weight: 500;
+    margin-bottom: 1.2rem;
+    color: var(--secondary-color);
+}
+
+.profile-contact {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+    color: var(--secondary-color);
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.profile-divider {
+    height: 1px;
+    width: 60px;
+    background: var(--border-color);
+    margin: 0 auto 1.5rem;
+}
+
+.profile-description {
     font-size: 0.95rem;
-    margin-bottom: 2rem;
+    line-height: 1.7;
+    margin-bottom: 0;
     text-align: justify;
+    color: var(--text-color);
 }
 
 .skills {
