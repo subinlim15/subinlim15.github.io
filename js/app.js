@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const section = document.getElementById(targetId);
         if (section && !loadedViews[targetId]) {
             try {
-                const response = await fetch(`./views/${targetId}.html`);
+                const response = await fetch(`./views/${targetId}.html`, { cache: "no-store" });
                 if (response.ok) {
                     const html = await response.text();
                     section.innerHTML = html;
