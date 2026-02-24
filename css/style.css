@@ -331,6 +331,33 @@ h6 {
     grid-template-columns: 1fr 1.5fr;
     gap: 3rem;
     margin-top: 3rem;
+    align-items: start;
+}
+
+.cv-list {
+    list-style: decimal outside;
+    margin-top: 1rem;
+    margin-bottom: 2.5rem;
+    margin-left: 1.5rem;
+    color: var(--text-color);
+}
+
+.cv-list li {
+    margin-bottom: 1rem;
+    line-height: 1.6;
+}
+
+.cv-list a {
+    color: var(--heading-color);
+    text-decoration: underline;
+}
+
+.timeline-section-title {
+    margin-top: 2.5rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.5rem;
+    color: var(--heading-color);
 }
 
 .profile-avatar {
