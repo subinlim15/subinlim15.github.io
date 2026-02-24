@@ -20,15 +20,10 @@ class CloudChamber {
 
         this.mouseX = -1000;
         this.mouseY = -1000;
-        this.isHoveringBackground = false;
 
-        // Mouse interaction for Magnetic Field based on background hovering
+        // Mouse interaction for Magnetic Field
         const trackMouse = (e) => {
             if (!this.isActive) return;
-            const target = e.target;
-            const overCard = target.closest('.glass-card, .navbar, .gate-btn, .footer-content');
-
-            this.isHoveringBackground = !overCard;
             this.mouseX = e.clientX || (e.touches && e.touches[0].clientX) || -1000;
             this.mouseY = e.clientY || (e.touches && e.touches[0].clientY) || -1000;
         };
@@ -38,7 +33,6 @@ class CloudChamber {
 
         // Reset when mouse leaves
         const resetMouse = () => {
-            this.isHoveringBackground = false;
             this.mouseX = -1000;
             this.mouseY = -1000;
         };
@@ -54,9 +48,8 @@ class CloudChamber {
 
     resize() {
         if (!this.canvas) return;
-        const rect = this.canvas.parentElement.getBoundingClientRect();
-        this.canvas.width = rect.width;
-        this.canvas.height = rect.height;
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
     }
 
     spawnParticle() {
@@ -67,7 +60,8 @@ class CloudChamber {
         const y = Math.random() * this.canvas.height;
 
         const angle = Math.random() * Math.PI * 2;
-        const speed = isCosmic ? 8 + Math.random() * 5 : 2 + Math.random() * 3;
+        // Slowed down initial speeds
+        const speed = isCosmic ? 3 + Math.random() * 2 : 1 + Math.random() * 1.5;
 
         const charge = Math.random() > 0.5 ? 1 : -1;
 
@@ -78,7 +72,8 @@ class CloudChamber {
             vy: Math.sin(angle) * speed,
             charge: charge,
             life: 1.0,
-            decayRate: isCosmic ? 0.005 : 0.015 + Math.random() * 0.02,
+            // Slower decay for longer visibility
+            decayRate: isCosmic ? 0.0015 : 0.003 + Math.random() * 0.003,
             history: [{ x, y }]
         });
     }
@@ -99,29 +94,28 @@ class CloudChamber {
         for (let i = this.particles.length - 1; i >= 0; i--) {
             let p = this.particles[i];
 
-            // Localized magnetic field (B-field coming out of the screen)
-            if (this.isHoveringBackground) {
+            // Localized magnetic field (B-field coming out of the screen, active near mouse anywhere)
+            if (this.mouseX > -1000 && this.mouseY > -1000) {
                 const dx = this.mouseX - p.x;
                 const dy = this.mouseY - p.y;
                 const dist2 = dx * dx + dy * dy;
-                // B field strength falls off with distance squared, capped at a max distance ~300px
-                const maxDist2 = 300 * 300;
+                // Reduced interaction radius for more localized effect (~250px)
+                const maxDist2 = 250 * 250;
 
                 if (dist2 < maxDist2) {
                     // Local magnetic field magnitude (stronger closer to mouse)
-                    const bStrength = (1 - (dist2 / maxDist2)) * 0.15;
+                    const bStrength = (1 - (dist2 / maxDist2)) * 0.3;
                     const curveForce = p.charge * bStrength;
 
-                    // Lorentz force changes direction but not speed (magnetic field doing no work)
+                    // Lorentz force changes direction
                     const newVx = p.vx * Math.cos(curveForce) - p.vy * Math.sin(curveForce);
                     const newVy = p.vx * Math.sin(curveForce) + p.vy * Math.cos(curveForce);
                     p.vx = newVx;
                     p.vy = newVy;
 
-                    // Energy loss due to Bremsstrahlung/Synchrotron radiation in a magnetic field
-                    // Speed slowly decays, creating a tighter inward spiral
-                    p.vx *= 0.96;
-                    p.vy *= 0.96;
+                    // Energy loss: gentler decay so the spiral makes multiple loops
+                    p.vx *= 0.985;
+                    p.vy *= 0.985;
                 }
             }
 
@@ -131,8 +125,8 @@ class CloudChamber {
 
             p.history.push({ x: p.x, y: p.y });
 
-            // Limit history length to fade tail
-            if (p.history.length > 30) {
+            // Long history list to show the nice curved trails
+            if (p.history.length > 80) {
                 p.history.shift();
             }
 
