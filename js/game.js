@@ -16,6 +16,7 @@ const PersonalGame = (() => {
         height: 20,
         vy: 0,
         isGrounded: true,
+        jumps: 0,
         color: '#ff4757'
     };
 
@@ -71,10 +72,14 @@ const PersonalGame = (() => {
             return;
         }
 
-        if (player.isGrounded) {
+        if (player.jumps < 2) {
+            // Apply jump force
             player.vy = JUMP_FORCE;
             player.isGrounded = false;
-            createParticles(player.x, player.y + player.height, 5, '#ddd');
+            player.jumps++;
+
+            // Create jump particles
+            createParticles(player.x, player.y + player.height, 5, player.jumps === 2 ? '#2ed573' : '#ddd');
         }
     }
 
@@ -121,6 +126,7 @@ const PersonalGame = (() => {
         player.y = canvas.height - GROUND_HEIGHT - player.height;
         player.vy = 0;
         player.isGrounded = true;
+        player.jumps = 0;
         isPlaying = true;
 
         updateUI();
@@ -197,6 +203,7 @@ const PersonalGame = (() => {
             player.y = groundY;
             player.vy = 0;
             player.isGrounded = true;
+            player.jumps = 0;
         }
 
         // Draw Player with glow
