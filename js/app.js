@@ -72,45 +72,49 @@ document.addEventListener('DOMContentLoaded', () => {
         // TOC Scroll Spy Logic
         const blocks = Array.from(container.querySelectorAll('.profile-card, .profile-info'));
         if (blocks.length > 0) {
-            const visibleBlocks = new Set();
-            const tocObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        visibleBlocks.add(entry.target);
-                    } else {
-                        visibleBlocks.delete(entry.target);
-                    }
-                });
+            const handleScroll = () => {
+                let currentId = null;
+                const scrollPosition = window.scrollY + window.innerHeight * 0.35; // 35% from the top
 
-                let topmost = null;
-                let minTop = Infinity;
-                visibleBlocks.forEach(block => {
-                    const rect = block.getBoundingClientRect();
-                    if (rect.top < minTop) {
-                        minTop = rect.top;
-                        topmost = block;
-                    }
-                });
+                // For very top of page, force the first block
+                if (window.scrollY < 50) {
+                    currentId = blocks[0].id || 'introduction';
+                } else {
+                    blocks.forEach(block => {
+                        const rect = block.getBoundingClientRect();
+                        const top = rect.top;
+                        const bottom = rect.bottom;
 
-                if (topmost) {
-                    let id = topmost.id;
-                    if (!id) {
-                        const h3 = topmost.querySelector('.timeline-section-title');
-                        if (h3) id = h3.id;
-                    }
-                    if (!id && topmost.classList.contains('profile-card')) {
-                        id = 'introduction';
-                    }
-
-                    if (id) {
-                        const links = document.querySelectorAll('.profile-toc a');
-                        links.forEach(a => a.classList.remove('active-toc'));
-                        const activeLink = document.querySelector(`.profile-toc a[data-scroll="${id}"]`);
-                        if (activeLink) activeLink.classList.add('active-toc');
-                    }
+                        // Check if the 35% viewport threshold falls within this block
+                        const triggerPoint = window.innerHeight * 0.35;
+                        if (top <= triggerPoint && bottom >= triggerPoint) {
+                            currentId = block.id;
+                            if (!currentId) {
+                                const h3 = block.querySelector('.timeline-section-title');
+                                if (h3) currentId = h3.id;
+                            }
+                            if (!currentId && block.classList.contains('profile-card')) {
+                                currentId = 'introduction';
+                            }
+                        }
+                    });
                 }
-            }, { rootMargin: '-10% 0px -60% 0px' });
-            blocks.forEach(block => tocObserver.observe(block));
+
+                if (currentId) {
+                    const links = document.querySelectorAll('.profile-toc a');
+                    links.forEach(a => a.classList.remove('active-toc'));
+                    const activeLink = document.querySelector(`.profile-toc a[data-scroll="${currentId}"]`);
+                    if (activeLink) activeLink.classList.add('active-toc');
+                }
+            };
+
+            // Use passive scroll listener for better performance
+            window.addEventListener('scroll', handleScroll, { passive: true });
+
+            // To clean up later when navigating, we would normally remove this,
+            // but since views are simply hidden/shown it's fine. 
+            // Better to attach one global scroll listener or trigger it initially.
+            setTimeout(handleScroll, 100);
         }
     };
 
