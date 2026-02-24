@@ -182,7 +182,14 @@ window.initParticles = () => {
         const gates = document.querySelectorAll('.gate-btn');
         if (gates.length > 0) {
             gates.forEach(gate => {
-                const angleDeg = parseFloat(gate.getAttribute('data-angle'));
+                let angleDeg = parseFloat(gate.getAttribute('data-angle'));
+
+                // On mobile, squeeze bottom bubbles inward to form a vertically elongated isosceles triangle
+                if (width < 768) {
+                    if (angleDeg === 150) angleDeg = 135;
+                    if (angleDeg === 30) angleDeg = 45;
+                }
+
                 // Pull bubbles slightly inward towards the center
                 const paddingRadius = maxRadius - 20;
                 const angleRad = angleDeg * Math.PI / 180;
@@ -197,8 +204,10 @@ window.initParticles = () => {
         }
 
         if (state === 'BEAM') {
-            // Speed of the approaching beams
-            beamProgress += 0.02;
+            // Speed of the approaching beams - adaptive pixel velocity
+            // This ensures the incoming beams on mobile (smaller width) don't look artificially slower than post-collision decays
+            const beamSpeedPx = Math.max(12, width * 0.012);
+            beamProgress += beamSpeedPx / (width / 2);
 
             const baseDist = (1 - beamProgress) * (width / 2);
 
