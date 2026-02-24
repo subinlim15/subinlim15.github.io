@@ -2,7 +2,7 @@
     <div class="back-link-wrapper" style="margin-bottom: 2rem;">
         <a href="#main" data-target="main" class="btn-text">← Back to Main</a>
     </div>
-    <h2 class="section-title">Personal <span class="gradient-text">Life</span></h2>
+    <h2 class="section-title">Personal</h2>
 
     <div class="code-editor-mockup glass-card delay-2">
         <div class="editor-header">
@@ -42,6 +42,27 @@
     subin <span class="operator">=</span> SubinLim()
     subin.<span class="function">daily_routine</span>()
 </code></pre>
+        </div>
+    </div>
+
+    <!-- Mini Game Section -->
+    <div class="game-container glass-card fade-up delay-4" style="text-align: center; margin-top: 3rem; padding: 2rem;">
+        <h3>Mini Game: Find the Higgs! <br><span
+                style="font-size:0.85rem; color:var(--secondary-color); font-weight:normal;">(Click the erratic <strong
+                    style="color:#ff4757;">Red</strong> particle)</span></h3>
+        <div style="margin-bottom: 1rem;">
+            <span id="game-score" style="font-weight:bold; color:var(--heading-color); font-size:1.1rem;">Significance:
+                0.0 σ</span>
+            | <span id="game-time" style="font-size:1.1rem;">Time: 30s</span>
+        </div>
+        <div style="position: relative; display: inline-block; width: 100%; max-width: 600px;">
+            <canvas id="higgs-game-canvas" width="600" height="400"
+                style="background:#111; border-radius: 8px; width: 100%; height: auto; border: 1px solid var(--border-color); display: block;"></canvas>
+            <div id="game-overlay"
+                style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); display:flex; flex-direction:column; justify-content:center; align-items:center; border-radius:8px;">
+                <h2 id="game-message" style="color:#FFF; margin-bottom: 1rem;">Ready to discover?</h2>
+                <button id="start-game-btn" class="btn btn-outline">Start Run</button>
+            </div>
         </div>
     </div>
 </div>

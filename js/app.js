@@ -199,6 +199,13 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (typeof window.stopCloudChamber === 'function') {
             window.stopCloudChamber();
         }
+
+        // Handle personal page specific game
+        if (targetId === 'personal' && typeof window.initPersonalGame === 'function') {
+            window.initPersonalGame();
+        } else if (typeof window.stopPersonalGame === 'function') {
+            window.stopPersonalGame();
+        }
     };
 
     // Event Delegation for Nav Links and Data-Target Buttons
