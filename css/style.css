@@ -533,19 +533,39 @@ h6 {
 .study-card {
     display: flex;
     flex-direction: column;
+    padding: 0;
+    overflow: hidden;
 }
 
-.card-icon {
-    font-size: 2.5rem;
-    margin-bottom: 1.5rem;
+.study-image {
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-bottom: 1px solid var(--border-color);
 }
 
-.study-card h3 {
+.study-image.img-ttbb {
+    background-image: url('../images/ttbb.png');
+}
+
+.study-image.img-clfv {
+    background-image: url('../images/clfv.png');
+}
+
+.study-content {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.study-content h3 {
     margin-bottom: 1rem;
     font-size: 1.3rem;
 }
 
-.study-card p {
+.study-content p {
     margin-bottom: 2rem;
     flex-grow: 1;
 }
