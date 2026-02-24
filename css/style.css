@@ -416,6 +416,7 @@ h6 {
     line-height: 1.6;
 }
 
+.timeline-content a,
 .cv-list a {
     color: var(--heading-color);
     text-decoration: underline;
