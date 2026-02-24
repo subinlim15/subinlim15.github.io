@@ -124,7 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // Function to switch active section
-    const navigateTo = async (targetId) => {
+    const navigateTo = async (targetId, origin = null) => {
 
         // Fetch the view lazily
         await loadView(targetId);
@@ -137,12 +137,26 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // Remove active class from all sections
-        sections.forEach(sec => sec.classList.remove('active'));
+        sections.forEach(sec => {
+            sec.classList.remove('active');
+            sec.classList.remove('from-bubble');
+        });
 
         // Add active class to target
         const targetSection = document.getElementById(targetId);
         if (targetSection) {
-            targetSection.classList.add('active');
+            if (origin) {
+                targetSection.style.transformOrigin = `${origin.x}px ${origin.y}px`;
+                targetSection.classList.add('from-bubble');
+
+                // Force reflow so the browser registers the initial scaled down state
+                void targetSection.offsetWidth;
+
+                targetSection.classList.add('active');
+            } else {
+                targetSection.style.transformOrigin = '';
+                targetSection.classList.add('active');
+            }
             window.scrollTo({ top: 0, behavior: 'instant' });
         }
     };
@@ -156,6 +170,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (link.classList.contains('gate-btn')) {
                 if (link.classList.contains('zoom-active')) return;
+
+                const rect = link.getBoundingClientRect();
+                const origin = { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+
                 link.classList.add('zoom-active');
 
                 setTimeout(() => {
@@ -163,7 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (window.location.hash !== newUrl) {
                         window.history.pushState({ section: targetId }, '', newUrl);
                     }
-                    navigateTo(targetId);
+                    navigateTo(targetId, origin);
                 }, 800); // Wait 800ms for bubble zoom to fill screen
             } else {
                 // Push state to history
