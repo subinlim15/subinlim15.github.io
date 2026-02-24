@@ -403,7 +403,7 @@ h6 {
     scroll-margin-top: 100px;
 }
 
-.cv-list {
+ol.cv-list {
     list-style: decimal outside;
     margin-top: 1rem;
     margin-bottom: 2.5rem;
@@ -411,9 +411,37 @@ h6 {
     color: var(--text-color);
 }
 
-.cv-list li {
+ol.cv-list li {
     margin-bottom: 1rem;
     line-height: 1.6;
+}
+
+ul.cv-list,
+.timeline-content ul {
+    list-style: none;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+    padding: 0;
+    color: var(--text-color);
+}
+
+ul.cv-list li,
+.timeline-content ul li {
+    position: relative;
+    padding-left: 1.5rem;
+    margin-bottom: 0.8rem;
+    line-height: 1.6;
+}
+
+ul.cv-list li::before,
+.timeline-content ul li::before {
+    content: "▹";
+    color: var(--secondary-color);
+    position: absolute;
+    left: 0;
+    top: 1px;
+    font-size: 1.1rem;
+    font-weight: 600;
 }
 
 .timeline-content a,
