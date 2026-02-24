@@ -723,13 +723,16 @@ footer {
     .nav-links {
         display: flex;
         position: fixed;
-        top: 80px;
-        /* Right below navbar */
-        left: 0;
-        width: 100%;
+        top: 70px;
+        right: 2rem;
+        left: auto;
+        width: 220px;
+        border-radius: 16px;
+        border: 1px solid var(--border-color);
         height: auto;
-        padding: 2rem 0;
-        background: var(--bg-color);
+        padding: 1.5rem 0;
+        background: var(--card-bg);
+        backdrop-filter: blur(10px);
         flex-direction: column;
         justify-content: center;
         align-items: center;
@@ -739,8 +742,9 @@ footer {
         /* Calm top-down fade animation */
         opacity: 0;
         visibility: hidden;
-        transform: translateY(-10px);
-        transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s ease;
+        transform: translateY(-10px) scale(0.95);
+        transform-origin: top right;
+        transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.3s ease;
         z-index: 999;
     }
 
@@ -751,7 +755,7 @@ footer {
     .nav-links.nav-active {
         opacity: 1;
         visibility: visible;
-        transform: translateY(0);
+        transform: translateY(0) scale(1);
     }
 
     .hero-title {
