@@ -476,9 +476,52 @@ h6 {
 .profile-socials {
     display: flex;
     justify-content: center;
+    align-items: center;
     flex-wrap: wrap;
     gap: 1rem;
     margin-bottom: 1.5rem;
+}
+
+.email-wrapper {
+    position: relative;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.email-tooltip {
+    position: absolute;
+    bottom: -40px;
+    background: var(--heading-color);
+    color: var(--bg-color) !important;
+    padding: 0.4rem 1rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: var(--transition-fast);
+    text-decoration: none;
+    white-space: nowrap;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+}
+
+.email-tooltip.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.email-tooltip::before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 0 6px 6px 6px;
+    border-style: solid;
+    border-color: transparent transparent var(--heading-color) transparent;
 }
 
 .social-btn {
@@ -499,10 +542,15 @@ h6 {
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
-.social-btn.email-btn:hover,
-.social-btn.insta-btn:hover {
+.social-btn.email-btn:hover {
     background: var(--heading-color);
     color: var(--bg-color);
+}
+
+.social-btn.insta-btn:hover {
+    background: #E1306C;
+    color: #FFF;
+    border-color: #E1306C;
 }
 
 .social-btn.linkedin-btn:hover {

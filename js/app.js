@@ -246,6 +246,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Close email tooltip when clicking outside
+    document.addEventListener('click', (e) => {
+        const tooltip = document.getElementById('email-tooltip');
+        if (tooltip && tooltip.classList.contains('show')) {
+            if (!e.target.closest('.email-wrapper')) {
+                tooltip.classList.remove('show');
+            }
+        }
+    });
+
     // Handle back/forward navigation
     window.addEventListener('popstate', (e) => {
         let hash = window.location.hash.substring(1);
