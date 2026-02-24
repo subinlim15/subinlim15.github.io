@@ -21,6 +21,28 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    /* --- Mobile Hamburger Menu --- */
+    const hamburger = document.querySelector('.hamburger');
+    const navLinks = document.querySelector('.nav-links');
+
+    if (hamburger && navLinks) {
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('nav-active');
+            hamburger.classList.toggle('toggle');
+        });
+    }
+
+    // Close mobile menu when clicking a link
+    if (navLinks) {
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (navLinks.classList.contains('nav-active')) {
+                    navLinks.classList.remove('nav-active');
+                    if (hamburger) hamburger.classList.remove('toggle');
+                }
+            });
+        });
+    }
 
 
     /* --- Single Page Application Routing & View Fetching --- */
