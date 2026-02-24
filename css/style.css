@@ -538,11 +538,12 @@ h6 {
 }
 
 .study-image {
-    height: 200px;
-    background-size: cover;
+    height: 220px;
+    background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
     border-bottom: 1px solid var(--border-color);
+    margin: 1rem;
 }
 
 .study-image.img-ttbb {
