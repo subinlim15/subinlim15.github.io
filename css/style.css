@@ -544,6 +544,16 @@ h6 {
     background-repeat: no-repeat;
     border-bottom: 1px solid var(--border-color);
     margin: 1rem;
+    border-radius: 8px;
+    transition: background-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+/* Light up transparent plot PNGs in Dark Mode so black lines are visible */
+[data-theme='dark'] .study-image {
+    background-color: rgba(220, 225, 230, 0.85);
+    /* Off-white, slightly glassy */
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.05) inset;
+    background-blend-mode: normal;
 }
 
 .study-image.img-ttbb {
