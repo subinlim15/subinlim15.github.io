@@ -74,30 +74,49 @@ document.addEventListener('DOMContentLoaded', () => {
         if (blocks.length > 0) {
             const handleScroll = () => {
                 let currentId = null;
-                const scrollPosition = window.scrollY + window.innerHeight * 0.35; // 35% from the top
+                // Use a fixed offset from the top to determine which section is currently active.
+                // Since our titles have 'scroll-margin-top: 100px;', active sections typically sit right below 100px.
+                const scanLine = 150;
 
                 // For very top of page, force the first block
                 if (window.scrollY < 50) {
                     currentId = blocks[0].id || 'introduction';
                 } else {
+                    let bestBlock = null;
+                    let minDistance = Infinity;
+
                     blocks.forEach(block => {
                         const rect = block.getBoundingClientRect();
                         const top = rect.top;
                         const bottom = rect.bottom;
 
-                        // Check if the 35% viewport threshold falls within this block
-                        const triggerPoint = window.innerHeight * 0.35;
-                        if (top <= triggerPoint && bottom >= triggerPoint) {
-                            currentId = block.id;
-                            if (!currentId) {
-                                const h3 = block.querySelector('.timeline-section-title');
-                                if (h3) currentId = h3.id;
-                            }
-                            if (!currentId && block.classList.contains('profile-card')) {
-                                currentId = 'introduction';
-                            }
+                        // Check if the scanLine falls inside this block
+                        if (top <= scanLine && bottom >= scanLine) {
+                            bestBlock = block;
                         }
                     });
+
+                    // If NO block contains the scanLine (e.g. gaps between blocks), find the closest one below it
+                    if (!bestBlock) {
+                        blocks.forEach(block => {
+                            const rect = block.getBoundingClientRect();
+                            if (rect.top > scanLine && rect.top < minDistance) {
+                                minDistance = rect.top;
+                                bestBlock = block;
+                            }
+                        });
+                    }
+
+                    if (bestBlock) {
+                        currentId = bestBlock.id;
+                        if (!currentId) {
+                            const h3 = bestBlock.querySelector('.timeline-section-title');
+                            if (h3) currentId = h3.id;
+                        }
+                        if (!currentId && bestBlock.classList.contains('profile-card')) {
+                            currentId = 'introduction';
+                        }
+                    }
                 }
 
                 if (currentId) {
