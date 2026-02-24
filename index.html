@@ -14,6 +14,34 @@
 
 <body>
     <div id="app">
+        <!-- SVG Sprite Map for Icons -->
+        <svg style="display: none;" xmlns="http://www.w3.org/2000/svg">
+            <symbol id="icon-email" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                <polyline points="22,6 12,13 2,6"></polyline>
+            </symbol>
+            <symbol id="icon-linkedin" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                    d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452z" />
+            </symbol>
+            <symbol id="icon-orcid" viewBox="0 0 256 256">
+                <path fill="currentColor"
+                    d="M86.3,186.2H70.9V79.1h15.4V186.2z M108.9,79.1h41.6c39.6,0,57,28.3,57,53.6c0,27.5-21.5,53.6-56.8,53.6h-41.8V79.1z M124.3,172.4h24.5c34.9,0,42.9-26.5,42.9-39.7c0-21.5-13.7-39.7-43.7-39.7h-23.7V172.4z M88.7,56.8c0,5.5-4.5,10.1-10.1,10.1c-5.6,0-10.1-4.6-10.1-10.1c0-5.6,4.5-10.1,10.1-10.1C84.2,46.7,88.7,51.3,88.7,56.8z" />
+            </symbol>
+            <symbol id="icon-inspire" viewBox="0 0 24 24" fill="currentColor">
+                <circle cx="4.8" cy="6" r="2" class="inspire-dot" />
+                <rect x="3.3" y="9.5" width="3" height="8.5" />
+                <path d="M 8.5 18 V 4 h 3 L 17 13.5 V 4 h 3 V 18 h -3 L 11.5 8.5 V 18 Z" />
+            </symbol>
+            <symbol id="icon-instagram" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+            </symbol>
+        </svg>
+
         <!-- Navigation -->
         <nav class="navbar">
             <div class="nav-container">
@@ -72,9 +100,9 @@
             <div class="footer-content glassmorphism">
                 <p>&copy; 2026 Subin Lim. Designed & Built with passion.</p>
                 <div class="social-links">
-                    <a href="#">GitHub</a>
-                    <a href="#">LinkedIn</a>
-                    <a href="#">Twitter</a>
+                    <a href="https://github.com/subinlim15" target="_blank">GitHub</a>
+                    <a href="https://www.linkedin.com/in/jongwon-lim" target="_blank">LinkedIn</a>
+                    <a href="https://www.instagram.com/subin_forest/" target="_blank">Instagram</a>
                 </div>
             </div>
         </footer>

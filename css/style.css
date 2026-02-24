@@ -548,9 +548,9 @@ h6 {
 }
 
 .social-btn.insta-btn:hover {
-    background: #E1306C;
+    background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
     color: #FFF;
-    border-color: #E1306C;
+    border-color: transparent;
 }
 
 .social-btn.linkedin-btn:hover {
@@ -565,16 +565,15 @@ h6 {
     border-color: #A6CE39;
 }
 
-.social-btn.inspire-btn:hover {
-    background: #001528;
-    color: #FFF;
-    border-color: #001528;
+.social-btn.inspire-btn {
+    --inspire-dot-color: currentColor;
 }
 
-[data-theme='dark'] .social-btn.inspire-btn:hover {
-    background: #00FFFF;
-    color: #000;
-    border-color: #00FFFF;
+.social-btn.inspire-btn:hover {
+    background: #003366;
+    color: #FFF;
+    border-color: #003366;
+    --inspire-dot-color: #00FFFF;
 }
 
 .profile-divider {
