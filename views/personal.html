@@ -1,30 +1,47 @@
-<div class="container">
+<div class="container fade-up">
     <div class="back-link-wrapper" style="margin-bottom: 2rem;">
         <a href="#main" data-target="main" class="btn-text">← Back to Main</a>
     </div>
-    <h2 class="section-title">Personal <span class="gradient-text">Projects</span></h2>
-    <div class="projects-grid">
-        <div class="project-card glass-card fade-up">
-            <div class="project-image proj-1"></div>
-            <div class="project-content">
-                <h3>NextGen E-Commerce</h3>
-                <p>A futuristic e-commerce platform featuring immersive 3D product previews.</p>
-                <div class="project-links">
-                    <a href="#" class="btn btn-outline btn-small">Live Demo</a>
-                    <a href="#" class="btn btn-text btn-small">GitHub</a>
-                </div>
-            </div>
+    <h2 class="section-title">Personal <span class="gradient-text">Life</span></h2>
+
+    <div class="code-editor-mockup glass-card delay-2">
+        <div class="editor-header">
+            <span class="mac-btn red"></span>
+            <span class="mac-btn yellow"></span>
+            <span class="mac-btn green"></span>
+            <span class="editor-title">subin_life.py</span>
         </div>
-        <div class="project-card glass-card fade-up delay-1">
-            <div class="project-image proj-2"></div>
-            <div class="project-content">
-                <h3>FinTech Dashboard</h3>
-                <p>Real-time financial analytics dashboard with dynamic animated charts.</p>
-                <div class="project-links">
-                    <a href="#" class="btn btn-outline btn-small">Live Demo</a>
-                    <a href="#" class="btn btn-text btn-small">GitHub</a>
-                </div>
-            </div>
+        <div class="editor-body">
+            <pre><code><span class="keyword">import</span> physics
+<span class="keyword">import</span> music
+<span class="keyword">import</span> life
+
+<span class="keyword">class</span> <span class="class-name">SubinLim</span>(life.Entity):
+    <span class="keyword">def</span> <span class="function">__init__</span>(self):
+        <span class="function">super</span>().<span class="function">__init__</span>(role=<span class="string">"Physicist"</span>)
+        self.passions <span class="operator">=</span> [<span class="string">"Particle Physics"</span>, <span class="string">"Violin orchestration"</span>, <span class="string">"Data Analysis"</span>]
+        self.coffee_level <span class="operator">=</span> <span class="number">100</span>
+        self.is_debugging <span class="operator">=</span> <span class="keyword">True</span>
+        
+    <span class="keyword">def</span> <span class="function">daily_routine</span>(self):
+        <span class="keyword">while</span> self.<span class="function">is_awake</span>():
+            <span class="keyword">if</span> self.coffee_level &lt; <span class="number">20</span>:
+                self.<span class="function">drink</span>(<span class="string">"Double Espresso"</span>)
+                
+            <span class="keyword">try</span>:
+                self.<span class="function">analyze_data</span>(framework=<span class="string">"ROOT"</span>, method=<span class="string">"Machine Learning"</span>)
+            <span class="keyword">except</span> physics.AnomaliesFound <span class="keyword">as</span> discovery:
+                self.<span class="function">publish_paper</span>(title=<span class="string">"New Physics Beyond Standard Model"</span>)
+                
+            self.<span class="function">play_instrument</span>(instrument=<span class="string">"Violin"</span>, piece=<span class="string">"Tchaikovsky Violin Concerto"</span>)
+            
+            self.coffee_level -= <span class="number">10</span>
+
+<span class="comment"># TODO: Add more chapters to this ongoing simulation...</span>
+<span class="keyword">if</span> __name__ <span class="operator">==</span> <span class="string">"__main__"</span>:
+    subin <span class="operator">=</span> SubinLim()
+    subin.<span class="function">daily_routine</span>()
+</code></pre>
         </div>
     </div>
 </div>

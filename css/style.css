@@ -1065,3 +1065,103 @@ footer {
 .gate-btn.zoom-active span {
     opacity: 0;
 }
+
+/* Personal Page Code Editor Mockup */
+.code-editor-mockup {
+    background: #1e1e1e !important;
+    border: 1px solid #333 !important;
+    padding: 0 !important;
+    overflow: hidden;
+    color: #d4d4d4;
+    font-family: 'Fira Code', 'Courier New', monospace, sans-serif;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5) !important;
+    max-width: 800px;
+    margin: 3rem auto;
+    text-align: left;
+}
+
+.editor-header {
+    background: #2d2d2d;
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #111;
+}
+
+.mac-btn {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 8px;
+    display: inline-block;
+}
+
+.mac-btn.red {
+    background: #ff5f56;
+}
+
+.mac-btn.yellow {
+    background: #ffbd2e;
+}
+
+.mac-btn.green {
+    background: #27c93f;
+}
+
+.editor-title {
+    margin-left: 10px;
+    color: #888;
+    font-size: 0.85rem;
+    font-family: var(--font-family);
+    letter-spacing: 0.5px;
+}
+
+.editor-body {
+    padding: 1.5rem;
+    overflow-x: auto;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.editor-body pre {
+    margin: 0;
+}
+
+/* Syntax Highlighting Colors (VS Code Dark+ Style) */
+.editor-body .keyword {
+    color: #569cd6;
+}
+
+/* Blue */
+.editor-body .class-name {
+    color: #4ec9b0;
+}
+
+/* Teal */
+.editor-body .function {
+    color: #dcdcaa;
+}
+
+/* Light yellow */
+.editor-body .string {
+    color: #ce9178;
+}
+
+/* Orange string */
+.editor-body .number {
+    color: #b5cea8;
+}
+
+/* Light green number */
+.editor-body .comment {
+    color: #6a9955;
+    font-style: italic;
+}
+
+/* Green comment */
+.editor-body .operator {
+    color: #d4d4d4;
+}
+
+/* White operator */
