@@ -18,23 +18,28 @@ class CloudChamber {
         this.ctx = this.canvas.getContext('2d');
         this.resize();
 
-        // Mouse interaction for Magnetic Field
-        this.canvas.addEventListener('mouseenter', () => {
-            this.targetB = (Math.random() > 0.5 ? 1 : -1) * 0.05; // Random B field direction
-        });
+        // Mouse interaction for Magnetic Field based on background hovering
+        const setMagneticField = (e) => {
+            if (!this.isActive) return;
+            const target = e.target;
+            // If the mouse is over a card, navbar, or control, remove B-field
+            const overCard = target.closest('.glass-card, .navbar, .gate-btn, .footer-content');
+            if (!overCard) {
+                // Determine direction based on x position relative to center for consistent curving
+                const rect = this.canvas.getBoundingClientRect();
+                const x = e.clientX || (e.touches && e.touches[0].clientX) || 0;
+                this.targetB = (x > rect.left + rect.width / 2) ? 0.05 : -0.05;
+            } else {
+                this.targetB = 0;
+            }
+        };
 
-        this.canvas.addEventListener('mouseleave', () => {
-            this.targetB = 0;
-        });
+        window.addEventListener('mousemove', setMagneticField);
+        window.addEventListener('touchmove', setMagneticField, { passive: true });
 
-        // Add touch support
-        this.canvas.addEventListener('touchstart', (e) => {
-            this.targetB = (Math.random() > 0.5 ? 1 : -1) * 0.05;
-        }, { passive: true });
-
-        this.canvas.addEventListener('touchend', (e) => {
-            this.targetB = 0;
-        });
+        // Reset when mouse leaves
+        window.addEventListener('mouseleave', () => this.targetB = 0);
+        window.addEventListener('touchend', () => this.targetB = 0);
 
         window.addEventListener('resize', () => {
             if (this.isActive) this.resize();
@@ -118,9 +123,11 @@ class CloudChamber {
                     this.ctx.lineTo(p.history[j].x, p.history[j].y);
                 }
 
-                // Color mapping: subtle blue/white/red traces
+                // Color mapping: subtle traces adapting to theme
                 const alpha = Math.max(0, p.life);
-                this.ctx.strokeStyle = `rgba(180, 200, 255, ${alpha * 0.4})`;
+                const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+                const rgb = isDark ? '180, 200, 255' : '120, 130, 150'; // Bright for dark mode, subtle grey/blue for light mode
+                this.ctx.strokeStyle = `rgba(${rgb}, ${alpha * (isDark ? 0.4 : 0.6)})`;
                 this.ctx.lineWidth = 1.5;
                 this.ctx.lineCap = 'round';
                 this.ctx.lineJoin = 'round';
