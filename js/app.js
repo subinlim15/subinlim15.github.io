@@ -70,24 +70,46 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // TOC Scroll Spy Logic
-        const blocks = container.querySelectorAll('#summary, .timeline-section-title');
+        const blocks = Array.from(container.querySelectorAll('.profile-card, .profile-info'));
         if (blocks.length > 0) {
+            const visibleBlocks = new Set();
             const tocObserver = new IntersectionObserver((entries) => {
-                let currentActive = null;
-                // Find the topmost intersecting element
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        currentActive = entry.target.getAttribute('id');
+                        visibleBlocks.add(entry.target);
+                    } else {
+                        visibleBlocks.delete(entry.target);
                     }
                 });
 
-                if (currentActive) {
-                    const links = document.querySelectorAll('.profile-toc a');
-                    links.forEach(a => a.classList.remove('active-toc'));
-                    const activeLink = document.querySelector(`.profile-toc a[data-scroll="${currentActive}"]`);
-                    if (activeLink) activeLink.classList.add('active-toc');
+                let topmost = null;
+                let minTop = Infinity;
+                visibleBlocks.forEach(block => {
+                    const rect = block.getBoundingClientRect();
+                    if (rect.top < minTop) {
+                        minTop = rect.top;
+                        topmost = block;
+                    }
+                });
+
+                if (topmost) {
+                    let id = topmost.id;
+                    if (!id) {
+                        const h3 = topmost.querySelector('.timeline-section-title');
+                        if (h3) id = h3.id;
+                    }
+                    if (!id && topmost.classList.contains('profile-card')) {
+                        id = 'introduction';
+                    }
+
+                    if (id) {
+                        const links = document.querySelectorAll('.profile-toc a');
+                        links.forEach(a => a.classList.remove('active-toc'));
+                        const activeLink = document.querySelector(`.profile-toc a[data-scroll="${id}"]`);
+                        if (activeLink) activeLink.classList.add('active-toc');
+                    }
                 }
-            }, { rootMargin: '-150px 0px -60% 0px' });
+            }, { rootMargin: '-10% 0px -60% 0px' });
             blocks.forEach(block => tocObserver.observe(block));
         }
     };
