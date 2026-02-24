@@ -234,9 +234,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (scrollBtn) {
             e.preventDefault();
             const targetId = scrollBtn.getAttribute('data-scroll');
-            const targetEl = document.getElementById(targetId);
-            if (targetEl) {
-                targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            if (targetId === 'introduction') {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                const targetEl = document.getElementById(targetId);
+                if (targetEl) {
+                    targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
             }
         }
     });
