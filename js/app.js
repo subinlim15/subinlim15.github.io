@@ -159,7 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     btn.classList.remove('zoom-active');
                     setTimeout(() => btn.classList.remove('zoom-resetting'), 50);
                 });
-            }, 800);
+            }, 500);
 
         } else {
             // Standard reset for regular navigation (e.g. back button)

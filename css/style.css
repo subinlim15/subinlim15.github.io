@@ -658,8 +658,8 @@ footer {
 /* Utility Animations */
 .fade-up {
     opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    transform: translateY(15px);
+    transition: opacity 0.4s ease-out, transform 0.4s ease-out;
 }
 
 .fade-up.visible {
@@ -827,7 +827,7 @@ footer {
     background-color: var(--bg-color);
     border-color: var(--bg-color);
     z-index: 100;
-    transition: transform 1.2s cubic-bezier(0.65, 0, 0.35, 1), background-color 0.8s, border-color 0.8s, opacity 0.8s;
+    transition: transform 0.6s cubic-bezier(0.5, 0, 0, 1), background-color 0.4s, border-color 0.4s, opacity 0.4s;
 }
 
 .gate-btn.zoom-resetting {
