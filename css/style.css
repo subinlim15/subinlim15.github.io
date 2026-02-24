@@ -831,10 +831,11 @@ footer {
 }
 
 .gate-btn.zoom-active {
+    transform: scale(40) !important;
     background-color: var(--bg-color);
     border-color: var(--bg-color);
     z-index: 100;
-    transition: background-color 0.4s, border-color 0.4s, opacity 0.4s;
+    transition: transform 1.2s cubic-bezier(0.65, 0, 0.35, 1), background-color 0.8s, border-color 0.8s, opacity 0.8s;
 }
 
 .gate-btn.zoom-resetting {

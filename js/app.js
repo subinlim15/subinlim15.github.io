@@ -130,10 +130,6 @@ document.addEventListener('DOMContentLoaded', () => {
         await loadView(targetId);
 
         // Reset zoomed bubbles if returning without transition jitter
-        document.querySelectorAll('.zoom-dive').forEach(sec => {
-            sec.classList.remove('zoom-dive');
-            sec.style.transformOrigin = '';
-        });
         document.querySelectorAll('.gate-btn.zoom-active').forEach(btn => {
             btn.classList.add('zoom-resetting');
             btn.classList.remove('zoom-active');
@@ -159,15 +155,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const targetId = link.getAttribute('data-target');
 
             if (link.classList.contains('gate-btn')) {
-                const mainSec = document.getElementById('main');
-                if (mainSec && mainSec.classList.contains('zoom-dive')) return;
-
-                const rect = link.getBoundingClientRect();
-                if (mainSec) {
-                    mainSec.style.transformOrigin = `${rect.left + rect.width / 2}px ${rect.top + rect.height / 2}px`;
-                    mainSec.classList.add('zoom-dive');
-                }
-
                 if (link.classList.contains('zoom-active')) return;
                 link.classList.add('zoom-active');
 
@@ -177,7 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         window.history.pushState({ section: targetId }, '', newUrl);
                     }
                     navigateTo(targetId);
-                }, 400); // Wait 400ms for snappier zoom transition
+                }, 800); // Wait 800ms for bubble zoom to fill screen
             } else {
                 // Push state to history
                 const newUrl = `#${targetId}`;
