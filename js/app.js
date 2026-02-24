@@ -135,6 +135,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 navigateTo(targetId);
             }
         }
+
+        // Handle Table of Contents (TOC) smooth scrolling
+        const scrollBtn = e.target.closest('[data-scroll]');
+        if (scrollBtn) {
+            e.preventDefault();
+            const targetId = scrollBtn.getAttribute('data-scroll');
+            const targetEl = document.getElementById(targetId);
+            if (targetEl) {
+                targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
     });
 
     // Handle back/forward navigation

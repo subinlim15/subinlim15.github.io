@@ -326,12 +326,51 @@ h6 {
 }
 
 /* Profile Section */
-.profile-grid {
+.profile-layout {
     display: grid;
-    grid-template-columns: 1fr 1.5fr;
+    grid-template-columns: 1fr 280px;
     gap: 3rem;
-    margin-top: 3rem;
     align-items: start;
+    margin-top: 3rem;
+}
+
+.profile-main {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+.profile-toc {
+    position: sticky;
+    top: 100px;
+    padding: 1.5rem;
+}
+
+.profile-toc h4 {
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+    color: var(--heading-color);
+}
+
+.profile-toc ul {
+    list-style: none;
+    padding: 0;
+}
+
+.profile-toc li {
+    margin-bottom: 0.8rem;
+}
+
+.profile-toc a {
+    color: var(--secondary-color);
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: var(--transition-fast);
+}
+
+.profile-toc a:hover {
+    color: var(--heading-color);
+    padding-left: 5px;
 }
 
 .cv-list {
@@ -631,8 +670,13 @@ footer {
 
 /* Responsive Media Queries */
 @media (max-width: 900px) {
-    .profile-grid {
+    .profile-layout {
         grid-template-columns: 1fr;
+    }
+
+    .profile-toc {
+        display: none;
+        /* Hide TOC on mobile */
     }
 
     .hero-title {
