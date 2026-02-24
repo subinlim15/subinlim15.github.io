@@ -46,6 +46,23 @@ document.addEventListener('DOMContentLoaded', () => {
         fadeElements.forEach(el => {
             scrollObserver.observe(el);
         });
+
+        // TOC Scroll Spy Logic
+        const blocks = container.querySelectorAll('.section-block');
+        if (blocks.length > 0) {
+            const tocObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const id = entry.target.getAttribute('id');
+                        const links = document.querySelectorAll('.profile-toc a');
+                        links.forEach(a => a.classList.remove('active-toc'));
+                        const activeLink = document.querySelector(`.profile-toc a[data-scroll="${id}"]`);
+                        if (activeLink) activeLink.classList.add('active-toc');
+                    }
+                });
+            }, { rootMargin: '-120px 0px -60% 0px' });
+            blocks.forEach(block => tocObserver.observe(block));
+        }
     };
 
     // Function to load external HTML view
@@ -91,6 +108,10 @@ document.addEventListener('DOMContentLoaded', () => {
         await loadView(targetId);
 
         // Reset zoomed bubbles if returning without transition jitter
+        document.querySelectorAll('.zoom-dive').forEach(sec => {
+            sec.classList.remove('zoom-dive');
+            sec.style.transformOrigin = '';
+        });
         document.querySelectorAll('.gate-btn.zoom-active').forEach(btn => {
             btn.classList.add('zoom-resetting');
             btn.classList.remove('zoom-active');
@@ -116,6 +137,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const targetId = link.getAttribute('data-target');
 
             if (link.classList.contains('gate-btn')) {
+                const mainSec = document.getElementById('main');
+                if (mainSec && mainSec.classList.contains('zoom-dive')) return;
+
+                const rect = link.getBoundingClientRect();
+                if (mainSec) {
+                    mainSec.style.transformOrigin = `${rect.left + rect.width / 2}px ${rect.top + rect.height / 2}px`;
+                    mainSec.classList.add('zoom-dive');
+                }
+
                 if (link.classList.contains('zoom-active')) return;
                 link.classList.add('zoom-active');
 
