@@ -428,8 +428,8 @@ ul.cv-list,
 ul.cv-list li,
 .timeline-content ul li {
     position: relative;
-    padding-left: 1.5rem;
-    margin-bottom: 0.8rem;
+    padding-left: 1rem;
+    margin-bottom: 0.4rem;
     line-height: 1.6;
 }
 
