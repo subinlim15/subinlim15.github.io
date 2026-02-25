@@ -211,8 +211,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // Handle personal page specific game
         if (targetId === 'personal' && typeof window.initPersonalGame === 'function') {
             window.initPersonalGame();
-        } else if (typeof window.stopPersonalGame === 'function') {
-            window.stopPersonalGame();
+            if (typeof window.initPersonalAnimations === 'function') window.initPersonalAnimations();
+        } else {
+            if (typeof window.stopPersonalGame === 'function') window.stopPersonalGame();
+            if (typeof window.stopPersonalAnimations === 'function') window.stopPersonalAnimations();
         }
 
         // Handle study page specific cosmic ray background
@@ -251,6 +253,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 navigateTo(targetId);
             }
         }
+
+        // Handle personal animation toggle buttons
+        const animBtn = e.target.closest('button.anim-btn');
+        if (animBtn) {
+            e.preventDefault();
+            const mode = animBtn.getAttribute('data-anim');
+            if (mode && typeof window.setPersonalAnimationMode === 'function') {
+                window.setPersonalAnimationMode(mode);
+            }
+        }
+
         // Handle Table of Contents (TOC) smooth scrolling
         const scrollBtn = e.target.closest('[data-scroll]');
         if (scrollBtn) {

@@ -1,8 +1,22 @@
-<div class="container fade-up">
+<canvas id="personal-bg-canvas"
+    style="position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:-1; opacity:0.3; pointer-events:none;"></canvas>
+<div class="container fade-up" style="position:relative; z-index:1;">
     <div class="back-link-wrapper" style="margin-bottom: 2rem;">
         <a href="#main" data-target="main" class="btn-text">← Back to Main</a>
     </div>
     <h2 class="section-title">Personal</h2>
+
+    <div class="anim-controls"
+        style="display:flex; justify-content:center; align-items:center; gap:0.5rem; flex-wrap:wrap; margin-bottom: 3rem;">
+        <button class="gate-btn anim-btn active" data-anim="tunneling"
+            style="font-size: 0.85rem; padding: 0.5rem 1rem; border-radius: 20px;">Quantum Tunneling</button>
+        <button class="gate-btn anim-btn" data-anim="feynman"
+            style="font-size: 0.85rem; padding: 0.5rem 1rem; border-radius: 20px;">Feynman Diagram</button>
+        <button class="gate-btn anim-btn" data-anim="neutrino"
+            style="font-size: 0.85rem; padding: 0.5rem 1rem; border-radius: 20px;">Neutrino Oscillation</button>
+        <button class="gate-btn anim-btn" data-anim="doubleslit"
+            style="font-size: 0.85rem; padding: 0.5rem 1rem; border-radius: 20px;">Double-Slit Interference</button>
+    </div>
 
     <div class="code-editor-mockup glass-card delay-2">
         <div class="editor-header">
