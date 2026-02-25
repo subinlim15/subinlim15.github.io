@@ -81,17 +81,17 @@ window.initParticles = () => {
             this.angle = Math.random() * Math.PI * 2;
 
             // Particle momentum (speed) and charge (curvature in magnetic field)
-            this.momentum = Math.random() * 4 + 1; // Slower particles
+            this.momentum = Math.random() * 7 + 2; // Balanced slower particles
             this.charge = Math.random() > 0.5 ? 1 : -1;
             this.isNeutral = Math.random() > 0.7; // Neutrals don't curve
 
             // Lorentz force approximation in a uniform magnetic field: 
-            let bend = 0.025 / (this.momentum * 0.5); // Adjust bend for slower speed
+            let bend = 0.05 / (this.momentum * 0.5); // Adjust bend for slower speed
             this.curvature = this.isNeutral ? 0 : bend * this.charge;
 
             this.life = 1.0;
             // Adjust decay rate to let particles reach outer layers even when slow
-            this.decay = (Math.random() * 0.01 + 0.002) / (this.momentum * 0.2);
+            this.decay = (Math.random() * 0.015 + 0.004) / (this.momentum * 0.2);
             this.thickness = Math.random() > 0.8 ? 2.5 : 1; // Some high energy jets
         }
 
@@ -210,7 +210,7 @@ window.initParticles = () => {
 
         if (state === 'BEAM') {
             // Speed of the approaching beams - adaptive pixel velocity
-            const beamSpeedPx = Math.max(6, width * 0.006);
+            const beamSpeedPx = Math.max(10, width * 0.009);
             beamProgress += beamSpeedPx / (width / 2);
 
             const baseDist = (1 - beamProgress) * (width / 2);
