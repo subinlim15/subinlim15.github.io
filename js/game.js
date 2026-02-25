@@ -1,8 +1,16 @@
 const PersonalGame = (() => {
     let canvas, ctx;
     let score = 0;
-    let grid = [];
+
+    let grid = []; // 2D array of tile objects or null
+    let activeTiles = []; // tiles currently on board
+    let deletedTiles = []; // tiles sliding to merge and then disappear
+    let nextTileId = 1;
+    let anyTileMoving = false;
+    let animationId = null;
+
     let isPlaying = false;
+    let isTouchMoved = false;
     let touchStartX = 0;
     let touchStartY = 0;
 
@@ -39,20 +47,32 @@ const PersonalGame = (() => {
 
         TILE_SIZE = (canvas.width - TILE_PADDING * (GRID_SIZE + 1)) / GRID_SIZE;
 
-        // Input handlers
+        // Event Listeners
         document.addEventListener('keydown', handleKeydown);
 
-        // Touch or click on canvas
         canvas.addEventListener('touchstart', (e) => {
             if (!isPlaying) return;
-            // e.preventDefault();
             touchStartX = e.changedTouches[0].screenX;
             touchStartY = e.changedTouches[0].screenY;
+            isTouchMoved = false;
+        }, { passive: false });
+
+        canvas.addEventListener('touchmove', (e) => {
+            if (!isPlaying) return;
+            let touchEndX = e.changedTouches[0].screenX;
+            let touchEndY = e.changedTouches[0].screenY;
+
+            let dx = touchEndX - touchStartX;
+            let dy = touchEndY - touchStartY;
+
+            if (Math.abs(dx) > 20 || Math.abs(dy) > 20) {
+                e.preventDefault(); // Prevent scrolling once we surpass a threshold
+                isTouchMoved = true;
+            }
         }, { passive: false });
 
         canvas.addEventListener('touchend', (e) => {
-            if (!isPlaying) return;
-            // e.preventDefault();
+            if (!isPlaying || !isTouchMoved) return;
             let touchEndX = e.changedTouches[0].screenX;
             let touchEndY = e.changedTouches[0].screenY;
             handleSwipe(touchStartX, touchStartY, touchEndX, touchEndY);
@@ -63,26 +83,31 @@ const PersonalGame = (() => {
             startBtn.addEventListener('click', startGame);
         }
 
-        drawGrid();
+        drawStaticBoard();
     }
 
     function startGame() {
         document.getElementById('game-overlay').style.display = 'none';
         isPlaying = true;
         score = 0;
+        activeTiles = [];
+        deletedTiles = [];
+        nextTileId = 1;
 
         // Initialize empty grid
-        grid = Array(GRID_SIZE).fill().map(() => Array(GRID_SIZE).fill(0));
+        grid = Array(GRID_SIZE).fill().map(() => Array(GRID_SIZE).fill(null));
 
         // Add two initial tiles
         addRandomTile();
         addRandomTile();
 
         updateUI();
-        drawGrid();
 
         // Lock scrolling on mobile when game is active
         document.body.style.overflow = 'hidden';
+
+        if (animationId) cancelAnimationFrame(animationId);
+        animationLoop();
     }
 
     function addRandomTile() {
@@ -91,10 +116,10 @@ const PersonalGame = (() => {
 
         for (let r = 0; r < GRID_SIZE; r++) {
             for (let c = 0; c < GRID_SIZE; c++) {
-                if (grid[r][c] === 0) {
+                if (!grid[r][c]) {
                     emptyCells.push({ r, c });
-                } else if (grid[r][c] > maxVal) {
-                    maxVal = grid[r][c];
+                } else if (grid[r][c].val > maxVal) {
+                    maxVal = grid[r][c].val;
                 }
             }
         }
@@ -103,10 +128,9 @@ const PersonalGame = (() => {
 
         let randomCell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
 
-        // User custom rule: "새로운 수가 생길때는 현재 판의 최대 숫자/2 가 나올 수 있는 최대치야"
+        // "현재 판의 최대 숫자/2 가 나올 수 있는 최대치"
         let upperLimit = Math.max(2, Math.floor(maxVal / 2));
 
-        // Find valid powers of 2 up to upperLimit
         let possibleValues = [1, 2];
         let p = 4;
         while (p <= upperLimit) {
@@ -116,37 +140,42 @@ const PersonalGame = (() => {
 
         let newValue = possibleValues[Math.floor(Math.random() * possibleValues.length)];
 
-        // Initialize with 1 or 2 as requested ("처음에 1이나 2가 두개정도 주어지고")
         if (maxVal === 0) {
             newValue = Math.random() < 0.5 ? 1 : 2;
         }
 
-        grid[randomCell.r][randomCell.c] = newValue;
+        let t = {
+            id: nextTileId++,
+            r: randomCell.r,
+            c: randomCell.c,
+            val: newValue,
+            x: TILE_PADDING + (TILE_SIZE + TILE_PADDING) * randomCell.c,
+            y: TILE_PADDING + (TILE_SIZE + TILE_PADDING) * randomCell.r,
+            scale: 0,
+            animatingScale: 'up',
+            isPop: false
+        };
+
+        grid[randomCell.r][randomCell.c] = t;
+        activeTiles.push(t);
     }
 
     function handleKeydown(e) {
         if (!isPlaying) return;
 
+        // Avoid handling multiple moves if already heavily animating
+        // but typically 2048 allows fast queued moves. We'll allow it.
         let moved = false;
         switch (e.code) {
-            case 'ArrowUp':
-                moved = moveUp();
-                break;
-            case 'ArrowDown':
-                moved = moveDown();
-                break;
-            case 'ArrowLeft':
-                moved = moveLeft();
-                break;
-            case 'ArrowRight':
-                moved = moveRight();
-                break;
-            default:
-                return; // Not an arrow key
+            case 'ArrowUp': moved = moveUp(); break;
+            case 'ArrowDown': moved = moveDown(); break;
+            case 'ArrowLeft': moved = moveLeft(); break;
+            case 'ArrowRight': moved = moveRight(); break;
+            default: return; // Not an arrow key
         }
 
         if (moved) {
-            e.preventDefault(); // Prevent scrolling
+            e.preventDefault();
             afterMove();
         }
     }
@@ -158,13 +187,10 @@ const PersonalGame = (() => {
         if (Math.abs(dx) < 30 && Math.abs(dy) < 30) return; // Too short
 
         let moved = false;
-
         if (Math.abs(dx) > Math.abs(dy)) {
-            // Horizontal
             if (dx > 0) moved = moveRight();
             else moved = moveLeft();
         } else {
-            // Vertical
             if (dy > 0) moved = moveDown();
             else moved = moveUp();
         }
@@ -175,45 +201,47 @@ const PersonalGame = (() => {
     function afterMove() {
         addRandomTile();
         updateUI();
-        drawGrid();
 
         if (isGameOver()) {
             endGame();
         }
     }
 
-    // Core game logic: Slide and merge
-    function slideArray(row) {
-        let newRow = row.filter(val => val !== 0);
-        let mergedRow = [];
-        let i = 0;
-        let scoreGain = 0;
-
-        while (i < newRow.length) {
-            if (i < newRow.length - 1 && newRow[i] === newRow[i + 1]) {
-                mergedRow.push(newRow[i] * 2);
-                scoreGain += newRow[i] * 2;
-                i += 2;
-            } else {
-                mergedRow.push(newRow[i]);
-                i++;
-            }
-        }
-
-        while (mergedRow.length < GRID_SIZE) {
-            mergedRow.push(0);
-        }
-
-        score += scoreGain;
-        return { modifiedRow: mergedRow, changed: row.toString() !== mergedRow.toString() };
-    }
-
+    // Abstracting movement logic
     function moveLeft() {
         let moved = false;
         for (let r = 0; r < GRID_SIZE; r++) {
-            let res = slideArray(grid[r]);
-            grid[r] = res.modifiedRow;
-            if (res.changed) moved = true;
+            let rowTiles = [];
+            for (let c = 0; c < GRID_SIZE; c++) if (grid[r][c]) rowTiles.push(grid[r][c]);
+            for (let c = 0; c < GRID_SIZE; c++) grid[r][c] = null;
+
+            let targetCol = 0;
+            let i = 0;
+            while (i < rowTiles.length) {
+                let t1 = rowTiles[i];
+                if (i < rowTiles.length - 1 && t1.val === rowTiles[i + 1].val) {
+                    let t2 = rowTiles[i + 1];
+                    t2.toBeDeleted = true;
+                    t2.targetR = r;
+                    t2.targetC = targetCol;
+                    deletedTiles.push(t2);
+                    activeTiles = activeTiles.filter(at => at.id !== t2.id);
+
+                    t1.r = r;
+                    t1.c = targetCol;
+                    t1.val = t1.val * 2;
+                    t1.isPop = true;
+
+                    score += t1.val;
+                    grid[r][targetCol] = t1;
+                    targetCol++; i += 2; moved = true;
+                } else {
+                    if (t1.r !== r || t1.c !== targetCol) moved = true;
+                    t1.r = r; t1.c = targetCol;
+                    grid[r][targetCol] = t1;
+                    targetCol++; i++;
+                }
+            }
         }
         return moved;
     }
@@ -221,10 +249,35 @@ const PersonalGame = (() => {
     function moveRight() {
         let moved = false;
         for (let r = 0; r < GRID_SIZE; r++) {
-            let reversed = [...grid[r]].reverse();
-            let res = slideArray(reversed);
-            grid[r] = res.modifiedRow.reverse();
-            if (res.changed) moved = true;
+            let rowTiles = [];
+            for (let c = GRID_SIZE - 1; c >= 0; c--) if (grid[r][c]) rowTiles.push(grid[r][c]);
+            for (let c = 0; c < GRID_SIZE; c++) grid[r][c] = null;
+
+            let targetCol = GRID_SIZE - 1;
+            let i = 0;
+            while (i < rowTiles.length) {
+                let t1 = rowTiles[i];
+                if (i < rowTiles.length - 1 && t1.val === rowTiles[i + 1].val) {
+                    let t2 = rowTiles[i + 1];
+                    t2.toBeDeleted = true;
+                    t2.targetR = r; t2.targetC = targetCol;
+                    deletedTiles.push(t2);
+                    activeTiles = activeTiles.filter(at => at.id !== t2.id);
+
+                    t1.r = r; t1.c = targetCol;
+                    t1.val = t1.val * 2;
+                    t1.isPop = true;
+
+                    score += t1.val;
+                    grid[r][targetCol] = t1;
+                    targetCol--; i += 2; moved = true;
+                } else {
+                    if (t1.r !== r || t1.c !== targetCol) moved = true;
+                    t1.r = r; t1.c = targetCol;
+                    grid[r][targetCol] = t1;
+                    targetCol--; i++;
+                }
+            }
         }
         return moved;
     }
@@ -232,12 +285,35 @@ const PersonalGame = (() => {
     function moveUp() {
         let moved = false;
         for (let c = 0; c < GRID_SIZE; c++) {
-            let column = [grid[0][c], grid[1][c], grid[2][c], grid[3][c]];
-            let res = slideArray(column);
-            for (let r = 0; r < GRID_SIZE; r++) {
-                grid[r][c] = res.modifiedRow[r];
+            let colTiles = [];
+            for (let r = 0; r < GRID_SIZE; r++) if (grid[r][c]) colTiles.push(grid[r][c]);
+            for (let r = 0; r < GRID_SIZE; r++) grid[r][c] = null;
+
+            let targetRow = 0;
+            let i = 0;
+            while (i < colTiles.length) {
+                let t1 = colTiles[i];
+                if (i < colTiles.length - 1 && t1.val === colTiles[i + 1].val) {
+                    let t2 = colTiles[i + 1];
+                    t2.toBeDeleted = true;
+                    t2.targetR = targetRow; t2.targetC = c;
+                    deletedTiles.push(t2);
+                    activeTiles = activeTiles.filter(at => at.id !== t2.id);
+
+                    t1.r = targetRow; t1.c = c;
+                    t1.val = t1.val * 2;
+                    t1.isPop = true;
+
+                    score += t1.val;
+                    grid[targetRow][c] = t1;
+                    targetRow++; i += 2; moved = true;
+                } else {
+                    if (t1.r !== targetRow || t1.c !== c) moved = true;
+                    t1.r = targetRow; t1.c = c;
+                    grid[targetRow][c] = t1;
+                    targetRow++; i++;
+                }
             }
-            if (res.changed) moved = true;
         }
         return moved;
     }
@@ -245,13 +321,35 @@ const PersonalGame = (() => {
     function moveDown() {
         let moved = false;
         for (let c = 0; c < GRID_SIZE; c++) {
-            let column = [grid[3][c], grid[2][c], grid[1][c], grid[0][c]];
-            let res = slideArray(column);
-            let merged = res.modifiedRow.reverse();
-            for (let r = 0; r < GRID_SIZE; r++) {
-                grid[r][c] = merged[r];
+            let colTiles = [];
+            for (let r = GRID_SIZE - 1; r >= 0; r--) if (grid[r][c]) colTiles.push(grid[r][c]);
+            for (let r = 0; r < GRID_SIZE; r++) grid[r][c] = null;
+
+            let targetRow = GRID_SIZE - 1;
+            let i = 0;
+            while (i < colTiles.length) {
+                let t1 = colTiles[i];
+                if (i < colTiles.length - 1 && t1.val === colTiles[i + 1].val) {
+                    let t2 = colTiles[i + 1];
+                    t2.toBeDeleted = true;
+                    t2.targetR = targetRow; t2.targetC = c;
+                    deletedTiles.push(t2);
+                    activeTiles = activeTiles.filter(at => at.id !== t2.id);
+
+                    t1.r = targetRow; t1.c = c;
+                    t1.val = t1.val * 2;
+                    t1.isPop = true;
+
+                    score += t1.val;
+                    grid[targetRow][c] = t1;
+                    targetRow--; i += 2; moved = true;
+                } else {
+                    if (t1.r !== targetRow || t1.c !== c) moved = true;
+                    t1.r = targetRow; t1.c = c;
+                    grid[targetRow][c] = t1;
+                    targetRow--; i++;
+                }
             }
-            if (res.changed) moved = true;
         }
         return moved;
     }
@@ -259,9 +357,9 @@ const PersonalGame = (() => {
     function isGameOver() {
         for (let r = 0; r < GRID_SIZE; r++) {
             for (let c = 0; c < GRID_SIZE; c++) {
-                if (grid[r][c] === 0) return false;
-                if (c < GRID_SIZE - 1 && grid[r][c] === grid[r][c + 1]) return false;
-                if (r < GRID_SIZE - 1 && grid[r][c] === grid[r + 1][c]) return false;
+                if (!grid[r][c]) return false;
+                if (c < GRID_SIZE - 1 && grid[r][c].val === (grid[r][c + 1] ? grid[r][c + 1].val : -1)) return false;
+                if (r < GRID_SIZE - 1 && grid[r][c].val === (grid[r + 1][c] ? grid[r + 1][c].val : -1)) return false;
             }
         }
         return true;
@@ -282,7 +380,7 @@ const PersonalGame = (() => {
             btn.textContent = 'Try Again';
             btn.style.background = '#8f7a66';
             msg.style.color = '#776e65';
-        }, 500);
+        }, 1000);
     }
 
     function updateUI() {
@@ -290,7 +388,6 @@ const PersonalGame = (() => {
         if (scoreEl) scoreEl.textContent = `Score: ${score}`;
     }
 
-    // Polyfill roundRect for older browsers if needed
     function drawRoundRect(ctx, x, y, width, height, radius) {
         if (ctx.roundRect) {
             ctx.roundRect(x, y, width, height, radius);
@@ -307,38 +404,99 @@ const PersonalGame = (() => {
         ctx.quadraticCurveTo(x, y, x + radius, y);
     }
 
-    function drawGrid() {
+    function drawStaticBoard() {
         if (!ctx) return;
-
-        // Clear canvas
         ctx.fillStyle = COLORS.background;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-
         for (let r = 0; r < GRID_SIZE; r++) {
             for (let c = 0; c < GRID_SIZE; c++) {
                 let x = TILE_PADDING + (TILE_SIZE + TILE_PADDING) * c;
                 let y = TILE_PADDING + (TILE_SIZE + TILE_PADDING) * r;
-                let val = grid.length ? grid[r][c] : 0;
+                ctx.fillStyle = COLORS.emptyTile;
+                ctx.beginPath(); drawRoundRect(ctx, x, y, TILE_SIZE, TILE_SIZE, 5); ctx.fill();
+            }
+        }
+    }
 
-                // Draw tile background
-                ctx.fillStyle = val === 0 ? COLORS.emptyTile : (COLORS.tiles[val] || '#3c3a32');
+    function drawTile(t) {
+        // Find center for scaling pop effect
+        let cx = t.x + TILE_SIZE / 2;
+        let cy = t.y + TILE_SIZE / 2;
+        let ts = TILE_SIZE * t.scale;
 
-                // Draw rounded rect
-                ctx.beginPath();
-                drawRoundRect(ctx, x, y, TILE_SIZE, TILE_SIZE, 5);
-                ctx.fill();
+        ctx.fillStyle = COLORS.tiles[t.val] || '#3c3a32';
+        ctx.beginPath();
+        drawRoundRect(ctx, cx - ts / 2, cy - ts / 2, ts, ts, 5 * t.scale);
+        ctx.fill();
 
-                // Draw value
-                if (val !== 0) {
-                    ctx.fillStyle = val <= 4 ? COLORS.textDark : COLORS.textLight;
+        ctx.fillStyle = t.val <= 4 ? COLORS.textDark : COLORS.textLight;
 
-                    let fontSize = val < 100 ? 46 : (val < 1000 ? 38 : 30);
-                    ctx.font = `bold ${fontSize}px var(--font-family, sans-serif)`;
-                    ctx.textAlign = 'center';
-                    ctx.textBaseline = 'middle';
-                    ctx.fillText(val, x + TILE_SIZE / 2, y + TILE_SIZE / 2);
+        // Increase font size slightly as requested
+        let fontSize = t.val < 100 ? 52 * t.scale : (t.val < 1000 ? 44 * t.scale : 34 * t.scale);
+        ctx.font = `bold ${fontSize}px var(--font-family, sans-serif)`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(t.val, cx, cy);
+    }
+
+    function animationLoop() {
+        if (!ctx) return;
+
+        const LERP_SPEED = 0.35;
+        anyTileMoving = false;
+
+        // Process physics
+        activeTiles.forEach(t => {
+            let tx = TILE_PADDING + (TILE_SIZE + TILE_PADDING) * t.c;
+            let ty = TILE_PADDING + (TILE_SIZE + TILE_PADDING) * t.r;
+
+            if (Math.abs(tx - t.x) > 1 || Math.abs(ty - t.y) > 1) {
+                t.x += (tx - t.x) * LERP_SPEED;
+                t.y += (ty - t.y) * LERP_SPEED;
+                anyTileMoving = true;
+            } else {
+                t.x = tx; t.y = ty;
+                if (t.isPop) {
+                    t.isPop = false;
+                    t.animatingScale = 'down';
+                    t.scale = 1.25;
                 }
             }
+
+            if (t.animatingScale === 'up') {
+                t.scale += (1 - t.scale) * 0.2;
+                if (t.scale > 0.95) { t.scale = 1; t.animatingScale = false; }
+                anyTileMoving = true;
+            } else if (t.animatingScale === 'down') {
+                t.scale += (1 - t.scale) * 0.2;
+                if (t.scale < 1.05) { t.scale = 1; t.animatingScale = false; }
+                anyTileMoving = true;
+            }
+        });
+
+        for (let i = deletedTiles.length - 1; i >= 0; i--) {
+            let t = deletedTiles[i];
+            let tx = TILE_PADDING + (TILE_SIZE + TILE_PADDING) * t.targetC;
+            let ty = TILE_PADDING + (TILE_SIZE + TILE_PADDING) * t.targetR;
+
+            if (Math.abs(tx - t.x) > 1 || Math.abs(ty - t.y) > 1) {
+                t.x += (tx - t.x) * LERP_SPEED;
+                t.y += (ty - t.y) * LERP_SPEED;
+                anyTileMoving = true;
+            } else {
+                deletedTiles.splice(i, 1);
+            }
+        }
+
+        // Draw Layer
+        drawStaticBoard();
+
+        // Draw deleted tiles below active ones so they slide "into" the merging tile
+        deletedTiles.forEach(t => drawTile(t));
+        activeTiles.forEach(t => drawTile(t));
+
+        if (isPlaying || anyTileMoving || deletedTiles.length > 0) {
+            animationId = requestAnimationFrame(animationLoop);
         }
     }
 
@@ -353,6 +511,7 @@ const PersonalGame = (() => {
         stop: () => {
             isPlaying = false;
             document.body.style.overflow = '';
+            if (animationId) cancelAnimationFrame(animationId);
         }
     };
 })();
