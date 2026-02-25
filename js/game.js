@@ -112,14 +112,11 @@ const PersonalGame = (() => {
 
     function addRandomTile() {
         let emptyCells = [];
-        let maxVal = 0;
 
         for (let r = 0; r < GRID_SIZE; r++) {
             for (let c = 0; c < GRID_SIZE; c++) {
                 if (!grid[r][c]) {
                     emptyCells.push({ r, c });
-                } else if (grid[r][c].val > maxVal) {
-                    maxVal = grid[r][c].val;
                 }
             }
         }
@@ -128,21 +125,8 @@ const PersonalGame = (() => {
 
         let randomCell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
 
-        // "현재 판의 최대 숫자/2 가 나올 수 있는 최대치"
-        let upperLimit = Math.max(2, Math.floor(maxVal / 2));
-
-        let possibleValues = [1, 2];
-        let p = 4;
-        while (p <= upperLimit) {
-            possibleValues.push(p);
-            p *= 2;
-        }
-
-        let newValue = possibleValues[Math.floor(Math.random() * possibleValues.length)];
-
-        if (maxVal === 0) {
-            newValue = Math.random() < 0.5 ? 1 : 2;
-        }
+        // Classic 2048 rule: 90% chance of 2, 10% chance of 4
+        let newValue = Math.random() < 0.9 ? 2 : 4;
 
         let t = {
             id: nextTileId++,
