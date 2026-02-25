@@ -4,6 +4,20 @@ const PersonalAnimations = (() => {
     let currentMode = 'tunneling'; // tunneling, feynman, neutrino, doubleslit
     let entities = [];
     let time = 0;
+    let mouseX = 0, mouseY = 0;
+
+    function handleMouseMove(e) {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+    }
+
+    function handleMouseDown() {
+        if (currentMode === 'doubleslit' && entities.observerHover) {
+            entities.isObserved = !entities.isObserved;
+            // Reset accumulated screen data to clearly show the change
+            entities.screenBins = new Array(200).fill(0);
+        }
+    }
 
     // --- Tunneling ---
     function initTunneling() {
@@ -199,29 +213,181 @@ const PersonalAnimations = (() => {
 
     // --- Double Slit ---
     function initDoubleSlit() {
-        entities = { time: 0 };
+        entities = {
+            particles: [],
+            screenBins: new Array(200).fill(0), // bins for screen intensity
+            isObserved: false,
+            observerHover: false
+        };
     }
     function updateDoubleSlit() {
-        entities.time += 0.05;
-        let s1 = { x: canvas.width / 2 - 100, y: canvas.height / 2 };
-        let s2 = { x: canvas.width / 2 + 100, y: canvas.height / 2 };
-
-        ctx.lineWidth = 1;
         let isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-        let rgb = isDark ? '255, 255, 255' : '0, 0, 0';
+        let fgColor = isDark ? '#ffffff' : '#000000';
+        let particleColor = isDark ? '#00f7ff' : '#0055ff';
 
-        let maxRadius = Math.max(canvas.width, canvas.height) * 0.8;
-        for (let r = (entities.time * 20) % 40; r < maxRadius; r += 40) {
-            let alpha = Math.max(0, 1 - r / maxRadius) * 0.25;
-            ctx.strokeStyle = `rgba(${rgb}, ${alpha})`;
+        // Dimensions
+        let sourceX = 50;
+        let slitX = canvas.width / 3;
+        let screenX = canvas.width - 50;
+        let slitGap = 80;
+        let slitHeight = 30;
+        let centerY = canvas.height / 2;
 
+        // Draw Source
+        ctx.fillStyle = fgColor;
+        ctx.beginPath();
+        ctx.arc(sourceX, centerY, 5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillText("Electron Gun", sourceX - 20, centerY - 20);
+
+        // Draw Slit Barrier
+        ctx.fillStyle = isDark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)';
+        ctx.fillRect(slitX, 0, 4, centerY - slitGap / 2 - slitHeight / 2); // Top
+        ctx.fillRect(slitX, centerY - slitGap / 2 + slitHeight / 2, 4, slitGap - slitHeight); // Middle
+        ctx.fillRect(slitX, centerY + slitGap / 2 + slitHeight / 2, 4, canvas.height); // Bottom
+
+        // Draw Screen
+        ctx.fillRect(screenX, 0, 2, canvas.height);
+
+        // Draw Observer (Eye)
+        let eyeX = slitX + 50;
+        let eyeY = centerY - 150;
+        let dist = Math.sqrt((mouseX - eyeX) ** 2 + (mouseY - eyeY) ** 2);
+        entities.observerHover = dist < 30;
+
+        // Toggle observation on click (handled in event listener, but visualized here)
+        ctx.strokeStyle = entities.isObserved ? '#ff4757' : (entities.observerHover ? fgColor : 'rgba(128,128,128,0.5)');
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.ellipse(eyeX, eyeY, 20, 12, 0, 0, Math.PI * 2);
+        ctx.stroke();
+
+        // Pupil
+        ctx.fillStyle = entities.isObserved ? '#ff4757' : fgColor;
+        ctx.beginPath();
+        if (entities.isObserved) {
+            ctx.arc(eyeX, eyeY, 6, 0, Math.PI * 2); // Open
+        } else {
+            ctx.rect(eyeX - 5, eyeY - 1, 10, 2); // Closed/Sleeping
+        }
+        ctx.fill();
+
+        ctx.fillStyle = fgColor;
+        ctx.font = "12px sans-serif";
+        ctx.fillText(entities.isObserved ? "Observer: ON" : "Observer: OFF", eyeX - 30, eyeY - 20);
+        ctx.fillText(entities.isObserved ? "(Collapse!)" : "(Wave!)", eyeX - 25, eyeY + 35);
+
+        // Spawn Particles
+        if (Math.random() < 0.4) { // Spawn rate
+            entities.particles.push({
+                x: sourceX,
+                y: centerY,
+                vx: 4,
+                vy: (Math.random() - 0.5) * 1,
+                stage: 0, // 0: source->slit, 1: slit->screen
+                targetY: 0
+            });
+        }
+
+        // Update Particles
+        for (let i = entities.particles.length - 1; i >= 0; i--) {
+            let p = entities.particles[i];
+
+            p.x += p.vx;
+            p.y += p.vy;
+
+            // Stage 0: Approaching Slits
+            if (p.stage === 0 && p.x >= slitX) {
+                // Check if blocked
+                let inTopSlit = (p.y > centerY - slitGap / 2 - slitHeight / 2 && p.y < centerY - slitGap / 2 + slitHeight / 2);
+                let inBotSlit = (p.y > centerY + slitGap / 2 - slitHeight / 2 && p.y < centerY + slitGap / 2 + slitHeight / 2);
+
+                if (inTopSlit || inBotSlit) {
+                    p.stage = 1;
+
+                    // Determine target Y based on physics mode
+                    // We distribute target Y based on Probability Density Function (PDF)
+                    // Pattern width scaling
+                    let sigma = 40;
+                    let k = 0.15; // wave number proxy for interference fringe spacing
+
+                    // Use rejection sampling to pick a random Y coordinate that fits the PDF
+                    let found = false;
+                    while (!found) {
+                        let testY = Math.random() * canvas.height;
+                        let relY = testY - centerY;
+                        let prob = 0;
+
+                        if (entities.isObserved) {
+                            // Particle nature: Sum of two Gaussians (no interference)
+                            // P = exp(-(y-d/2)^2) + exp(-(y+d/2)^2)
+                            let p1 = Math.exp(-Math.pow(relY - slitGap / 2, 2) / (2 * sigma * sigma));
+                            let p2 = Math.exp(-Math.pow(relY + slitGap / 2, 2) / (2 * sigma * sigma));
+                            prob = p1 + p2;
+                        } else {
+                            // Wave nature: Interference pattern
+                            // P = Envelope * Interference
+                            // P = exp(-y^2) * cos^2(k*y)
+                            let envelope = Math.exp(-Math.pow(relY, 2) / (2 * (sigma * 2.5) * (sigma * 2.5))); // Broader envelope
+                            let interference = Math.cos(k * relY);
+                            prob = envelope * (interference * interference);
+                        }
+
+                        if (Math.random() < prob) {
+                            p.targetY = testY;
+                            // Recalculate velocity vector to hit targetY at screenX
+                            let dx = screenX - p.x;
+                            let dy = p.targetY - p.y;
+                            let speed = 4;
+                            let angle = Math.atan2(dy, dx);
+                            p.vx = Math.cos(angle) * speed;
+                            p.vy = Math.sin(angle) * speed;
+                            found = true;
+                        }
+                    }
+                } else {
+                    // Blocked by wall
+                    entities.particles.splice(i, 1);
+                    continue;
+                }
+            }
+
+            // Stage 1: Slit to Screen
+            if (p.stage === 1 && p.x >= screenX) {
+                // Hit Screen
+                let binIndex = Math.floor((p.y / canvas.height) * entities.screenBins.length);
+                if (binIndex >= 0 && binIndex < entities.screenBins.length) {
+                    entities.screenBins[binIndex] += 1;
+                }
+                entities.particles.splice(i, 1);
+                continue;
+            }
+
+            // Draw Particle
+            ctx.fillStyle = particleColor;
             ctx.beginPath();
-            ctx.arc(s1.x, s1.y, r, 0, Math.PI * 2);
-            ctx.stroke();
+            ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+            ctx.fill();
+        }
 
-            ctx.beginPath();
-            ctx.arc(s2.x, s2.y, r, 0, Math.PI * 2);
-            ctx.stroke();
+        // Draw Intensity Pattern on Screen
+        let maxVal = Math.max(...entities.screenBins, 1);
+        ctx.fillStyle = isDark ? 'rgba(0, 247, 255, 0.5)' : 'rgba(0, 85, 255, 0.5)';
+        ctx.beginPath();
+        for (let i = 0; i < entities.screenBins.length; i++) {
+            let val = entities.screenBins[i];
+            let barHeight = (val / maxVal) * 100; // 100px max width for the graph
+            let y = (i / entities.screenBins.length) * canvas.height;
+            let h = canvas.height / entities.screenBins.length;
+            ctx.rect(screenX + 2, y, barHeight, h);
+        }
+        ctx.fill();
+
+        // Decay pattern slowly for dynamic effect
+        if (Math.random() < 0.1) {
+            for (let i = 0; i < entities.screenBins.length; i++) {
+                if (entities.screenBins[i] > 0) entities.screenBins[i] *= 0.99;
+            }
         }
     }
 
@@ -253,6 +419,8 @@ const PersonalAnimations = (() => {
             ctx = canvas.getContext('2d');
             resize();
             window.addEventListener('resize', resize);
+            window.addEventListener('mousemove', handleMouseMove);
+            window.addEventListener('mousedown', handleMouseDown);
 
             if (!isPlaying) {
                 isPlaying = true;
@@ -277,13 +445,15 @@ const PersonalAnimations = (() => {
             isPlaying = false;
             if (animationId) cancelAnimationFrame(animationId);
             window.removeEventListener('resize', resize);
+            window.removeEventListener('mousemove', handleMouseMove);
+            window.removeEventListener('mousedown', handleMouseDown);
         },
         updateInfoText: () => {
             const infoDesc = {
                 'tunneling': 'The background animation shows Quantum Tunneling. The energy barrier mostly reflects incoming wave packets, but occasionally, a particle seamlessly tunnels through the impenetrable wall.',
                 'feynman': 'The background animation generates random Feynman diagrams. It visualizes hypothetical interaction histories between fermions and bosons in a vacuum state.',
                 'neutrino': 'The background animation illustrates Neutrino Oscillation, displaying particles that drift steadily while shifting their flavor states (represented by gradient colors).',
-                'doubleslit': 'The background animation mimics the Double-Slit wave interference pattern. Concentric waves emitted from two distinct points overlap to form constructive and destructive interference.'
+                'doubleslit': 'The background animation simulates the Double-Slit experiment. Click the Eye icon to observe which slit particles pass through, collapsing the wavefunction and destroying the interference pattern.'
             };
             const el = document.querySelector(`.bg-info-anim_${currentMode}`);
             if (el) {
