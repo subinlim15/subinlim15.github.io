@@ -247,8 +247,8 @@ const PersonalAnimations = (() => {
     }
 
     return {
-        init: () => {
-            canvas = document.getElementById('personal-bg-canvas');
+        init: (mode, canvasId) => {
+            canvas = document.getElementById(canvasId);
             if (!canvas) return;
             ctx = canvas.getContext('2d');
             resize();
@@ -256,8 +256,11 @@ const PersonalAnimations = (() => {
 
             if (!isPlaying) {
                 isPlaying = true;
+                currentMode = mode;
                 PersonalAnimations.setMode(currentMode);
                 loop();
+            } else {
+                PersonalAnimations.setMode(mode);
             }
         },
         setMode: (mode) => {
@@ -268,11 +271,7 @@ const PersonalAnimations = (() => {
             else if (mode === 'doubleslit') initDoubleSlit();
             PersonalAnimations.updateInfoText();
 
-            // Update active button state if UI exists
-            const buttons = document.querySelectorAll('.anim-btn');
-            buttons.forEach(b => b.classList.remove('active'));
-            const activeBtn = document.querySelector(`.anim-btn[data-anim="${mode}"]`);
-            if (activeBtn) activeBtn.classList.add('active');
+            PersonalAnimations.updateInfoText();
         },
         stop: () => {
             isPlaying = false;
@@ -286,7 +285,7 @@ const PersonalAnimations = (() => {
                 'neutrino': 'The background animation illustrates Neutrino Oscillation, displaying particles that drift steadily while shifting their flavor states (represented by gradient colors).',
                 'doubleslit': 'The background animation mimics the Double-Slit wave interference pattern. Concentric waves emitted from two distinct points overlap to form constructive and destructive interference.'
             };
-            const el = document.querySelector('.bg-info-personal');
+            const el = document.querySelector(`.bg-info-anim_${currentMode}`);
             if (el) {
                 el.textContent = infoDesc[currentMode];
             }
