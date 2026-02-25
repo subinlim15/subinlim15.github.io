@@ -128,13 +128,14 @@ const PersonalGame = (() => {
         // Classic 2048 rule: 90% chance of 2, 10% chance of 4
         let newValue = Math.random() < 0.9 ? 2 : 4;
 
+        let CURRENT_TILE_SIZE = (canvas.width - TILE_PADDING * (GRID_SIZE + 1)) / GRID_SIZE;
         let t = {
             id: nextTileId++,
             r: randomCell.r,
             c: randomCell.c,
             val: newValue,
-            x: TILE_PADDING + (TILE_SIZE + TILE_PADDING) * randomCell.c,
-            y: TILE_PADDING + (TILE_SIZE + TILE_PADDING) * randomCell.r,
+            x: TILE_PADDING + (CURRENT_TILE_SIZE + TILE_PADDING) * randomCell.c,
+            y: TILE_PADDING + (CURRENT_TILE_SIZE + TILE_PADDING) * randomCell.r,
             scale: 0,
             animatingScale: 'up',
             isPop: false
@@ -390,23 +391,25 @@ const PersonalGame = (() => {
 
     function drawStaticBoard() {
         if (!ctx) return;
+        let CURRENT_TILE_SIZE = (canvas.width - TILE_PADDING * (GRID_SIZE + 1)) / GRID_SIZE;
         ctx.fillStyle = COLORS.background;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         for (let r = 0; r < GRID_SIZE; r++) {
             for (let c = 0; c < GRID_SIZE; c++) {
-                let x = TILE_PADDING + (TILE_SIZE + TILE_PADDING) * c;
-                let y = TILE_PADDING + (TILE_SIZE + TILE_PADDING) * r;
+                let x = TILE_PADDING + (CURRENT_TILE_SIZE + TILE_PADDING) * c;
+                let y = TILE_PADDING + (CURRENT_TILE_SIZE + TILE_PADDING) * r;
                 ctx.fillStyle = COLORS.emptyTile;
-                ctx.beginPath(); drawRoundRect(ctx, x, y, TILE_SIZE, TILE_SIZE, 5); ctx.fill();
+                ctx.beginPath(); drawRoundRect(ctx, x, y, CURRENT_TILE_SIZE, CURRENT_TILE_SIZE, 5); ctx.fill();
             }
         }
     }
 
     function drawTile(t) {
+        let CURRENT_TILE_SIZE = (canvas.width - TILE_PADDING * (GRID_SIZE + 1)) / GRID_SIZE;
         // Find center for scaling pop effect
-        let cx = t.x + TILE_SIZE / 2;
-        let cy = t.y + TILE_SIZE / 2;
-        let ts = TILE_SIZE * t.scale;
+        let cx = t.x + CURRENT_TILE_SIZE / 2;
+        let cy = t.y + CURRENT_TILE_SIZE / 2;
+        let ts = CURRENT_TILE_SIZE * t.scale;
 
         ctx.fillStyle = COLORS.tiles[t.val] || '#3c3a32';
         ctx.beginPath();
@@ -415,8 +418,9 @@ const PersonalGame = (() => {
 
         ctx.fillStyle = t.val <= 4 ? COLORS.textDark : COLORS.textLight;
 
-        // Increase font size slightly as requested
-        let fontSize = t.val < 100 ? 64 * t.scale : (t.val < 1000 ? 54 * t.scale : 42 * t.scale);
+        // Increase font size proportionally to canvas
+        let baseFont = CURRENT_TILE_SIZE / 2.5;
+        let fontSize = t.val < 100 ? (baseFont * 1.5) * t.scale : (t.val < 1000 ? (baseFont * 1.2) * t.scale : (baseFont * 0.9) * t.scale);
         ctx.font = `bold ${fontSize}px var(--font-family, sans-serif)`;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
@@ -426,13 +430,15 @@ const PersonalGame = (() => {
     function animationLoop() {
         if (!ctx) return;
 
+        let CURRENT_TILE_SIZE = (canvas.width - TILE_PADDING * (GRID_SIZE + 1)) / GRID_SIZE;
+
         const LERP_SPEED = 0.35;
         anyTileMoving = false;
 
         // Process physics
         activeTiles.forEach(t => {
-            let tx = TILE_PADDING + (TILE_SIZE + TILE_PADDING) * t.c;
-            let ty = TILE_PADDING + (TILE_SIZE + TILE_PADDING) * t.r;
+            let tx = TILE_PADDING + (CURRENT_TILE_SIZE + TILE_PADDING) * t.c;
+            let ty = TILE_PADDING + (CURRENT_TILE_SIZE + TILE_PADDING) * t.r;
 
             if (Math.abs(tx - t.x) > 1 || Math.abs(ty - t.y) > 1) {
                 t.x += (tx - t.x) * LERP_SPEED;
@@ -460,8 +466,8 @@ const PersonalGame = (() => {
 
         for (let i = deletedTiles.length - 1; i >= 0; i--) {
             let t = deletedTiles[i];
-            let tx = TILE_PADDING + (TILE_SIZE + TILE_PADDING) * t.targetC;
-            let ty = TILE_PADDING + (TILE_SIZE + TILE_PADDING) * t.targetR;
+            let tx = TILE_PADDING + (CURRENT_TILE_SIZE + TILE_PADDING) * t.targetC;
+            let ty = TILE_PADDING + (CURRENT_TILE_SIZE + TILE_PADDING) * t.targetR;
 
             if (Math.abs(tx - t.x) > 1 || Math.abs(ty - t.y) > 1) {
                 t.x += (tx - t.x) * LERP_SPEED;
