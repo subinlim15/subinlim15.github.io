@@ -47,22 +47,23 @@
 
     <!-- Mini Game Section -->
     <div class="game-container glass-card fade-up delay-4" style="text-align: center; margin-top: 3rem; padding: 2rem;">
-        <h3>Mini Game: Particle Dash! <br><span
-                style="font-size:0.85rem; color:var(--secondary-color); font-weight:normal;">(Press <strong
-                    style="color:#ff4757;">SPACE</strong> or <strong style="color:#ff4757;">Tap</strong> to double-jump
-                over
-                the background anomalies)</span></h3>
+        <h3>Mini Game: Custom 2048 <br><span
+                style="font-size:0.85rem; color:var(--secondary-color); font-weight:normal;">(Use <strong
+                    style="color:#ff4757;">Arrow Keys</strong> or <strong style="color:#ff4757;">Swipe</strong> to merge
+                tiles)</span></h3>
         <div style="margin-bottom: 1rem;">
             <span id="game-score" style="font-weight:bold; color:var(--heading-color); font-size:1.1rem;">Score:
                 0</span>
         </div>
-        <div style="position: relative; display: inline-block; width: 100%; max-width: 600px;">
-            <canvas id="higgs-game-canvas" width="600" height="200"
-                style="background:#111; border-radius: 8px; width: 100%; height: auto; border: 1px solid var(--border-color); display: block;"></canvas>
+        <div style="position: relative; display: inline-block; width: 100%; max-width: 400px;">
+            <canvas id="higgs-game-canvas" width="400" height="400"
+                style="background:#bbada0; border-radius: 8px; width: 100%; height: auto; border: 1px solid var(--border-color); display: block; touch-action: none;"></canvas>
             <div id="game-overlay"
-                style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); display:flex; flex-direction:column; justify-content:center; align-items:center; border-radius:8px;">
-                <h2 id="game-message" style="color:#FFF; margin-bottom: 1rem;">Ready to discover?</h2>
-                <button id="start-game-btn" class="btn btn-outline">Start Run</button>
+                style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(238,228,218,0.73); display:flex; flex-direction:column; justify-content:center; align-items:center; border-radius:8px;">
+                <h2 id="game-message" style="color:#776e65; margin-bottom: 1rem; font-size:2rem; font-weight:bold;">2048
+                </h2>
+                <button id="start-game-btn" class="btn btn-outline"
+                    style="color:#f9f6f2; background:#8f7a66; border:none;">New Game</button>
             </div>
         </div>
     </div>
