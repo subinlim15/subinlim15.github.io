@@ -419,12 +419,13 @@ const PersonalGame = (() => {
         ctx.fillStyle = t.val <= 4 ? COLORS.textDark : COLORS.textLight;
 
         // Increase font size proportionally to canvas
-        let baseFont = CURRENT_TILE_SIZE / 2.5;
-        let fontSize = t.val < 100 ? (baseFont * 1.5) * t.scale : (t.val < 1000 ? (baseFont * 1.2) * t.scale : (baseFont * 0.9) * t.scale);
-        ctx.font = `bold ${fontSize}px var(--font-family, sans-serif)`;
+        let baseFont = CURRENT_TILE_SIZE * 0.7; // Very large base font
+        let fontSize = t.val < 100 ? baseFont * t.scale : (t.val < 1000 ? (baseFont * 0.8) * t.scale : (baseFont * 0.6) * t.scale);
+        ctx.font = `bold ${fontSize}px sans-serif`;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText(t.val, cx, cy);
+        // Add a slight vertical offset for better visual centering in some fonts
+        ctx.fillText(t.val, cx, cy + (fontSize * 0.05));
     }
 
     function animationLoop() {
