@@ -416,7 +416,7 @@ const PersonalGame = (() => {
         ctx.fillStyle = t.val <= 4 ? COLORS.textDark : COLORS.textLight;
 
         // Increase font size slightly as requested
-        let fontSize = t.val < 100 ? 52 * t.scale : (t.val < 1000 ? 44 * t.scale : 34 * t.scale);
+        let fontSize = t.val < 100 ? 64 * t.scale : (t.val < 1000 ? 54 * t.scale : 42 * t.scale);
         ctx.font = `bold ${fontSize}px var(--font-family, sans-serif)`;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
