@@ -206,6 +206,13 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (typeof window.stopPersonalGame === 'function') {
             window.stopPersonalGame();
         }
+
+        // Handle study page specific cosmic ray background
+        if (targetId === 'study' && typeof window.initCosmicRay === 'function') {
+            window.initCosmicRay();
+        } else if (typeof window.stopCosmicRay === 'function') {
+            window.stopCosmicRay();
+        }
     };
 
     // Event Delegation for Nav Links and Data-Target Buttons
