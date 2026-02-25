@@ -76,7 +76,8 @@ class CloudChamber {
             decayRate: isCosmic ? 0.009 : 0.02 + Math.random() * 0.02,
             history: [{ x, y }],
             isFlying: true,
-            maxLength: isCosmic ? 50 + Math.random() * 50 : 20 + Math.random() * 30
+            // Shorter max lengths for tracks to avoid them looking too long
+            maxLength: isCosmic ? 25 + Math.random() * 25 : 10 + Math.random() * 15
         });
     }
 
