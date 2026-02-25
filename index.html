@@ -9,7 +9,7 @@
         content="Subin Lim's personal portfolio website showcasing profile, study, and personal projects.">
     <link rel="stylesheet" as="style" crossorigin
         href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
-    <link rel="stylesheet" href="./css/style.css?v=4">
+    <link rel="stylesheet" href="./css/style.css?v=5">
 </head>
 
 <body>
@@ -72,6 +72,25 @@
                             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
                         </svg>
                     </button>
+                    <div class="info-toggle" tabindex="0" aria-label="Page Background Info">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="16" x2="12" y2="12"></line>
+                            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                        </svg>
+                        <div class="info-tooltip">
+                            <span class="bg-info bg-info-main active">The background animation shows a diagram of
+                                head-on particle collisions at a particle detector.</span>
+                            <span class="bg-info bg-info-profile">The background animation shows the trajectories of
+                                particles in the cloud chamber. When a mouse is placed in the background, the magnetic
+                                dipole moment bends the trajectory of particles.</span>
+                            <span class="bg-info bg-info-study">The background animation shows the trajectories of
+                                cosmic rays. Incoming high-energy cosmic rays from the top of the atmosphere decay into
+                                low-energy particles traveling down to the ground.</span>
+                            <span class="bg-info bg-info-personal">Enjoy the classic 2048 game!</span>
+                        </div>
+                    </div>
                     <div class="hamburger">
                         <span></span>
                         <span></span>
@@ -107,7 +126,7 @@
             </div>
         </footer>
     </div>
-    <script src="./js/app.js?v=2"></script>
+    <script src="./js/app.js?v=3"></script>
     <script src="./js/particles.js?v=2"></script>
     <script src="./js/cloud_chamber.js?v=6"></script>
     <script src="./js/cosmic_ray.js?v=2"></script>

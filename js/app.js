@@ -193,6 +193,14 @@ document.addEventListener('DOMContentLoaded', () => {
         targetSection.classList.add('active');
         window.scrollTo({ top: 0, behavior: 'instant' });
 
+        // Update info tooltip content based on the active page
+        const bgInfos = document.querySelectorAll('.bg-info');
+        bgInfos.forEach(info => info.classList.remove('active'));
+        const targetBgInfo = document.querySelector(`.bg-info-${targetId}`);
+        if (targetBgInfo) {
+            targetBgInfo.classList.add('active');
+        }
+
         // Handle profile specific background animation
         if (targetId === 'profile' && typeof window.initCloudChamber === 'function') {
             window.initCloudChamber();
