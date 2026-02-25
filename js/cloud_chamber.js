@@ -61,7 +61,7 @@ class CloudChamber {
 
         const angle = Math.random() * Math.PI * 2;
         // Increased initial speeds by 50%
-        const speed = isCosmic ? 4.5 + Math.random() * 3 : 1.5 + Math.random() * 2.25;
+        const speed = isCosmic ? 10 + Math.random() * 3 : 1.5 + Math.random() * 2.25;
 
         const charge = Math.random() > 0.5 ? 1 : -1;
 
@@ -73,7 +73,7 @@ class CloudChamber {
             charge: charge,
             life: 1.0,
             // Increased decay by 50% for shorter lifetime
-            decayRate: isCosmic ? 0.0045 : 0.012 + Math.random() * 0.015,
+            decayRate: isCosmic ? 0.009 : 0.02 + Math.random() * 0.02,
             history: [{ x, y }]
         });
     }
@@ -135,8 +135,8 @@ class CloudChamber {
 
             p.history.push({ x: p.x, y: p.y });
 
-            // Long history list to show the nice curved trails
-            if (p.history.length > 80) {
+            // Short history list to keep the tracks thin and short at high speeds
+            if (p.history.length > 25) {
                 p.history.shift();
             }
 
