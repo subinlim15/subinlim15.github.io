@@ -74,7 +74,9 @@ class CloudChamber {
             life: 1.0,
             // Increased decay by 50% for shorter lifetime
             decayRate: isCosmic ? 0.009 : 0.02 + Math.random() * 0.02,
-            history: [{ x, y }]
+            history: [{ x, y }],
+            isFlying: true,
+            maxLength: isCosmic ? 50 + Math.random() * 50 : 20 + Math.random() * 30
         });
     }
 
@@ -94,50 +96,44 @@ class CloudChamber {
         for (let i = this.particles.length - 1; i >= 0; i--) {
             let p = this.particles[i];
 
-            // Localized magnetic field (B-field coming out of the screen, active near mouse anywhere)
-            if (this.mouseX > -1000 && this.mouseY > -1000) {
-                const dx = this.mouseX - p.x;
-                const dy = this.mouseY - p.y;
-                const dist2 = dx * dx + dy * dy;
+            if (p.isFlying) {
+                // Localized magnetic field (B-field coming out of the screen, active near mouse anywhere)
+                if (this.mouseX > -1000 && this.mouseY > -1000) {
+                    const dx = this.mouseX - p.x;
+                    const dy = this.mouseY - p.y;
+                    const dist2 = dx * dx + dy * dy;
 
-                // Magnetic Dipole Model
-                // For a dipole pointing out of the (x,y) screen (z-axis), the B-field in the plane is proportional to 1/r³
-                // Introduce a 'zDepth' to prevent singularity/infinity when distance is 0. 
-                // Imagine the dipole is placed slightly below the screen at z = -depth.
-                const zDepth = 60;
-                const r3 = Math.pow(dist2 + zDepth * zDepth, 1.5);
+                    // Magnetic Dipole Model
+                    const zDepth = 60;
+                    const r3 = Math.pow(dist2 + zDepth * zDepth, 1.5);
 
-                // Dipole Moment constant (tuned to give a max B-field of ~0.35 at the exact mouse center)
-                // 0.35 * (60^3) = 75600
-                const dipoleMoment = 100000;
-                const bStrength = dipoleMoment / r3;
+                    // Dipole Moment constant (tuned to give a max B-field of ~0.35 at the exact mouse center)
+                    const dipoleMoment = 100000;
+                    const bStrength = dipoleMoment / r3;
 
-                // Lorentz force (F = qv x B): Acts perpendicular to velocity, causing rotation without changing speed.
-                const curveForce = p.charge * bStrength;
+                    // Lorentz force (F = qv x B): Acts perpendicular to velocity, causing rotation without changing speed.
+                    const curveForce = p.charge * bStrength;
 
-                const newVx = p.vx * Math.cos(curveForce) - p.vy * Math.sin(curveForce);
-                const newVy = p.vx * Math.sin(curveForce) + p.vy * Math.cos(curveForce);
-                p.vx = newVx;
-                p.vy = newVy;
+                    const newVx = p.vx * Math.cos(curveForce) - p.vy * Math.sin(curveForce);
+                    const newVy = p.vx * Math.sin(curveForce) + p.vy * Math.cos(curveForce);
+                    p.vx = newVx;
+                    p.vy = newVy;
 
-                // Synchrotron Radiation (Energy Loss)
-                // Accelerated charged particles in a B-field lose energy proportional to B² * v²
-                // We simulate this by applying a drag coefficient proportional to bStrength squared.
-                // This creates realistic tighter inward spirals closer to the dipole.
-                const radiationLoss = Math.max(0.6, 1 - (0.15 * bStrength * bStrength));
-                p.vx *= radiationLoss;
-                p.vy *= radiationLoss;
-            }
+                    // Synchrotron Radiation (Energy Loss)
+                    const radiationLoss = Math.max(0.6, 1 - (0.15 * bStrength * bStrength));
+                    p.vx *= radiationLoss;
+                    p.vy *= radiationLoss;
+                }
 
-            p.x += p.vx;
-            p.y += p.vy;
-            p.life -= p.decayRate;
+                p.x += p.vx;
+                p.y += p.vy;
+                p.history.push({ x: p.x, y: p.y });
 
-            p.history.push({ x: p.x, y: p.y });
-
-            // Short history list to keep the tracks thin and short at high speeds
-            if (p.history.length > 25) {
-                p.history.shift();
+                if (p.history.length >= p.maxLength || p.x < -50 || p.x > this.canvas.width + 50 || p.y < -50 || p.y > this.canvas.height + 50) {
+                    p.isFlying = false;
+                }
+            } else {
+                p.life -= p.decayRate;
             }
 
             // Draw track
