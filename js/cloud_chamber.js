@@ -60,8 +60,8 @@ class CloudChamber {
         const y = Math.random() * this.canvas.height;
 
         const angle = Math.random() * Math.PI * 2;
-        // Slowed down initial speeds
-        const speed = isCosmic ? 3 + Math.random() * 2 : 1 + Math.random() * 1.5;
+        // Increased initial speeds by 50%
+        const speed = isCosmic ? 4.5 + Math.random() * 3 : 1.5 + Math.random() * 2.25;
 
         const charge = Math.random() > 0.5 ? 1 : -1;
 
@@ -72,8 +72,8 @@ class CloudChamber {
             vy: Math.sin(angle) * speed,
             charge: charge,
             life: 1.0,
-            // Increased decay for shorter lifetime
-            decayRate: isCosmic ? 0.003 : 0.008 + Math.random() * 0.01,
+            // Increased decay by 50% for shorter lifetime
+            decayRate: isCosmic ? 0.0045 : 0.012 + Math.random() * 0.015,
             history: [{ x, y }]
         });
     }
