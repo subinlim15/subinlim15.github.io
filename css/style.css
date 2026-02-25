@@ -1081,6 +1081,31 @@ footer {
     z-index: 10;
 }
 
+.anim-link-btn {
+    border-radius: 30px;
+    border: 1px solid var(--border-color);
+    background: transparent;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: var(--heading-color);
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
+    background-color: var(--card-bg);
+}
+
+.anim-link-btn:hover {
+    transform: translateY(-2px);
+    background-color: var(--border-color);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme='dark'] .anim-link-btn:hover {
+    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.1);
+}
+
 .page-section.zoom-dive {
     transform: scale(1.03) !important;
     opacity: 0 !important;
