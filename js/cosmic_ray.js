@@ -65,8 +65,8 @@ const CosmicRayShower = (() => {
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // Spawn primary cosmic ray occasionally
-        if (Math.random() < 0.04) {
+        // Spawn primary cosmic ray occasionally (reduced frequency)
+        if (Math.random() < 0.02) {
             createPrimaryShower();
         }
 
