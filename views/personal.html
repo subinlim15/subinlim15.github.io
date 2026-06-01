@@ -1,86 +1,544 @@
-<div class="container fade-up">
-    <div class="back-link-wrapper" style="margin-bottom: 2rem;">
+<canvas id="cosmic-ray-canvas"
+    style="position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:-1; opacity:0.3; pointer-events:none;"></canvas>
+<div class="container blog-narrow-container fade-up">
+    <!-- Back to Main link -->
+    <div class="back-link-wrapper" style="margin-bottom: 1.2rem;">
         <a href="#main" data-target="main" class="btn-text">← Back to Main</a>
-    </div>
-    <h2 class="section-title">Personal</h2>
-
-    <div class="glass-card delay-1" style="margin-bottom: 3rem; text-align: center;">
-        <h3 style="margin-bottom: 1rem;">Physics Animations Explorer</h3>
-        <p style="margin-bottom: 2rem; color: var(--secondary-color);">Explore various interactive physics phenomena
-            visualized through canvas animations.</p>
-        <div style="display:flex; justify-content:center; align-items:center; gap:1rem; flex-wrap:wrap;">
-            <a href="#anim_tunneling" data-target="anim_tunneling" class="anim-link-btn"
-                style="padding: 0.8rem 1.5rem; text-decoration: none;">Quantum Tunneling</a>
-            <a href="#anim_feynman" data-target="anim_feynman" class="anim-link-btn"
-                style="padding: 0.8rem 1.5rem; text-decoration: none;">Feynman Diagram</a>
-            <a href="#anim_neutrino" data-target="anim_neutrino" class="anim-link-btn"
-                style="padding: 0.8rem 1.5rem; text-decoration: none;">Neutrino Oscillation</a>
-            <a href="#anim_doubleslit" data-target="anim_doubleslit" class="anim-link-btn"
-                style="padding: 0.8rem 1.5rem; text-decoration: none;">Double-Slit Interference</a>
-        </div>
-    </div>
-
-    <div class="code-editor-mockup glass-card delay-2">
-        <div class="editor-header">
-            <span class="mac-btn red"></span>
-            <span class="mac-btn yellow"></span>
-            <span class="mac-btn green"></span>
-            <span class="editor-title">subin_life.py</span>
-        </div>
-        <div class="editor-body">
-            <pre><code><span class="keyword">import</span> physics
-<span class="keyword">import</span> music
-<span class="keyword">import</span> life
-
-<span class="keyword">class</span> <span class="class-name">SubinLim</span>(life.Entity):
-    <span class="keyword">def</span> <span class="function">__init__</span>(self):
-        <span class="function">super</span>().<span class="function">__init__</span>(role=<span class="string">"Physicist"</span>)
-        self.passions <span class="operator">=</span> [<span class="string">"Particle Physics"</span>, <span class="string">"Violin orchestration"</span>, <span class="string">"Data Analysis"</span>]
-        self.coffee_level <span class="operator">=</span> <span class="number">100</span>
-        self.is_debugging <span class="operator">=</span> <span class="keyword">True</span>
+    </div>    <!-- Unified Header & Toolbar Panel -->
+    <div class="blog-header-section glass-card"
+        style="margin-bottom: 1.2rem; position: relative; overflow: hidden; padding: 1.2rem 1.8rem;">
         
-    <span class="keyword">def</span> <span class="function">daily_routine</span>(self):
-        <span class="keyword">while</span> self.<span class="function">is_awake</span>():
-            <span class="keyword">if</span> self.coffee_level &lt; <span class="number">20</span>:
-                self.<span class="function">drink</span>(<span class="string">"Double Espresso"</span>)
-                
-            <span class="keyword">try</span>:
-                self.<span class="function">analyze_data</span>(framework=<span class="string">"ROOT"</span>, method=<span class="string">"Machine Learning"</span>)
-            <span class="keyword">except</span> physics.AnomaliesFound <span class="keyword">as</span> discovery:
-                self.<span class="function">publish_paper</span>(title=<span class="string">"New Physics Beyond Standard Model"</span>)
-                
-            self.<span class="function">play_instrument</span>(instrument=<span class="string">"Violin"</span>, piece=<span class="string">"Tchaikovsky Violin Concerto"</span>)
-            
-            self.coffee_level -= <span class="number">10</span>
-
-<span class="comment"># TODO: Add more chapters to this ongoing simulation...</span>
-<span class="keyword">if</span> __name__ <span class="operator">==</span> <span class="string">"__main__"</span>:
-    subin <span class="operator">=</span> SubinLim()
-    subin.<span class="function">daily_routine</span>()
-</code></pre>
+        <!-- Top part: Personal Space Title -->
+        <div class="blog-header-content" style="position: relative; z-index: 2;">
+            <h2 class="blog-title"
+                style="font-size: 2.2rem; margin-bottom: 0px; text-align: left; color: var(--heading-color); font-weight: 300; letter-spacing: -0.5px;">
+                Personal Space</h2>
         </div>
-    </div>
+        <div class="blog-decor-orbit"></div>
 
-    <!-- Mini Game Section -->
-    <div class="game-container glass-card fade-up delay-4" style="text-align: center; margin-top: 3rem; padding: 2rem;">
-        <h3>Mini Game: Classic 2048 <br><span
-                style="font-size:0.85rem; color:var(--secondary-color); font-weight:normal;">(Use <strong
-                    style="color:#ff4757;">Arrow Keys</strong> or <strong style="color:#ff4757;">Swipe</strong> to merge
-                tiles)</span></h3>
-        <div style="margin-bottom: 1rem;">
-            <span id="game-score" style="font-weight:bold; color:var(--heading-color); font-size:1.1rem;">Score:
-                0</span>
-        </div>
-        <div style="position: relative; display: inline-block; width: 100%; max-width: 400px;">
-            <canvas id="higgs-game-canvas" width="400" height="400"
-                style="background:#bbada0; border-radius: 8px; width: 100%; height: auto; border: 1px solid var(--border-color); display: block; touch-action: none;"></canvas>
-            <div id="game-overlay"
-                style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(238,228,218,0.73); display:flex; flex-direction:column; justify-content:center; align-items:center; border-radius:8px;">
-                <h2 id="game-message" style="color:#776e65; margin-bottom: 1rem; font-size:2rem; font-weight:bold;">2048
-                </h2>
-                <button id="start-game-btn" class="btn btn-outline"
-                    style="color:#f9f6f2; background:#8f7a66; border:none;">New Game</button>
+        <!-- Decorative Horizontal Separator -->
+        <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 1rem 0; position: relative; z-index: 2;" />
+
+        <!-- Bottom part: Search and Filter Toolbar -->
+        <div class="blog-toolbar"
+            style="display: flex; justify-content: space-between; align-items: center; gap: 1.5rem; flex-wrap: wrap; position: relative; z-index: 2;">
+            <!-- Categories (Dynamically populated by js/blog.js based on actual active posts) -->
+            <div class="blog-categories" id="blog-categories-container" style="display: flex; gap: 0.6rem; flex-wrap: wrap;">
+            </div>
+
+            <!-- Search input -->
+            <div class="blog-search-wrapper" style="position: relative; max-width: 320px; width: 100%;">
+                <input type="text" id="blog-search-input" placeholder="Search logs..." class="blog-search-field" />
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="search-icon">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
             </div>
         </div>
     </div>
+
+    <!-- Blog Posts Container -->
+    <div id="blog-posts-grid" class="blog-list">
+        <!-- Post items will be injected dynamically by blog.js -->
+    </div>
+
+    <!-- Empty State -->
+    <div id="blog-empty-state" class="glass-card"
+        style="display: none; text-align: center; padding: 4rem 2rem; border-color: var(--border-color);">
+        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+            style="color: var(--secondary-color); margin-bottom: 1rem;">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="8" y1="12" x2="16" y2="12" />
+        </svg>
+        <h4 style="margin-bottom: 0.5rem; color: var(--heading-color);">No logs found</h4>
+        <p style="color: var(--secondary-color);">Try adjusting your search terms or filters!</p>
+    </div>
 </div>
+
+<style>
+    .blog-narrow-container {
+        max-width: 850px;
+        margin: 0 auto;
+    }
+
+    /* Styling isolated to the blog views */
+    .blog-header-section {
+        border-color: var(--border-color);
+        background: var(--card-bg);
+    }
+
+    /* Prevent the main header block and toolbar from shifting or lifting on hover */
+    .blog-header-section:hover,
+    .blog-toolbar:hover {
+        transform: none !important;
+        box-shadow: none !important;
+    }
+
+    .blog-decor-orbit {
+        position: absolute;
+        top: -50px;
+        right: -50px;
+        width: 250px;
+        height: 250px;
+        border-radius: 50%;
+        border: 1px dashed var(--border-color);
+        pointer-events: none;
+        opacity: 0.4;
+        animation: spin-orbit 40s linear infinite;
+    }
+
+    @keyframes spin-orbit {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    /* Toolbar Category buttons - Compact */
+    .category-filter-btn {
+        background: transparent;
+        border: 1px solid var(--border-color);
+        color: var(--text-color);
+        padding: 0.3rem 0.8rem;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.8rem;
+        font-weight: 500;
+        transition: var(--transition-fast);
+    }
+
+    .category-filter-btn:hover {
+        background: var(--border-color);
+        color: var(--heading-color);
+    }
+
+    .category-filter-btn.active {
+        background: var(--heading-color);
+        border-color: var(--heading-color);
+        color: var(--bg-color);
+    }
+
+    /* Search Box */
+    .blog-search-field {
+        width: 100%;
+        background: var(--bg-color);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        padding: 0.5rem 1rem 0.5rem 2.5rem;
+        color: var(--text-color);
+        font-family: inherit;
+        outline: none;
+        transition: var(--transition-fast);
+        font-size: 0.9rem;
+    }
+
+    .blog-search-field:focus {
+        border-color: var(--heading-color);
+        box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+    }
+
+    [data-theme='dark'] .blog-search-field:focus {
+        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.05);
+    }
+
+    .search-icon {
+        position: absolute;
+        left: 0.8rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--secondary-color);
+        pointer-events: none;
+        transition: var(--transition-fast);
+    }
+
+    .blog-search-field:focus+.search-icon {
+        color: var(--heading-color);
+    }
+
+    /* Premium Horizontal List Layout */
+    .blog-list {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: 0px; /* Aligns border separators seamlessly */
+    }
+
+    .blog-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.85rem 1rem;
+        border-bottom: 1px solid var(--border-color);
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        border-radius: 8px;
+        margin: 0 -0.5rem; /* Allows padding expansion without breaking layouts */
+        position: relative;
+    }
+
+    .blog-item:hover {
+        background: var(--card-bg);
+        padding-left: 1.4rem;
+        padding-right: 1.4rem;
+        transform: translateX(6px); /* Elegant micro-interaction slide */
+        border-bottom-color: transparent;
+    }
+
+    .blog-item-left {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        flex-grow: 1;
+        min-width: 0; /* Important for ellipsis truncation to work */
+    }
+
+    .blog-item-date {
+        font-size: 0.85rem;
+        color: var(--secondary-color);
+        width: 95px;
+        flex-shrink: 0;
+        font-weight: 500;
+    }
+
+    .blog-tag {
+        font-weight: 600;
+        padding: 0.15rem 0.5rem;
+        border-radius: 4px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-size: 0.72rem;
+        width: 72px;
+        text-align: center;
+        flex-shrink: 0;
+    }
+
+    .tag-physics {
+        background: rgba(0, 122, 255, 0.1);
+        color: #007aff;
+    }
+
+    .tag-coding {
+        background: rgba(52, 199, 89, 0.1);
+        color: #34c759;
+    }
+
+    .tag-music {
+        background: rgba(255, 149, 0, 0.1);
+        color: #ff9500;
+    }
+
+    .tag-life {
+        background: rgba(175, 82, 222, 0.1);
+        color: #af52de;
+    }
+
+    .tag-diary {
+        background: rgba(255, 45, 85, 0.1);
+        color: #ff2d55;
+    }
+
+    .tag-travel {
+        background: rgba(90, 200, 250, 0.1);
+        color: #5ac8fa;
+    }
+
+    .blog-item-text-wrapper {
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+        flex-grow: 1;
+        padding-right: 1rem;
+    }
+
+    .blog-item-title {
+        font-size: 1.15rem;
+        font-weight: 500;
+        color: var(--heading-color);
+        margin: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        transition: var(--transition-fast);
+    }
+
+    .blog-item:hover .blog-item-title {
+        color: var(--primary-color);
+    }
+
+    .blog-item-excerpt {
+        font-size: 0.88rem;
+        color: var(--secondary-color);
+        margin: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 600px;
+    }
+
+    .blog-item-right {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        margin-left: auto;
+    }
+
+    .blog-item-arrow {
+        color: var(--secondary-color);
+        opacity: 0.3;
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    .blog-item:hover .blog-item-arrow {
+        opacity: 1;
+        color: var(--heading-color);
+        transform: translateX(4px);
+    }
+
+    /* Modals */
+    .blog-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 2000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        visibility: hidden;
+    }
+
+    .blog-modal.active {
+        visibility: visible;
+    }
+
+    .blog-modal-backdrop {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.08);
+        backdrop-filter: blur(0px);
+        -webkit-backdrop-filter: blur(0px);
+        opacity: 0;
+        transition: opacity 0.22s cubic-bezier(0.25, 0.8, 0.25, 1), backdrop-filter 0.22s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    [data-theme='dark'] .blog-modal-backdrop {
+        background: rgba(0, 0, 0, 0.25);
+    }
+
+    .blog-modal.active .blog-modal-backdrop {
+        opacity: 1;
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+    }
+
+    .blog-modal-container {
+        position: relative;
+        width: 90%;
+        max-width: 800px;
+        max-height: 85vh;
+        overflow-y: auto;
+        z-index: 2;
+        padding: 3rem 2.5rem;
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), background-color var(--transition-fast), border-color var(--transition-fast);
+        pointer-events: auto;
+
+        /* Premium Soft Glassmorphism */
+        background: rgba(255, 255, 255, 0.7) !important;
+        backdrop-filter: blur(25px) saturate(180%);
+        -webkit-backdrop-filter: blur(25px) saturate(180%);
+        border: 1px solid rgba(255, 255, 255, 0.45) !important;
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.08) !important;
+    }
+
+    [data-theme='dark'] .blog-modal-container {
+        background: rgba(22, 22, 22, 0.75) !important;
+        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.35) !important;
+    }
+
+    .blog-modal.active .blog-modal-container {
+        opacity: 1;
+        transform: translateY(0);
+        transition-delay: 0.04s;
+    }
+
+    .blog-modal-close {
+        position: absolute;
+        top: 1.5rem;
+        right: 1.5rem;
+        background: transparent;
+        border: none;
+        color: var(--secondary-color);
+        cursor: pointer;
+        padding: 0.5rem;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: var(--transition-fast);
+    }
+
+    .blog-modal-close:hover {
+        background: var(--border-color);
+        color: var(--heading-color);
+    }
+
+    /* Read Post Meta and tags */
+    .blog-read-meta {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .blog-read-category {
+        font-weight: 600;
+        font-size: 0.85rem;
+        padding: 0.3rem 0.8rem;
+        border-radius: 4px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .blog-read-category.Physics {
+        background: rgba(0, 122, 255, 0.1);
+        color: #007aff;
+    }
+
+    .blog-read-category.Coding {
+        background: rgba(52, 199, 89, 0.1);
+        color: #34c759;
+    }
+
+    .blog-read-category.Music {
+        background: rgba(255, 149, 0, 0.1);
+        color: #ff9500;
+    }
+
+    .blog-read-category.Life {
+        background: rgba(175, 82, 222, 0.1);
+        color: #af52de;
+    }
+
+    .blog-read-category.Diary {
+        background: rgba(255, 45, 85, 0.1);
+        color: #ff2d55;
+    }
+
+    .blog-read-category.Travel {
+        background: rgba(90, 200, 250, 0.1);
+        color: #5ac8fa;
+    }
+
+    .blog-read-date {
+        color: var(--secondary-color);
+        font-size: 0.9rem;
+    }
+
+    .blog-read-content p {
+        margin-bottom: 1.5rem;
+    }
+
+    .blog-read-content ul,
+    .blog-read-content ol {
+        margin-left: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .blog-read-content li {
+        margin-bottom: 0.5rem;
+    }
+
+    .blog-read-content img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        border: 1px solid var(--border-color);
+        margin: 1.5rem auto;
+        display: block;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Mobile responsive */
+    @media (max-width: 768px) {
+        .blog-modal-container {
+            padding: 2rem 1.5rem;
+            max-height: 90vh;
+        }
+
+        .blog-toolbar {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .blog-search-wrapper {
+            max-width: 100%;
+        }
+
+        /* Mobile List Styling */
+        .blog-item {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 0.6rem;
+            padding: 1.2rem 0.5rem;
+            margin: 0;
+        }
+
+        .blog-item:hover {
+            transform: translateX(3px); /* Subtle slide on tap */
+            padding-left: 0.8rem;
+            padding-right: 0.8rem;
+        }
+
+        .blog-item-left {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .blog-item-date {
+            width: auto;
+            font-size: 0.8rem;
+        }
+
+        .blog-tag {
+            width: auto;
+            align-self: flex-start;
+            padding: 0.1rem 0.4rem;
+        }
+
+        .blog-item-text-wrapper {
+            padding-right: 0;
+        }
+
+        .blog-item-title {
+            font-size: 1.1rem;
+            white-space: normal;
+        }
+
+        .blog-item-excerpt {
+            white-space: normal; /* Allow wrapping on small screens */
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+        }
+
+        .blog-item-right {
+            display: none; /* Hide horizontal arrow icon on mobile to clean up space */
+        }
+    }
+</style>

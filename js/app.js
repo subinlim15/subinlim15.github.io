@@ -208,26 +208,18 @@ document.addEventListener('DOMContentLoaded', () => {
             window.stopCloudChamber();
         }
 
-        // Handle personal page specific game
-        if (targetId === 'personal' && typeof window.initPersonalGame === 'function') {
-            window.initPersonalGame();
+        // Handle personal page specific blog and cosmic ray background
+        if (targetId === 'personal') {
+            if (typeof window.initPersonalBlog === 'function') {
+                window.initPersonalBlog();
+            }
+            if (typeof window.initCosmicRay === 'function') {
+                window.initCosmicRay();
+            }
         } else {
-            if (typeof window.stopPersonalGame === 'function') window.stopPersonalGame();
-        }
-
-        // Handle animation standalone pages
-        if (targetId.startsWith('anim_') && typeof window.initPersonalAnimations === 'function') {
-            const mode = targetId.replace('anim_', '');
-            window.initPersonalAnimations(mode, `anim-canvas-${mode}`);
-        } else if (typeof window.stopPersonalAnimations === 'function') {
-            window.stopPersonalAnimations();
-        }
-
-        // Handle study page specific cosmic ray background
-        if (targetId === 'study' && typeof window.initCosmicRay === 'function') {
-            window.initCosmicRay();
-        } else if (typeof window.stopCosmicRay === 'function') {
-            window.stopCosmicRay();
+            if (typeof window.stopCosmicRay === 'function') {
+                window.stopCosmicRay();
+            }
         }
     };
 

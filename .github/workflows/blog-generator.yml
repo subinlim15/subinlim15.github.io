@@ -1,0 +1,33 @@
+name: Generate Blog Manifest
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'posts/**/*.md'
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Run Manifest Generator
+        run: python3 posts/generate.py
+
+      - name: Commit and Push changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add js/blog.js
+          git diff --staged --quiet || (git commit -m "Auto: Update blog post manifest [skip ci]" && git push)

@@ -10,6 +10,8 @@
     <link rel="stylesheet" as="style" crossorigin
         href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
     <link rel="stylesheet" href="./css/style.css?v=6">
+    <!-- Marked.js CDN for robust Markdown rendering -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 
 <body>
@@ -49,7 +51,7 @@
                 <ul class="nav-links">
                     <li><a href="#profile" data-target="profile">Profile</a></li>
                     <li><a href="#study" data-target="study">Study</a></li>
-                    <li><a href="#personal" data-target="personal">Personal</a></li>
+                    <li><a href="#personal" data-target="personal">Diary</a></li>
                 </ul>
                 <div class="nav-controls">
                     <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Theme">
@@ -85,22 +87,11 @@
                             <span class="bg-info bg-info-profile">The background animation shows the trajectories of
                                 particles in the cloud chamber. When a mouse is placed in the background, the magnetic
                                 dipole moment bends the trajectory of particles.</span>
-                            <span class="bg-info bg-info-study">The background animation shows the trajectories of
+                            <span class="bg-info bg-info-study">My Studies: Research and notes on high-energy physics experiments.</span>
+                            <span class="bg-info bg-info-personal">The background animation shows the trajectories of
                                 cosmic rays. Incoming high-energy cosmic rays from the top of the atmosphere decay into
                                 low-energy particles traveling down to the ground.</span>
-                            <span class="bg-info bg-info-personal">Enjoy the classic 2048 game!</span>
-                            <span class="bg-info bg-info-anim_tunneling">The background animation shows Quantum
-                                Tunneling. The energy barrier mostly reflects incoming wave packets, but occasionally, a
-                                particle seamlessly tunnels through the impenetrable wall.</span>
-                            <span class="bg-info bg-info-anim_feynman">The background animation generates random Feynman
-                                diagrams. It visualizes hypothetical interaction histories between fermions and bosons
-                                in a vacuum state.</span>
-                            <span class="bg-info bg-info-anim_neutrino">The background animation illustrates Neutrino
-                                Oscillation, displaying particles that drift steadily while shifting their flavor states
-                                (represented by gradient colors).</span>
-                            <span class="bg-info bg-info-anim_doubleslit">The background animation mimics the
-                                Double-Slit wave interference pattern. Concentric waves emitted from two distinct points
-                                overlap to form constructive and destructive interference.</span>
+
                         </div>
                     </div>
                     <div class="hamburger">
@@ -126,11 +117,7 @@
             <!-- Personal Section -->
             <section id="personal" class="page-section" data-view="personal"></section>
 
-            <!-- Animation Sections -->
-            <section id="anim_tunneling" class="page-section" data-view="anim_tunneling"></section>
-            <section id="anim_feynman" class="page-section" data-view="anim_feynman"></section>
-            <section id="anim_neutrino" class="page-section" data-view="anim_neutrino"></section>
-            <section id="anim_doubleslit" class="page-section" data-view="anim_doubleslit"></section>
+
         </main>
 
         <footer>
@@ -144,12 +131,34 @@
             </div>
         </footer>
     </div>
+
+    <!-- Read Modal -->
+    <div id="blog-read-modal" class="blog-modal">
+        <div class="blog-modal-backdrop"></div>
+        <div class="blog-modal-container glass-card">
+            <button class="blog-modal-close" id="close-read-modal-btn" aria-label="Close modal">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+            <div class="blog-modal-body">
+                <div class="blog-read-meta" style="margin-bottom: 1.5rem;">
+                    <span class="blog-read-category" id="modal-post-category">Category</span>
+                    <span class="blog-read-date" id="modal-post-date">June 2, 2026</span>
+                </div>
+                <h3 class="blog-read-title" id="modal-post-title" style="font-size: 2.2rem; margin-bottom: 0.8rem; line-height: 1.3; color: var(--heading-color); font-weight: 600;">Title</h3>
+                <p class="blog-read-subtitle" id="modal-post-subtitle" style="font-size: 1.2rem; color: var(--secondary-color); margin-bottom: 2rem; font-style: italic;">Subtitle</p>
+                <div class="profile-divider" style="margin: 0 0 2rem 0; width: 80px; height: 2px;"></div>
+                <div class="blog-read-content" id="modal-post-content" style="line-height: 1.8; font-size: 1.05rem; color: var(--text-color); text-align: justify;">
+                    <!-- Post body content will be injected -->
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="./js/app.js?v=5"></script>
     <script src="./js/particles.js?v=4"></script>
     <script src="./js/cloud_chamber.js?v=6"></script>
     <script src="./js/cosmic_ray.js?v=2"></script>
-    <script src="./js/personal_animations.js?v=3"></script>
-    <script src="./js/game.js?v=9"></script>
+    <script src="./js/blog.js?v=1"></script>
 </body>
 
 </html>

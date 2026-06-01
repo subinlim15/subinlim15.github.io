@@ -112,6 +112,44 @@ h6 {
     text-decoration: none;
     letter-spacing: 0.5px;
     pointer-events: auto;
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+    padding: 0.4rem 2.4rem;
+    /* Increased padding to expand the hover and blur zone */
+    z-index: 1;
+    /* Create stacking context so ::before can go behind text */
+    transition: var(--transition-fast);
+}
+
+/* Background blur layer isolated behind the text - expanded further */
+.logo::before {
+    content: '';
+    position: absolute;
+    top: -6px;    /* Spread upwards */
+    bottom: -6px; /* Spread downwards */
+    left: -12px;  /* Spread to the left */
+    right: -12px; /* Spread to the right */
+    z-index: -1;
+    border-radius: 50px;
+    background: var(--card-bg);
+    backdrop-filter: blur(12px); /* Increased from 8px to restore glass depth and texture */
+    -webkit-backdrop-filter: blur(12px);
+    pointer-events: none;
+    transition: var(--transition-fast);
+
+    /* Keep the core blur and background solid (0.95) behind the text (0% to 25%), then feather it out to 0 at 95% */
+    -webkit-mask-image: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.95) 25%, rgba(0, 0, 0, 0) 95%);
+    mask-image: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.95) 25%, rgba(0, 0, 0, 0) 95%);
+}
+
+.logo:hover::before {
+    -webkit-mask-image: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.98) 0%, rgba(0, 0, 0, 0.98) 40%, rgba(0, 0, 0, 0) 98%);
+    mask-image: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.98) 0%, rgba(0, 0, 0, 0.98) 40%, rgba(0, 0, 0, 0) 98%);
+}
+
+[data-theme='dark'] .logo {
+    /* Maintained clean separation */
 }
 
 .logo span {

@@ -7,6 +7,7 @@ class CloudChamber {
         this.currentB = 0;
         this.animationFrame = null;
         this.isActive = false;
+        this.lastDecayTime = 0;
 
         this.init();
     }
@@ -60,8 +61,8 @@ class CloudChamber {
         const y = Math.random() * this.canvas.height;
 
         const angle = Math.random() * Math.PI * 2;
-        // Increased initial speeds by 50%
-        const speed = isCosmic ? 10 + Math.random() * 3 : 1.5 + Math.random() * 2.25;
+        // Reduced initial speeds to make the animation calmer and less dizzying
+        const speed = isCosmic ? 4 + Math.random() * 1.5 : 0.6 + Math.random() * 0.9;
 
         const charge = Math.random() > 0.5 ? 1 : -1;
 
@@ -89,8 +90,9 @@ class CloudChamber {
         // Smooth transition for Magnetic Field
         this.currentB += (this.targetB - this.currentB) * 0.05;
 
-        // Spawn new particles (rarely to keep it subtle)
-        if (Math.random() < 0.15 && this.particles.length < 50) {
+        // Spawn new particles (rarely to keep it subtle, with a 1-second delay after any particle decays)
+        const canSpawn = !this.lastDecayTime || (Date.now() - this.lastDecayTime >= 1000);
+        if (canSpawn && Math.random() < 0.15 && this.particles.length < 5) {
             this.spawnParticle();
         }
 
@@ -156,9 +158,10 @@ class CloudChamber {
                 this.ctx.stroke();
             }
 
-            // Remove dead particles
+            // Remove dead particles and record decay timestamp
             if (p.life <= 0) {
                 this.particles.splice(i, 1);
+                this.lastDecayTime = Date.now();
             }
         }
 
