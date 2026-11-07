@@ -1,0 +1,459 @@
+<div class="container">
+    <div class="back-link-wrapper" style="margin-bottom: 2rem;">
+        <a href="#main" data-target="main" class="btn-text">← Back to Main</a>
+    </div>
+    <h2 class="section-title">Profile</h2>
+    <div class="profile-layout">
+        <canvas id="cloud-chamber-canvas" class="cloud-chamber-bg"></canvas>
+        <div class="profile-main">
+            <!-- Summary Profile Card -->
+            <div id="introduction" class="profile-card glass-card fade-up" style="padding: 2.5rem 2rem;">
+                <h3 class="profile-name">Subin Lim</h3>
+                <div class="profile-title">
+                    Specialized in <span class="gradient-text">Experimental Particle Physics</span>
+                </div>
+
+                <div class="profile-location">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        style="margin-right: -2px;">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                        <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                    Seoul, Republic of Korea
+                </div>
+
+                <div class="profile-socials">
+                    <div class="email-wrapper">
+                        <button type="button" class="social-btn email-btn" aria-label="Email" title="Email"
+                            onclick="document.getElementById('email-tooltip').classList.toggle('show'); event.stopPropagation();">
+                            <svg width="20" height="20">
+                                <use href="#icon-email" />
+                            </svg>
+                        </button>
+                        <a href="mailto:ljw1015@hanyang.ac.kr" class="email-tooltip"
+                            id="email-tooltip">ljw1015@hanyang.ac.kr</a>
+                    </div>
+                    <a href="https://orcid.org/0000-0002-1019-6401" class="social-btn orcid-btn" aria-label="ORCID"
+                        title="ORCID" target="_blank">
+                        <svg width="22" height="22">
+                            <use href="#icon-orcid" />
+                        </svg>
+                    </a>
+                    <a href="https://inspirehep.net/authors/1853380" class="social-btn inspire-btn"
+                        aria-label="INSPIRE-HEP" title="INSPIRE-HEP" target="_blank">
+                        <svg width="20" height="20">
+                            <use href="#icon-inspire" />
+                        </svg>
+                    </a>
+                    <a href="https://www.instagram.com/subin_forest/" class="social-btn insta-btn"
+                        aria-label="Instagram" title="Instagram" target="_blank">
+                        <svg width="20" height="20">
+                            <use href="#icon-instagram" />
+                        </svg>
+                    </a>
+                </div>
+
+                <div class="profile-divider"></div>
+
+                <p class="profile-description">
+                    I completed my Master's degree in Physics from Hanyang University and conducted high energy physics
+                    analysis with the CMS collaboration at CERN. I have experience in top quark physics by studing
+                    additional b-jets from the ttbb process and charged lepton flavour violation in the top quark
+                    sector. My research experience focuses on data analysis, simulation, and a machine learning
+                    application for HEP analysis.
+                </p>
+            </div>
+
+
+            <div class="profile-info glass-card fade-up delay-1">
+                <h3 id="research-interests" class="timeline-section-title" style="margin-top:0;">Research Interests</h3>
+                <div class="skills">
+                    <span class="skill-tag">Top quark physics</span>
+                    <span class="skill-tag">Higgs boson physics</span>
+                    <span class="skill-tag">Beyond the Standard Model</span>
+                    <span class="skill-tag">Tau lepton</span>
+                    <span class="skill-tag">Machine Learning</span>
+                </div>
+            </div>
+
+            <!-- Details CV Card -->
+            <div class="profile-info glass-card fade-up delay-3">
+                <h3 id="education" class="timeline-section-title" style="margin-top:0;">Education</h3>
+                <ul class="timeline">
+                    <li>
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h4>Master of Science in Physics</h4>
+                            <p class="date">Mar 2020 - Aug 2022 | Hanyang University, Seoul, Republic of Korea</p>
+                            <p class="role-subtitle">Advisor: Prof. Tae Jeong Kim</p>
+                            <p>Dissertation: "Search for charged lepton flavor violation in top quark sector with
+                                hadronic tau final state using CMS Run 2 data at √s = 13 TeV" <a
+                                    href="https://hanyang.dcollection.net/public_resource/pdf/200000626407_20260225010544.pdf"
+                                    target="_blank">[PDF]</a><br>
+                                Honored with a Best Dissertation Award.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h4>Bachelor of Science in Physics</h4>
+                            <p class="date">Mar 2016 - Feb 2020 | Hanyang University, Seoul, Republic of Korea</p>
+                            <p class="role-subtitle">Advisor: Prof. Tae Jeong Kim</p>
+                            <p>Bachelor's Thesis: "Study of identification of b-jets in the ttbb using Deep Neural
+                                Networks" <a href="bachelor_graduate_poster.pdf" target="_blank">[Poster]</a></p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h4>Bachelor of Science in Mechanical Engineering</h4>
+                            <p class="date">Mar 2017 - Feb 2020 | Hanyang University, Seoul, Republic of Korea</p>
+                            <p>Dual Degree Program<br>
+                                Graduate Project: "Design of collision warning and braking system using Region-based
+                                Convolutional Neural Network (RCNN)" <a href="me_capstone_poster.pdf"
+                                    target="_blank">[Poster]</a>
+                            </p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="profile-info glass-card fade-up delay-4">
+                <h3 id="research-experience" style="margin-top:0;" class="timeline-section-title">Research Experience
+                </h3>
+                <ul class="timeline">
+                    <li>
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h4>Search for the charged lepton flavour violation (cLFV) using CMS Run2 data</h4>
+                            <p class="date">Jan 2020 - Aug 2022 | CMS Collaboration, CERN</p>
+                            <p class="role-subtitle">Team Leader: Prof. Tae Jeong Kim</p>
+                            <ul>
+                                <li>Led the analysis with generating simulation samples for the cLFV events adopting the
+                                    Standard Model effective field theory (SMEFT) model.</li>
+                                <li>Analyzed the CMS Run2 data using ROOT, C++, and Python by comparing with simulated
+                                    data using GEANT4.</li>
+                                <li>Applied deep neural network algorithms to identify rare cLFV signal events from the
+                                    SM backgrounds using kinematic variables from top quark reconstruction for the cLFV
+                                    and SM interactions.</li>
+                                <li>Set upper limits of cross section and branching fractions of the EFT operators for
+                                    the cLFV interaction in 5σ confidence level with systematic and uncertainty studies.
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h4>Learning to increase matching efficiency in identifying additional b-jets in ttbb
+                                process</h4>
+                            <p class="date">Feb 2020 - Jul 2022 | Elementary Particle Physics Laboratory, Hanyang
+                                University</p>
+                            <p class="role-subtitle">Advisor: Prof. Tae Jeong Kim</p>
+                            <ul>
+                                <li>Interdisciplinary study with the Department of Computer Science</li>
+                                <li>Contributed with generating more than 10M events of ttbb and ttH(bb) simulated
+                                    samples in a Monte-Carlo method using MadGraph, MadSpin, Pythia, and Delphes.</li>
+                                <li>Improved DNN performance for identifying b-jets by optimizing loss function of each
+                                    nodes, proposing better identification of ttbb events.</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h4>Identification of additional jets in the ttbb events by using DNN</h4>
+                            <p class="date">Mar 2019 - Nov 2020 | Elementary Particle Physics Laboratory, Hanyang
+                                University</p>
+                            <p class="role-subtitle">Advisor: Prof. Tae Jeong Kim</p>
+                            <ul>
+                                <li>Initially participated as an undergraduate researcher, learning basic
+                                    particle properties and data visualization using ROOT for data analysis.</li>
+                                <li>Learned how to produce simulated events using MadGraph and Delphes
+                                    and conducted data analysis using C++.</li>
+                                <li>Improved DNN performance for identification of additional jets by
+                                    changing nodes and layers of network.</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h4>Design of Collision Warning & Breaking Algorithm using RCNN</h4>
+                            <p class="date">Aug 2019 - Dec 2019 | Parallel Computing Laboratory, Hanyang University</p>
+                            <p class="role-subtitle">Advisor: Prof. Sang Hwan Lee</p>
+                            <ul>
+                                <li>Participated in Mechanical Engineering graduate project for dual degree.</li>
+                                <li>Led a team project and developed algorithms for real-time object detection
+                                    with RCNN applicable to two-wheeled robots for practical implementation.</li>
+                                <li>Won the second place in the Mechanical Engineering Design presentation.</li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="profile-info glass-card fade-up delay-5">
+                <h3 id="publications" style="margin-top:0;" class="timeline-section-title">Publications</h3>
+                <ol class="cv-list">
+                    <li>CMS Collaboration, “Search for charged-lepton flavour violation in top quark interactions with
+                        an up-type quark, a muon, and a τ lepton in proton-proton collisions at √s = 13 TeV,” <i>Journal
+                            of High Energy Physics, vol. 2025, no. 12, p. 65</i>, 2025.
+                        <a href="https://doi.org/10.1007/JHEP12(2025)065" target="_blank">DOI</a>
+                    </li>
+                    <li>C. Jang, S. K. Ko, J. Choi, <b>J. Lim</b>, Y. K. Noh, and T. J. Kim, "Learning to increase
+                        matching
+                        efficiency in identifying additional b-jets in the ttbb process," <i>The European Physical
+                            Journal Plus</i>, Jul. 2022.
+                        <a href="https://doi.org/10.1140/epjp/s13360-022-03024-8" target="_blank">DOI</a>
+                    </li>
+                    <li><b>J. Lim</b>, C. T. Lu, J. H. Park, and J. Park, "Implementation of the ATLAS-SUSY-2018-04
+                        analysis in
+                        the MadAnalysis 5 framework," <i>Modern physics letters A</i>, Jan. 2021.
+                        <a href="https://doi.org/10.1142/s0217732321410091" target="_blank">DOI</a>
+                    </li>
+                    <li>J. Choi, T. J. Kim, <b>J. Lim</b>, J. Park, Y. Ryou, J. Song, and S. Yun, "Identification of
+                        additional jets in the ttbb events by using deep neural network," <i>Journal of the Korean
+                            Physical Society</i>, Nov. 2020.
+                        <a href="https://doi.org/10.3938/jkps.77.1100" target="_blank">DOI</a>
+                    </li>
+                </ol>
+            </div>
+
+            <div class="profile-info glass-card fade-up delay-6">
+                <h3 id="conferences" style="margin-top:0;" class="timeline-section-title">Conferences</h3>
+                <ol class="cv-list">
+                    <li><b>J. Lim</b>, and T.J. Kim, "Search for Charged Lepton Flavour Violation in top quark
+                        interaction with muon and tau in pp collisions at √s = 13 TeV". <i>2022 KPS Spring Meeting:
+                            Korean Physics Society</i>, Apr. 2022.
+                        <a href="https://www.kps.or.kr/conference/event/content/program/search_result_abstract_poster.php?id=5439&tid=689"
+                            target="_blank">Abstract</a>
+                    </li>
+                    <li>J. Choi, S.-Y. Choi, T.J. Kim, <b>J. Lim</b>, J. Song, Y. Ryou, and S. Yun, "Search for LFV in
+                        top quark sector with charm, muon, and tau final states". <i>2020 KPS Fall Meeting: Korean
+                            Physics Society</i>, Nov. 2020.
+                        <a href="https://www.kps.or.kr/conference/event/content/program/search_result_abstract.php?id=1963&tid=160"
+                            target="_blank">Abstract</a>
+                    </li>
+                </ol>
+            </div>
+
+            <div class="profile-info glass-card fade-up delay-6">
+                <h3 id="schools-workshops" style="margin-top:0;" class="timeline-section-title">Schools & Workshops</h3>
+                <ul class="timeline">
+                    <li>
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h4>CMS Data Analysis School</h4>
+                            <p class="date">Sept 2021 | Virtual, CERN</p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h4>The Second MadAnalysis5 workshop on LHC recasting @ Korea</h4>
+                            <p class="date">Feb 2020 | KIAS, Seoul</p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h4>Winter Camp on Particle Physics</h4>
+                            <p class="date">Dec 2018 | KIAS, Yangpyeong</p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h4>Fundamentals of Deep Learning for Computer Vision</h4>
+                            <p class="date">Oct 2018 | NVIDIA, Seoul</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="profile-info glass-card fade-up delay-7">
+                <h3 id="scholarships-awards" style="margin-top:0;" class="timeline-section-title">Scholarships & Awards
+                </h3>
+                <ul class="timeline">
+                    <li>
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h4>The Best Dissertation Award</h4>
+                            <p class="date">Aug 2022 | Dean of Graduate School, Hanyang University</p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h4>Graduate Program Scholarship</h4>
+                            <p class="date">Mar 2020 - Dec 2021 | Hanyang University</p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h4>Han Ki-su Scholarship</h4>
+                            <p class="date">Mar 2020 | Department of Physics, Hanyang University</p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h4>Academic Honor Award</h4>
+                            <p class="date">Feb 2020 | College of Natural Science, Hanyang University</p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h4>The 11th Capstone Design Fair</h4>
+                            <p class="date">Dec 2019 | LINC, Hanyang University</p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h4>Mechanical Engineering Design Project Presentation - 2nd Place</h4>
+                            <p class="date">Dec 2019 | Hanyang University</p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h4>Natural Science Academic Conference - 2nd Place</h4>
+                            <p class="date">Dec 2019 | Hanyang University</p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h4>Hanyang Brain Scholarship - 3rd Place</h4>
+                            <p class="date">Sept 2017 | Department of Physics, Hanyang University</p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h4>Learning Mate Program - 2nd Place</h4>
+                            <p class="date">Sept 2017 | Hanyang University</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="profile-info glass-card fade-up delay-8">
+                <h3 id="skills" class="timeline-section-title" style="margin-top:0;">Skills</h3>
+                <ul class="cv-list">
+                    <li>Particle data analysis on <b>Linux</b> using <b>ROOT</b>, <b>C</b>, <b>C++</b>, and
+                        <b>Python</b>.
+                    </li>
+                    <li>Machine learning using <b>Keras</b>, <b>Tensorflow</b> and <b>PyTorch</b>.</li>
+                    <li><b>Parallel computing</b> and <b>cloud computing</b> for data analysis.</li>
+                    <li>Collaboration with <b>Git</b> and documentation using <b>Tex</b>.</li>
+                    <li>Generation of simulation events using <b>MadGraph</b>, <b>MadSpin</b>, <b>Pythia</b>,
+                        <b>Delphes</b>, and <b>GEANT4</b>.
+                    </li>
+                    <li>Fluent in speaking and writing in <b>English</b>, IELTS 7.5 (test taken Feb. 03 2024).</li>
+                </ul>
+            </div>
+
+            <div class="profile-info glass-card fade-up delay-8">
+                <h3 id="work-experience" style="margin-top:0;" class="timeline-section-title">Work Experience</h3>
+                <ul class="timeline">
+                    <li>
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h4>Social Service Personnel (Military Service Obligation)</h4>
+                            <p class="date">Sept 2022 - Jun 2024 | Seoul Metropolitan Fire & Disaster Headquarters</p>
+                            <ul>
+                                <li>Served 21 months at Seoul Civil Disaster Experience Center.</li>
+                                <li>Learned to handle emergency situations and supported social minorities.</li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="profile-info glass-card fade-up delay-9">
+                <h3 id="professional-memberships" style="margin-top:0;" class="timeline-section-title">Teaching
+                    Experience
+                </h3>
+                <ul class="timeline">
+                    <li>
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h4>Teaching Assistant of <b>General Physics and Experiment 1 and 2</b></h4>
+                            <p class="date">Mar 2020 - Dec 2021 | Hanyang University</p>
+                            <ul>
+                                <li>Taught concepts of general physics and experiments in undergraduate
+                                    level for four semesters.</li>
+                                <li>Total 9 physics experiments were taught per semester and homework sets
+                                    were graded weekly with Q&A.</li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="profile-info glass-card fade-up delay-10">
+                <h3 id="extracurricular" style="margin-top:0;" class="timeline-section-title">Extracurricular Activities
+                </h3>
+                <ul class="timeline">
+                    <li>
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h4><b></b>Inertia</b>, Computer club, Department of Physics</h4>
+                            <p class="date">Mar 2016 - Feb 2020 | Hanyang University</p>
+                            <p>Team-based learning for programming languages - Python, C, C++</p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h4><b>ℏ-action</b>, Academic Physics club, Department of physics</h4>
+                            <p class="date">Mar 2016 - Feb 2020 | Hanyang University</p>
+                            <p>Academic presentation: Introduction to Fluid Dynamics (2019)</p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h4>2nd Violin, <b>Hanaklang</b>, Hanyang Amateur Orchestra</h4>
+                            <p class="date">Mar 2017 - Feb 2020 | Hanyang University</p>
+                            <p>Participated in weekly orchestra rehearsal.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-content">
+                            <h4><b>Volunteer</b> at Children’s Museum of National Folk Museum (30 hours)</h4>
+                            <p class="date">Sept 2016 - Dec 2016 | Seoul, Republic of Korea</p>
+                            <p>Ensured safety for children and managed museum facilities.</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- TOC Sidebar -->
+        <aside class="profile-toc glass-card fade-up delay-2">
+            <h4>Contents</h4>
+            <ul>
+                <li><a href="#" data-scroll="introduction">Introduction</a></li>
+                <li><a href="#" data-scroll="research-interests">Research Interests</a></li>
+                <li><a href="#" data-scroll="education">Education</a></li>
+                <li><a href="#" data-scroll="research-experience">Research Experience</a></li>
+                <li><a href="#" data-scroll="publications">Publications</a></li>
+                <li><a href="#" data-scroll="conferences">Conferences</a></li>
+                <li><a href="#" data-scroll="schools-workshops">Schools & Workshops</a></li>
+                <li><a href="#" data-scroll="scholarships-awards">Scholarships & Awards</a></li>
+                <li><a href="#" data-scroll="skills">Skills</a></li>
+                <li><a href="#" data-scroll="work-experience">Work Experience</a></li>
+                <li><a href="#" data-scroll="professional-memberships">Teaching Experience</a></li>
+                <li><a href="#" data-scroll="extracurricular">Extracurricular Activities</a></li>
+            </ul>
+        </aside>
+    </div>
+</div>

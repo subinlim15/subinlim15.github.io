@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subin Lim | Portfolio</title>
+    <meta name="description"
+        content="Subin Lim's personal portfolio website showcasing profile, study, and personal projects.">
+    <link rel="stylesheet" as="style" crossorigin
+        href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+    <link rel="stylesheet" href="./css/style.css?v=6">
+</head>
+
+<body>
+    <div id="app">
+        <!-- SVG Sprite Map for Icons -->
+        <svg style="display: none;" xmlns="http://www.w3.org/2000/svg">
+            <symbol id="icon-email" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                <polyline points="22,6 12,13 2,6"></polyline>
+            </symbol>
+            <symbol id="icon-orcid" viewBox="0 0 256 256">
+                <path fill="currentColor"
+                    d="M86.3,186.2H70.9V79.1h15.4V186.2z M108.9,79.1h41.6c39.6,0,57,28.3,57,53.6c0,27.5-21.5,53.6-56.8,53.6h-41.8V79.1z M124.3,172.4h24.5c34.9,0,42.9-26.5,42.9-39.7c0-21.5-13.7-39.7-43.7-39.7h-23.7V172.4z M88.7,56.8c0,5.5-4.5,10.1-10.1,10.1c-5.6,0-10.1-4.6-10.1-10.1c0-5.6,4.5-10.1,10.1-10.1C84.2,46.7,88.7,51.3,88.7,56.8z" />
+            </symbol>
+            <symbol id="icon-inspire" viewBox="0 0 24 24" fill="currentColor">
+                <circle cx="4.8" cy="6" r="2" class="inspire-dot" fill="var(--inspire-dot-color, currentColor)" />
+                <rect x="3.3" y="9.5" width="3" height="8.5" />
+                <path d="M 8.5 18 V 4 h 3 L 17 13.5 V 4 h 3 V 18 h -3 L 11.5 8.5 V 18 Z" />
+            </symbol>
+            <symbol id="icon-instagram" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+            </symbol>
+        </svg>
+
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="nav-container">
+                <a href="#main" class="logo" data-target="main">Subin<span>.</span></a>
+                <ul class="nav-links">
+                    <li><a href="#profile" data-target="profile">Profile</a></li>
+                    <li><a href="#study" data-target="study">Study</a></li>
+                    <li><a href="#personal" data-target="personal">Personal</a></li>
+                </ul>
+                <div class="nav-controls">
+                    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Theme">
+                        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="5"></circle>
+                            <line x1="12" y1="1" x2="12" y2="3"></line>
+                            <line x1="12" y1="21" x2="12" y2="23"></line>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                            <line x1="1" y1="12" x2="3" y2="12"></line>
+                            <line x1="21" y1="12" x2="23" y2="12"></line>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                        </svg>
+                        <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                        </svg>
+                    </button>
+                    <div class="info-toggle" tabindex="0" aria-label="Page Background Info">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="16" x2="12" y2="12"></line>
+                            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                        </svg>
+                        <div class="info-tooltip">
+                            <span class="bg-info bg-info-main active">The background animation shows a diagram of
+                                head-on particle collisions at a particle detector.</span>
+                            <span class="bg-info bg-info-profile">The background animation shows the trajectories of
+                                particles in the cloud chamber. When a mouse is placed in the background, the magnetic
+                                dipole moment bends the trajectory of particles.</span>
+                            <span class="bg-info bg-info-study">My Studies: Research and notes on high-energy physics experiments.</span>
+                            <span class="bg-info bg-info-personal">The background animation shows the trajectories of
+                                cosmic rays. Incoming high-energy cosmic rays from the top of the atmosphere decay into
+                                low-energy particles traveling down to the ground.</span>
+
+                        </div>
+                    </div>
+                    <div class="hamburger">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="content-wrapper">
+            <!-- Main Section -->
+            <section id="main" class="page-section active" data-view="main"></section>
+
+            <!-- Profile Section -->
+            <section id="profile" class="page-section" data-view="profile"></section>
+
+            <!-- Study Section -->
+            <section id="study" class="page-section" data-view="study"></section>
+
+            <!-- Personal Section -->
+            <section id="personal" class="page-section" data-view="personal"></section>
+
+
+        </main>
+
+        <footer>
+            <div class="footer-content glassmorphism">
+                <p>&copy; 2026 Subin Lim. Designed & Built with passion.</p>
+                <div class="social-links">
+                    <a href="https://github.com/subinlim15" target="_blank">GitHub</a>
+                    <a href="https://www.instagram.com/subin_forest/" target="_blank">Instagram</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+
+    <script src="./js/app.js?v=5"></script>
+    <script src="./js/particles.js?v=4"></script>
+    <script src="./js/cloud_chamber.js?v=6"></script>
+    <script src="./js/cosmic_ray.js?v=2"></script>
+</body>
+
+</html>
